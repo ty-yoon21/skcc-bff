@@ -139,8 +139,8 @@
     <header>
         <h1>00대학 입시관리 시스템</h1>
     </header>
-    <div style="display:flex">
-        <aside style="width:320px; flex-shrink:0; background:#e0e0e0; padding:16px; height:calc(100vh - 64px); overflow-y:auto; position:fixed; left:0; top:64px;">
+    <div class="main-container">
+        <aside>
             <ul class="menu-list">
                 <li th:each="menu1 : ${menuList}">
                     <div class="menu-item menu-dir">
@@ -156,8 +156,8 @@
                             <ul th:if="${not #lists.isEmpty(menu2.children)}" class="menu-level">
                                 <li th:each="menu3 : ${menu2.children}">
                                     <div class="menu-item">
-                                        <a th:if="${menu3.screnUrladdr != null}" 
-                                           th:href="@{#}"
+                                        <a th:if="${menu3.screnUrladdr != null}"
+                                           href="#"
                                            th:data-url="${menu3.screnUrladdr}"
                                            class="menu-link">
                                             <i class="fas fa-file-alt menu-icon"></i>
@@ -182,32 +182,60 @@
     </div>
 
     <script>
-        $(document).ready(function() {
-            $('.menu-link').click(function(e) {
-                e.preventDefault();
-                var url = $(this).data('url');
-                var menuName = $(this).find('span').text();
-                
-                $.ajax({
-                    url: url,
-                    method: 'GET',
-                    success: function(response) {
-                        $('.content-container').html(response);
-                    },
-                    error: function(xhr, status, error) {
-                        $('.content-container').html(`
-                            <div class="error-message">
-                                <h3>페이지 로드 오류</h3>
-                                <p>선택하신 메뉴(${menuName})를 불러오는 중 오류가 발생했습니다.</p>
-                                <p>오류 내용: ${error}</p>
-                            </div>
-                        `);
-                    }
+        // jQuery 로드 확인 및 초기화
+        function initMenu() {
+            if (typeof jQuery == 'undefined') {
+                console.error('jQuery가 로드되지 않았습니다. CDN을 확인하세요.');
+                return;
+            }
+
+            $(document).ready(function() {
+                console.log('jQuery 로드 완료');
+
+                $('.menu-link').click(function(e) {
+                    e.preventDefault();
+                    var url = $(this).data('url');
+                    var menuName = $(this).find('span').text();
+
+                    console.log("메뉴 클릭됨:", url, menuName);
+
+                    $.ajax({
+                        url: url,
+                        method: 'GET',
+                        success: function(response) {
+                            $('.content-container').html(response);
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("AJAX 오류:", error);
+                            $('.content-container').html(`
+                                <div class="error-message">
+                                    <h3>페이지 로드 오류</h3>
+                                    <p>선택하신 메뉴(${menuName})를 불러오는 중 오류가 발생했습니다.</p>
+                                    <p>오류 내용: ${error}</p>
+                                </div>
+                            `);
+                        }
+                    });
                 });
             });
-        });
+        }
+
+        // jQuery 로드 확인 후 초기화 실행
+        if (window.jQuery) {
+            initMenu();
+        } else {
+            // jQuery가 아직 로드되지 않은 경우, 로드 이벤트 대기
+            window.addEventListener('load', function() {
+                if (window.jQuery) {
+                    initMenu();
+                } else {
+                    console.error('jQuery가 로드되지 않았습니다. 페이지를 새로고침하세요.');
+                }
+            });
+        }
     </script>
 </div>
+
 
 </body>
 </html>

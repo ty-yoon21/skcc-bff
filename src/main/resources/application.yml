@@ -17,6 +17,15 @@ spring:
     hiddenmethod:
       filter:
         enabled: true
+  datasource:
+    url: jdbc:mysql://localhost:3307/OCO
+    username: com_dev
+    password: qwer1234!
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
 
 server:
   port: 9103

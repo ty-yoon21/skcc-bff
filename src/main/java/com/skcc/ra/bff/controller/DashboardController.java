@@ -32,7 +32,7 @@ public class DashboardController {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             String json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(menuTree);
-            log.info("🧾 Menu Tree JSON:\n{}", json);
+            //log.info("🧾 Menu Tree JSON:\n{}", json);
         } catch (Exception e) {
             log.error("🔴 JSON 변환 오류", e);
         }
