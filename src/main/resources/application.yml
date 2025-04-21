@@ -4,10 +4,12 @@ spring:
   application:
     name: bff-web
   thymeleaf:
+    cache: false
     prefix: classpath:/templates/
     suffix: .html
     mode: HTML
-    cache: false
+    encoding: UTF-8
+    check-template-location: true
   servlet:
     session:
       timeout: 30m

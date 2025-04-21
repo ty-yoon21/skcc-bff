@@ -4,10 +4,67 @@
 <head>
     <meta charset="UTF-8">
     <title>Main Layout</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #1a73e8;
+            --hover-color: #f3f8fe;
+            --text-primary: #3c4043;
+            --text-secondary: #5f6368;
+            --border-color: #dadce0;
+            --header-height: 64px;
+            --sidebar-width: 320px;
+            --sidebar-bg: #f2f2f2;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            color: var(--text-primary);
+            background-color: white;
+        }
+
+        header {
+            background-color: white;
+            box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 2px 6px 2px rgba(60,64,67,0.15);
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            justify-content: center;
+        }
+
+        header h1 {
+            font-size: 20px;
+            font-weight: 500;
+            margin: 0;
+        }
+
         .menu-list {
             list-style-type: none;
-            padding-left: 20px;
+            padding-left: 0;
+        }
+
+        .menu-list ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .menu-list a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: block;
+            padding: 8px 0;
+        }
+
+        .menu-list a:hover {
+            color: var(--primary-color);
+        }
+
+        .menu-icon {
+            margin-right: 8px;
+            width: 16px;
+            text-align: center;
         }
     </style>
 </head>
@@ -16,25 +73,35 @@
 <!-- ✅ fragment 정의가 필요함 -->
 <div th:fragment="layout">
     <header>
-        <h1>시스템 관리</h1>
+        <h1>00대학 입시관리 시스템</h1>
     </header>
     <div style="display:flex">
-        <aside style="width:250px; background:#f2f2f2; padding:10px">
-            <!-- 메뉴 구조 -->
-            <ul>
+        <aside style="width:var(--sidebar-width); background:var(--sidebar-bg); padding:16px; height:calc(100vh - var(--header-height)); overflow-y:auto">
+            <ul class="menu-list">
                 <li th:each="menu1 : ${menuList}">
-                    <div th:text="${menu1.menuNm}"></div>
-                    <ul th:if="${not #lists.isEmpty(menu1.children)}">
+                    <div th:text="${menu1.menuNm}" style="font-weight:600; padding:8px 0">
+                        <i class="fas fa-folder menu-icon"></i>
+                        <span th:text="${menu1.menuNm}"></span>
+                    </div>
+                    <ul th:if="${not #lists.isEmpty(menu1.children)}" style="margin-left: 20px">
                         <li th:each="menu2 : ${menu1.children}">
-                            <div th:text="${menu2.menuNm}"></div>
-                            <ul th:if="${not #lists.isEmpty(menu2.children)}">
+                            <div th:text="${menu2.menuNm}" style="font-weight:500; padding:8px 0">
+                                <i class="fas fa-folder menu-icon"></i>
+                                <span th:text="${menu2.menuNm}"></span>
+                            </div>
+                            <ul th:if="${not #lists.isEmpty(menu2.children)}" style="margin-left: 20px">
                                 <li th:each="menu3 : ${menu2.children}">
                                     <div>
                                         <a th:if="${menu3.screnUrladdr != null}" 
-                                           th:href="${menu3.screnUrladdr}"
-                                           th:text="${menu3.menuNm}"></a>
+                                           th:href="${menu3.screnUrladdr}">
+                                            <i class="fas fa-file-alt menu-icon"></i>
+                                            <span th:text="${menu3.menuNm}"></span>
+                                        </a>
                                         <span th:if="${menu3.screnUrladdr == null}"
-                                              th:text="${menu3.menuNm}"></span>
+                                              style="display:block; padding:8px 0">
+                                            <i class="fas fa-folder menu-icon"></i>
+                                            <span th:text="${menu3.menuNm}"></span>
+                                        </span>
                                     </div>
                                 </li>
                             </ul>
@@ -45,7 +112,7 @@
         </aside>
 
         <!-- 여기 내부가 다른 html에서 채워짐 -->
-        <main th:insert="~{::content}"></main>
+        <main th:insert="~{::content}" style="flex:1; padding:24px 32px; height:calc(100vh - var(--header-height)); overflow-y:auto"></main>
     </div>
 </div>
 
