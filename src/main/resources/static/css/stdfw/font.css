@@ -1,0 +1,65 @@
+@font-face {
+	font-family: 'SUIT-t';
+	src: local('SUIT Thin'), url('../fonts/SUIT-Thin.woff2') format('woff2');
+}
+@font-face {
+	font-family: 'SUIT-el';
+	src: local('SUIT ExtraLight'), url('../fonts/SUIT-ExtraLight.woff2') format('woff2');
+}
+@font-face {
+	font-family: 'SUIT-l';
+	src: local('SUIT Light'), url('../fonts/SUIT-Light.woff2') format('woff2');
+}
+@font-face {
+	font-family: 'SUIT-r';
+	src: local('SUIT Regular'), url('../fonts/SUIT-Regular.woff2') format('woff2');
+}
+@font-face {
+	font-family: 'SUIT-m';
+	src: local('SUIT Medium'), url('../fonts/SUIT-Medium.woff2') format('woff2');
+}
+@font-face {
+	font-family: 'SUIT-sb';
+	src: local('SUIT SemiBold'), url('../fonts/SUIT-SemiBold.woff2') format('woff2');
+}
+@font-face {
+	font-family: 'SUIT-b';
+	src: local('SUIT Bold'), url('../fonts/SUIT-Bold.woff2') format('woff2');
+}
+@font-face {
+	font-family: 'SUIT-eb';
+	src: local('SUIT ExtraBold'), url('../fonts/SUIT-ExtraBold.woff2') format('woff2');
+}
+@font-face {
+	font-family: 'SUIT-h';
+	src: local('SUIT Heavy'), url('../fonts/SUIT-Heavy.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: 'NotoSansKR-t';
+	src: local('NotoSansKR Thin'), url('../fonts/NotoSansKR-Thin.ttf') format('ttf');
+}
+@font-face {
+	font-family: 'NotoSansKR-l';
+	src: local('NotoSansKR Light'), url('../fonts/NotoSansKR-Light.ttf') format('ttf');
+}
+@font-face {
+	font-family: 'NotoSansKR-r';
+	src: local('NotoSansKR Regular'), url('../fonts/NotoSansKR-Regular.ttf') format('ttf');
+}
+@font-face {
+	font-family: 'NotoSansKR-m';
+	src: local('NotoSansKR Medium'), url('../fonts/NotoSansKR-Medium.ttf') format('ttf');
+}
+@font-face {
+	font-family: 'NotoSansKR-sb';
+	src: local('NotoSansKR SemiBold'), url('../fonts/NotoSansKR-SemiBold.ttf') format('ttf');
+}
+@font-face {
+	font-family: 'NotoSansKR-b';
+	src: local('NotoSansKR Bold'), url('../fonts/NotoSansKR-Bold.ttf') format('ttf');
+}
+@font-face {
+	font-family: 'NotoSansKR-eb';
+	src: local('NotoSansKR ExtraBold'), url('../fonts/NotoSansKR-ExtraBold.ttf') format('ttf');
+}
