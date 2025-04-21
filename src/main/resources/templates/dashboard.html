@@ -1,0 +1,14 @@
+<!-- templates/dashboard.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- ✅ 이 라인에서 레이아웃을 적용 -->
+<html th:replace="~{layout/layout :: layout}">
+
+<!-- ✅ 이 블럭이 layout.html 의 ::content 영역으로 들어감 -->
+<th:block th:fragment="content">
+    <h2>대시보드 메인 화면</h2>
+    <p>환영합니다!</p>
+</th:block>
+
+</html>

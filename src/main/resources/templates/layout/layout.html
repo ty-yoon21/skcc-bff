@@ -1,0 +1,53 @@
+<!-- templates/layout/layout.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Main Layout</title>
+    <style>
+        .menu-list {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ✅ fragment 정의가 필요함 -->
+<div th:fragment="layout">
+    <header>
+        <h1>시스템 관리</h1>
+    </header>
+    <div style="display:flex">
+        <aside style="width:250px; background:#f2f2f2; padding:10px">
+            <!-- 메뉴 구조 -->
+            <ul>
+                <li th:each="menu1 : ${menuList}">
+                    <div th:text="${menu1.menuNm}"></div>
+                    <ul th:if="${not #lists.isEmpty(menu1.children)}">
+                        <li th:each="menu2 : ${menu1.children}">
+                            <div th:text="${menu2.menuNm}"></div>
+                            <ul th:if="${not #lists.isEmpty(menu2.children)}">
+                                <li th:each="menu3 : ${menu2.children}">
+                                    <div>
+                                        <a th:if="${menu3.screnUrladdr != null}" 
+                                           th:href="${menu3.screnUrladdr}"
+                                           th:text="${menu3.menuNm}"></a>
+                                        <span th:if="${menu3.screnUrladdr == null}"
+                                              th:text="${menu3.menuNm}"></span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- 여기 내부가 다른 html에서 채워짐 -->
+        <main th:insert="~{::content}"></main>
+    </div>
+</div>
+
+</body>
+</html>

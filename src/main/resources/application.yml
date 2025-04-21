@@ -1,0 +1,25 @@
+# spring.application.name=bff-web
+# bff-web/src/main/resources/application.yml
+spring:
+  application:
+    name: bff-web
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    cache: false
+  servlet:
+    session:
+      timeout: 30m
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+
+server:
+  port: 9103
+
+app:
+  api:
+    gateway-url: http://localhost:9102
+  jwtSecret: adtcapsSecretKey    
