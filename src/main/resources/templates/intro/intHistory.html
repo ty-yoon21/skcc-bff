@@ -1,13 +1,740 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
+
 <head>
     <meta charset="UTF-8">
-    <title>연혁 - 체육인재개발원 학습운영시스템</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>체육인재개발원 포털 - 연혁</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>tailwind.config = { theme: { extend: { colors: { primary: '#1a237e', secondary: '#0d47a1' }, borderRadius: { 'none': '0px', 'sm': '4px', DEFAULT: '8px', 'md': '12px', 'lg': '16px', 'xl': '20px', '2xl': '24px', '3xl': '32px', 'full': '9999px', 'button': '8px' } } } }</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        :where([class^="ri-"])::before {
+            content: "\f3c2";
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .sidebar {
+            width: 280px;
+            transition: all 0.3s ease;
+        }
+
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .submenu.active {
+            max-height: 500px;
+        }
+
+        .menu-item.active {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-item.active .submenu {
+            max-height: 500px;
+        }
+
+        .timeline-item::before {
+            content: "";
+            position: absolute;
+            left: -35px;
+            top: 0;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: #1a237e;
+            border: 3px solid white;
+            z-index: 1;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: -28px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #e5e7eb;
+        }
+
+        .timeline-year::before {
+            content: "";
+            position: absolute;
+            left: -42px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: #1a237e;
+            border: 4px solid white;
+            box-shadow: 0 0 0 2px #1a237e;
+            z-index: 2;
+        }
+
+        .timeline-year-line {
+            position: absolute;
+            left: -31px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background-color: #1a237e;
+            z-index: 1;
+        }
+
+        .timeline-event {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-event::before {
+            content: "";
+            position: absolute;
+            left: -38px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: white;
+            border: 2px solid #1a237e;
+            z-index: 2;
+        }
+
+        .timeline-event:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
 </head>
-<body>
-    <!-- 개발원 소개 > 연혁 -->
-    <div th:fragment="content">
-        <h2>연혁</h2>
+
+<body class="bg-gray-50">
+    <div class="flex min-h-screen">
+        
+        <!-- 메인 콘텐츠 -->
+        <div class="ml-[280px] w-[calc(100%-280px)] min-h-screen">
+            <!-- 연혁 페이지 -->
+            <div class="fade-in">
+                <!-- 페이지 헤더 -->
+                <div class="bg-white shadow-sm">
+                    <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+                        <div class="flex items-center text-sm text-gray-500 mb-2">
+                            <a href="#" class="hover:text-primary">홈</a>
+                            <span class="mx-2">&gt;</span>
+                            <a href="#" class="hover:text-primary">개발원소개</a>
+                            <span class="mx-2">&gt;</span>
+                            <span class="text-primary font-medium">연혁</span>
+                        </div>
+                        <h1 class="text-3xl font-bold text-gray-900">연혁</h1>
+                        <p class="mt-2 text-gray-600">체육인재개발원의 설립부터 현재까지의 주요 발자취를 소개합니다.</p>
+                    </div>
+                </div>
+                <!-- 연혁 콘텐츠 -->
+                <div class="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+                    <div class="bg-white rounded-lg shadow-sm p-8 md:p-12">
+                        <!-- 연혁 소개 -->
+                        <div class="mb-12">
+                            <h2 class="text-2xl font-bold text-primary mb-4">체육인재개발원의 역사</h2>
+                            <p class="text-gray-700 mb-6">체육인재개발원은 2010년 설립 이후 대한민국 체육 발전을 위한 인재 양성의 중추적 역할을 담당해 왔습니다.
+                                설립부터 현재까지 체육 인재 양성을 위한 다양한 교육 프로그램 개발과 연구 활동을 통해 국내 체육 교육의 발전에 기여하고 있습니다.</p>
+                            <div class="flex flex-col md:flex-row gap-6">
+                                <div class="md:w-1/2">
+                                    <div class="bg-blue-50 p-6 rounded-lg border border-blue-100 h-full">
+                                        <h3 class="text-lg font-bold text-primary mb-3">주요 성과</h3>
+                                        <ul class="space-y-2 text-gray-700">
+                                            <li class="flex items-start">
+                                                <div
+                                                    class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                                                    <i class="ri-check-line"></i>
+                                                </div>
+                                                <span>15년간 총 50,000명 이상의 체육 인재 양성</span>
+                                            </li>
+                                            <li class="flex items-start">
+                                                <div
+                                                    class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                                                    <i class="ri-check-line"></i>
+                                                </div>
+                                                <span>체육 교육 콘텐츠 300여 종 개발</span>
+                                            </li>
+                                            <li class="flex items-start">
+                                                <div
+                                                    class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                                                    <i class="ri-check-line"></i>
+                                                </div>
+                                                <span>국제 교류 협력 MOU 20개국 체결</span>
+                                            </li>
+                                            <li class="flex items-start">
+                                                <div
+                                                    class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                                                    <i class="ri-check-line"></i>
+                                                </div>
+                                                <span>스포츠 과학 연구 논문 150여 편 발표</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="md:w-1/2">
+                                    <img src="https://readdy.ai/api/search-image?query=Modern%2520educational%2520institution%2520building%2520with%2520glass%2520facade%2520and%2520clean%2520architectural%2520lines%252C%2520surrounded%2520by%2520landscaped%2520gardens.%2520The%2520building%2520has%2520a%2520contemporary%2520design%2520with%2520blue%2520accents%2520representing%2520a%2520sports%2520education%2520center.%2520Students%2520are%2520walking%2520around%2520the%2520campus%2520on%2520a%2520clear%2520sunny%2520day.&width=600&height=400&seq=1&orientation=landscape"
+                                        alt="체육인재개발원 전경"
+                                        class="w-full h-auto rounded-lg shadow-sm object-cover object-top">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 타임라인 -->
+                        <div class="relative pl-10 md:pl-16">
+                            <!-- 2025년 -->
+                            <div class="mb-16 relative">
+                                <div class="timeline-year-line"></div>
+                                <div class="relative">
+                                    <h3 class="text-2xl font-bold text-primary mb-8 timeline-year">2025</h3>
+                                    <div class="space-y-4">
+                                        <div class="bg-blue-50 p-6 rounded-lg border border-blue-100 timeline-event">
+                                            <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-6">
+                                                <div class="md:w-1/6">
+                                                    <h4 class="text-lg font-semibold text-gray-900">3월</h4>
+                                                </div>
+                                                <div class="md:w-5/6">
+                                                    <p class="text-gray-700 font-medium">제5대 김정훈 원장 취임</p>
+                                                    <p class="text-gray-600 mt-1">체육인재개발원의 새로운 비전과 미션을 제시하며 디지털 전환 및 글로벌
+                                                        체육 인재 양성의 새로운 시대를 열어가고 있습니다.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="bg-blue-50 p-6 rounded-lg border border-blue-100 timeline-event">
+                                            <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-6">
+                                                <div class="md:w-1/6">
+                                                    <h4 class="text-lg font-semibold text-gray-900">1월</h4>
+                                                </div>
+                                                <div class="md:w-5/6">
+                                                    <p class="text-gray-700 font-medium">체육인재개발원 디지털 전환 프로젝트 착수</p>
+                                                    <p class="text-gray-600 mt-1">4차 산업혁명 시대에 발맞춰 디지털 기술을 활용한 스마트 체육 교육
+                                                        시스템 구축 프로젝트를 시작했습니다.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 2023년 -->
+                            <div class="mb-16 relative">
+                                <div class="timeline-year-line"></div>
+                                <div class="relative">
+                                    <h3 class="text-2xl font-bold text-primary mb-8 timeline-year">2023</h3>
+                                    <div class="space-y-4">
+                                        <div class="bg-blue-50 p-6 rounded-lg border border-blue-100 timeline-event">
+                                            <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-6">
+                                                <div class="md:w-1/6">
+                                                    <h4 class="text-lg font-semibold text-gray-900">11월</h4>
+                                                </div>
+                                                <div class="md:w-5/6">
+                                                    <p class="text-gray-700 font-medium">국제 체육교육 컨퍼런스 개최</p>
+                                                    <p class="text-gray-600 mt-1">15개국 200여명의 체육 교육 전문가들이 참석한 국제 컨퍼런스를
+                                                        성공적으로 개최하였습니다.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="bg-blue-50 p-6 rounded-lg border border-blue-100 timeline-event">
+                                            <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-6">
+                                                <div class="md:w-1/6">
+                                                    <h4 class="text-lg font-semibold text-gray-900">7월</h4>
+                                                </div>
+                                                <div class="md:w-5/6">
+                                                    <p class="text-gray-700 font-medium">체육인재개발원 교육시설 확장 및 리모델링</p>
+                                                    <p class="text-gray-600 mt-1">최신 교육 환경 조성을 위한 시설 확장 및 리모델링 공사를 완료하여
+                                                        교육생들에게 더 나은 교육 환경을 제공하게 되었습니다.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="bg-blue-50 p-6 rounded-lg border border-blue-100 timeline-event">
+                                            <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-6">
+                                                <div class="md:w-1/6">
+                                                    <h4 class="text-lg font-semibold text-gray-900">3월</h4>
+                                                </div>
+                                                <div class="md:w-5/6">
+                                                    <p class="text-gray-700 font-medium">스포츠 과학 연구센터 설립</p>
+                                                    <p class="text-gray-600 mt-1">체계적인 스포츠 과학 연구를 위한 전문 연구센터를 설립하여 과학적
+                                                        체육 교육의 기반을 마련하였습니다.</p>
+                                                    <div class="mt-4">
+                                                        <img src="https://readdy.ai/api/search-image?query=Modern%2520sports%2520science%2520research%2520center%2520with%2520advanced%2520laboratory%2520equipment%2520and%2520researchers%2520working%2520on%2520motion%2520analysis.%2520The%2520lab%2520has%2520high-tech%2520equipment%2520for%2520measuring%2520athletic%2520performance%2520with%2520clean%2520white%2520walls%2520and%2520blue%2520accents.%2520Scientists%2520in%2520lab%2520coats%2520are%2520analyzing%2520data%2520on%2520large%2520screens.&width=600&height=300&seq=2&orientation=landscape"
+                                                            alt="스포츠 과학 연구센터"
+                                                            class="w-full h-auto rounded-lg shadow-sm object-cover object-top">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 2020년 -->
+                            <div class="mb-16 relative">
+                                <div class="timeline-year-line"></div>
+                                <div class="relative">
+                                    <h3 class="text-2xl font-bold text-primary mb-8 timeline-year">2020</h3>
+                                    <div class="space-y-4">
+                                        <div class="bg-blue-50 p-6 rounded-lg border border-blue-100 timeline-event">
+                                            <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-6">
+                                                <div class="md:w-1/6">
+                                                    <h4 class="text-lg font-semibold text-gray-900">10월</h4>
+                                                </div>
+                                                <div class="md:w-5/6">
+                                                    <p class="text-gray-700 font-medium">개원 10주년 기념식 개최</p>
+                                                    <p class="text-gray-600 mt-1">체육인재개발원 설립 10주년을 맞아 기념식을 개최하고 지난 10년의
+                                                        성과를 돌아보며 미래 비전을 선포하였습니다.</p>
+                                                    <div class="mt-4">
+                                                        <img src="https://readdy.ai/api/search-image?query=Formal%2520anniversary%2520celebration%2520in%2520a%2520modern%2520conference%2520hall%2520with%2520blue%2520and%2520white%2520decorations.%2520Officials%2520and%2520guests%2520in%2520formal%2520attire%2520are%2520seated%2520at%2520round%2520tables.%2520A%2520large%2520stage%2520has%2520a%2520banner%2520reading%2520%2522%EC%B2%B4%EC%9C%A1%EC%9D%B8%EC%9E%AC%EA%B0%9C%EB%B0%9C%EC%9B%90%252010%EC%A3%BC%EB%85%84%2520%EA%B8%B0%EB%85%90%EC%8B%9D%2522%2520in%2520Korean%2520with%2520traditional%2520Korean%2520design%2520elements.%2520The%2520atmosphere%2520is%2520celebratory%2520yet%2520professional%2520with%2520Korean%2520cultural%2520touches.&width=600&height=300&seq=3&orientation=landscape"
+                                                            alt="개원 10주년 기념식"
+                                                            class="w-full h-auto rounded-lg shadow-sm object-cover object-top">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="bg-blue-50 p-6 rounded-lg border border-blue-100 timeline-event">
+                                            <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-6">
+                                                <div class="md:w-1/6">
+                                                    <h4 class="text-lg font-semibold text-gray-900">9월</h4>
+                                                </div>
+                                                <div class="md:w-5/6">
+                                                    <p class="text-gray-700 font-medium">체육 지도자 온라인 교육 플랫폼 구축</p>
+                                                    <p class="text-gray-600 mt-1">코로나19 상황에 대응하여 비대면 교육이 가능한 온라인 교육 플랫폼을
+                                                        구축하였습니다.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="bg-blue-50 p-6 rounded-lg border border-blue-100 timeline-event">
+                                            <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-6">
+                                                <div class="md:w-1/6">
+                                                    <h4 class="text-lg font-semibold text-gray-900">6월</h4>
+                                                </div>
+                                                <div class="md:w-5/6">
+                                                    <p class="text-gray-700 font-medium">제4대 박민수 원장 취임</p>
+                                                    <p class="text-gray-600 mt-1">체육계의 저명한 학자이자 행정가인 박민수 교수가 제4대 원장으로
+                                                        취임하였습니다.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 2017년 -->
+                            <div class="mb-16 relative">
+                                <div class="timeline-year-line"></div>
+                                <div class="relative">
+                                    <h3 class="text-2xl font-bold text-primary mb-8 timeline-year">2017</h3>
+                                    <div class="space-y-4">
+                                        <div class="bg-blue-50 p-6 rounded-lg border border-blue-100 timeline-event">
+                                            <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-6">
+                                                <div class="md:w-1/6">
+                                                    <h4 class="text-lg font-semibold text-gray-900">9월</h4>
+                                                </div>
+                                                <div class="md:w-5/6">
+                                                    <p class="text-gray-700 font-medium">제3대 정현석 원장 취임</p>
+                                                    <p class="text-gray-600 mt-1">스포츠 행정 전문가인 정현석 교수가 제3대 원장으로 취임하였습니다.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="bg-blue-50 p-6 rounded-lg border border-blue-100 timeline-event">
+                                            <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-6">
+                                                <div class="md:w-1/6">
+                                                    <h4 class="text-lg font-semibold text-gray-900">4월</h4>
+                                                </div>
+                                                <div class="md:w-5/6">
+                                                    <p class="text-gray-700 font-medium">체육인재개발원 연구지 창간</p>
+                                                    <p class="text-gray-600 mt-1">체육 교육 분야의 연구 성과를 공유하기 위한 학술지 '체육인재연구'를
+                                                        창간하였습니다.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 2015년 -->
+                            <div class="mb-16 relative">
+                                <div class="timeline-year-line"></div>
+                                <div class="relative">
+                                    <h3 class="text-2xl font-bold text-primary mb-8 timeline-year">2015</h3>
+                                    <div class="space-y-4">
+                                        <div class="bg-blue-50 p-6 rounded-lg border border-blue-100 timeline-event">
+                                            <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-6">
+                                                <div class="md:w-1/6">
+                                                    <h4 class="text-lg font-semibold text-gray-900">12월</h4>
+                                                </div>
+                                                <div class="md:w-5/6">
+                                                    <p class="text-gray-700 font-medium">체육 지도자 자격 연수원 지정</p>
+                                                    <p class="text-gray-600 mt-1">문화체육관광부로부터 공식 체육 지도자 자격 연수원으로 지정되어 체육
+                                                        지도자 양성의 공신력을 확보하였습니다.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="bg-blue-50 p-6 rounded-lg border border-blue-100 timeline-event">
+                                            <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-6">
+                                                <div class="md:w-1/6">
+                                                    <h4 class="text-lg font-semibold text-gray-900">5월</h4>
+                                                </div>
+                                                <div class="md:w-5/6">
+                                                    <p class="text-gray-700 font-medium">국제 체육 교류 협력 MOU 체결 (5개국)</p>
+                                                    <p class="text-gray-600 mt-1">일본, 중국, 미국, 독일, 호주의 체육 교육 기관과 국제 교류
+                                                        협력을 위한 MOU를 체결하였습니다.</p>
+                                                    <div class="mt-4">
+                                                        <img src="https://readdy.ai/api/search-image?query=Formal%2520MOU%2520signing%2520ceremony%2520in%2520Korea%2520with%2520representatives%2520seated%2520at%2520a%2520long%2520table.%2520Korean%2520text%2520banners%2520and%2520national%2520flags%2520are%2520displayed.%2520Officials%2520in%2520formal%2520attire%2520are%2520signing%2520documents%2520with%2520Korean%2520and%2520international%2520logos%2520on%2520the%2520backdrop.%2520The%2520ceremony%2520has%2520traditional%2520Korean%2520decorative%2520elements%2520and%2520Korean%2520media%2520coverage.&width=600&height=300&seq=4&orientation=landscape"
+                                                            alt="국제 MOU 체결식"
+                                                            class="w-full h-auto rounded-lg shadow-sm object-cover object-top">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 2013년 -->
+                            <div class="mb-16 relative">
+                                <div class="timeline-year-line"></div>
+                                <div class="relative">
+                                    <h3 class="text-2xl font-bold text-primary mb-8 timeline-year">2013</h3>
+                                    <div class="space-y-4">
+                                        <div class="bg-blue-50 p-6 rounded-lg border border-blue-100 timeline-event">
+                                            <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-6">
+                                                <div class="md:w-1/6">
+                                                    <h4 class="text-lg font-semibold text-gray-900">8월</h4>
+                                                </div>
+                                                <div class="md:w-5/6">
+                                                    <p class="text-gray-700 font-medium">제2대 이민호 원장 취임</p>
+                                                    <p class="text-gray-600 mt-1">체육계의 원로이자 행정 전문가인 이민호 교수가 제2대 원장으로
+                                                        취임하였습니다.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="bg-blue-50 p-6 rounded-lg border border-blue-100 timeline-event">
+                                            <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-6">
+                                                <div class="md:w-1/6">
+                                                    <h4 class="text-lg font-semibold text-gray-900">3월</h4>
+                                                </div>
+                                                <div class="md:w-5/6">
+                                                    <p class="text-gray-700 font-medium">체육인재개발원 교육센터 증축</p>
+                                                    <p class="text-gray-600 mt-1">늘어나는 교육 수요에 대응하기 위해 교육센터를 증축하여 교육 시설을
+                                                        확장하였습니다.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 2010년 -->
+                            <div class="relative">
+                                <div class="timeline-year-line"></div>
+                                <div class="relative">
+                                    <h3 class="text-2xl font-bold text-primary mb-8 timeline-year">2010</h3>
+                                    <div class="space-y-4">
+                                        <div class="bg-blue-50 p-6 rounded-lg border border-blue-100 timeline-event">
+                                            <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-6">
+                                                <div class="md:w-1/6">
+                                                    <h4 class="text-lg font-semibold text-gray-900">3월</h4>
+                                                </div>
+                                                <div class="md:w-5/6">
+                                                    <p class="text-gray-700 font-medium">체육인재개발원 설립 및 개원</p>
+                                                    <p class="text-gray-600 mt-1">대한민국 체육의 미래를 이끌어갈 인재를 양성하기 위한 전문
+                                                        교육기관으로 체육인재개발원이 공식 설립되었습니다.</p>
+                                                    <div class="mt-4">
+                                                        <img src="https://readdy.ai/api/search-image?query=Opening%2520ceremony%2520of%2520a%2520modern%2520sports%2520education%2520institute%2520in%2520Korea.%2520Professional%2520athletes%2520in%2520national%2520team%2520uniforms%2520and%2520training%2520gear%2520are%2520gathered%2520alongside%2520officials%2520in%2520formal%2520attire.%2520The%2520athletes%2520represent%2520various%2520sports%2520including%2520swimming%252C%2520gymnastics%252C%2520and%2520track%2520and%2520field.%2520A%2520large%2520banner%2520with%2520Korean%2520text%2520displays%2520the%2520institute%2527s%2520name.%2520The%2520modern%2520building%2520features%2520blue%2520and%2520white%2520color%2520scheme%2520with%2520clean%2520architectural%2520lines.%2520The%2520atmosphere%2520is%2520celebratory%2520with%2520professional%2520lighting%2520and%2520media%2520coverage.&width=600&height=300&seq=11&orientation=landscape"
+                                                            alt="체육인재개발원 설립식"
+                                                            class="w-full h-auto rounded-lg shadow-sm object-cover object-top">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="bg-blue-50 p-6 rounded-lg border border-blue-100 timeline-event">
+                                            <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-6">
+                                                <div class="md:w-1/6">
+                                                    <h4 class="text-lg font-semibold text-gray-900">1월</h4>
+                                                </div>
+                                                <div class="md:w-5/6">
+                                                    <p class="text-gray-700 font-medium">초대 이상철 원장 취임</p>
+                                                    <p class="text-gray-600 mt-1">체육계의 저명한 학자이자 행정가인 이상철 교수가 초대 원장으로
+                                                        취임하였습니다.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 통계 및 성과 -->
+                    <div class="mt-12 bg-white rounded-lg shadow-sm overflow-hidden">
+                        <div class="p-8 md:p-12">
+                            <h2 class="text-2xl font-bold text-primary mb-8">체육인재개발원의 성장</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div>
+                                    <h3 class="text-xl font-bold text-gray-900 mb-4">교육 실적</h3>
+                                    <div class="bg-blue-50 p-6 rounded-lg border border-blue-100">
+                                        <div class="h-64" id="educationChart"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-gray-900 mb-4">주요 성과 지표</h3>
+                                    <div class="space-y-4">
+                                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                                            <div class="flex justify-between items-center">
+                                                <div>
+                                                    <h4 class="font-medium text-gray-700">교육 프로그램 수</h4>
+                                                    <p class="text-2xl font-bold text-primary mt-1">120개</p>
+                                                </div>
+                                                <div
+                                                    class="w-12 h-12 flex items-center justify-center bg-primary rounded-full text-white">
+                                                    <i class="ri-book-open-line text-xl"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                                            <div class="flex justify-between items-center">
+                                                <div>
+                                                    <h4 class="font-medium text-gray-700">연간 교육생 수</h4>
+                                                    <p class="text-2xl font-bold text-primary mt-1">5,000명+</p>
+                                                </div>
+                                                <div
+                                                    class="w-12 h-12 flex items-center justify-center bg-primary rounded-full text-white">
+                                                    <i class="ri-user-line text-xl"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                                            <div class="flex justify-between items-center">
+                                                <div>
+                                                    <h4 class="font-medium text-gray-700">국제 협력 기관</h4>
+                                                    <p class="text-2xl font-bold text-primary mt-1">20개국 35기관</p>
+                                                </div>
+                                                <div
+                                                    class="w-12 h-12 flex items-center justify-center bg-primary rounded-full text-white">
+                                                    <i class="ri-global-line text-xl"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                                            <div class="flex justify-between items-center">
+                                                <div>
+                                                    <h4 class="font-medium text-gray-700">교육 만족도</h4>
+                                                    <p class="text-2xl font-bold text-primary mt-1">4.8/5.0</p>
+                                                </div>
+                                                <div
+                                                    class="w-12 h-12 flex items-center justify-center bg-primary rounded-full text-white">
+                                                    <i class="ri-star-line text-xl"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 원장 소개 -->
+                    <div class="mt-12 bg-white rounded-lg shadow-sm overflow-hidden">
+                        <div class="p-8 md:p-12">
+                            <h2 class="text-2xl font-bold text-primary mb-8">역대 원장</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-5 gap-6">
+                                <div class="bg-blue-50 p-6 rounded-lg border border-blue-100 text-center">
+                                    <div class="w-24 h-24 mx-auto rounded-full overflow-hidden mb-4">
+                                        <img src="https://readdy.ai/api/search-image?query=Professional%2520headshot%2520of%2520an%2520Asian%2520male%2520professor%2520in%2520his%252060s%2520wearing%2520a%2520formal%2520suit%2520and%2520tie.%2520He%2520has%2520gray%2520hair%2520and%2520glasses%252C%2520with%2520a%2520dignified%2520expression%2520suitable%2520for%2520an%2520academic%2520leader.%2520The%2520background%2520is%2520neutral%2520and%2520professional.&width=200&height=200&seq=6&orientation=squarish"
+                                            alt="이상철 초대 원장" class="w-full h-full object-cover object-top">
+                                    </div>
+                                    <h3 class="font-bold text-gray-900">이상철 원장</h3>
+                                    <p class="text-gray-600 text-sm">초대 원장</p>
+                                    <p class="text-gray-600 text-sm">2010.01 - 2013.08</p>
+                                </div>
+                                <div class="bg-blue-50 p-6 rounded-lg border border-blue-100 text-center">
+                                    <div class="w-24 h-24 mx-auto rounded-full overflow-hidden mb-4">
+                                        <img src="https://readdy.ai/api/search-image?query=Professional%2520headshot%2520of%2520an%2520Asian%2520male%2520professor%2520in%2520his%252050s%2520wearing%2520a%2520formal%2520suit.%2520He%2520has%2520short%2520black%2520hair%2520with%2520some%2520gray%252C%2520a%2520confident%2520expression%252C%2520and%2520appears%2520scholarly.%2520The%2520background%2520is%2520neutral%2520and%2520professional.&width=200&height=200&seq=7&orientation=squarish"
+                                            alt="이민호 제2대 원장" class="w-full h-full object-cover object-top">
+                                    </div>
+                                    <h3 class="font-bold text-gray-900">이민호 원장</h3>
+                                    <p class="text-gray-600 text-sm">제2대 원장</p>
+                                    <p class="text-gray-600 text-sm">2013.08 - 2017.09</p>
+                                </div>
+                                <div class="bg-blue-50 p-6 rounded-lg border border-blue-100 text-center">
+                                    <div class="w-24 h-24 mx-auto rounded-full overflow-hidden mb-4">
+                                        <img src="https://readdy.ai/api/search-image?query=Professional%2520headshot%2520of%2520an%2520Asian%2520male%2520professor%2520in%2520his%252050s%2520wearing%2520a%2520formal%2520suit%2520and%2520tie.%2520He%2520has%2520a%2520serious%2520yet%2520approachable%2520expression%252C%2520short%2520black%2520hair%252C%2520and%2520appears%2520confident.%2520The%2520background%2520is%2520neutral%2520and%2520professional.&width=200&height=200&seq=8&orientation=squarish"
+                                            alt="정현석 제3대 원장" class="w-full h-full object-cover object-top">
+                                    </div>
+                                    <h3 class="font-bold text-gray-900">정현석 원장</h3>
+                                    <p class="text-gray-600 text-sm">제3대 원장</p>
+                                    <p class="text-gray-600 text-sm">2017.09 - 2020.06</p>
+                                </div>
+                                <div class="bg-blue-50 p-6 rounded-lg border border-blue-100 text-center">
+                                    <div class="w-24 h-24 mx-auto rounded-full overflow-hidden mb-4">
+                                        <img src="https://readdy.ai/api/search-image?query=Professional%2520headshot%2520of%2520an%2520Asian%2520male%2520professor%2520in%2520his%252040s%2520wearing%2520a%2520formal%2520suit%2520and%2520tie.%2520He%2520has%2520a%2520friendly%2520smile%252C%2520short%2520black%2520hair%252C%2520and%2520appears%2520energetic.%2520The%2520background%2520is%2520neutral%2520and%2520professional.&width=200&height=200&seq=9&orientation=squarish"
+                                            alt="박민수 제4대 원장" class="w-full h-full object-cover object-top">
+                                    </div>
+                                    <h3 class="font-bold text-gray-900">박민수 원장</h3>
+                                    <p class="text-gray-600 text-sm">제4대 원장</p>
+                                    <p class="text-gray-600 text-sm">2020.06 - 2025.03</p>
+                                </div>
+                                <div class="bg-blue-50 p-6 rounded-lg border border-blue-100 text-center">
+                                    <div class="w-24 h-24 mx-auto rounded-full overflow-hidden mb-4">
+                                        <img src="https://readdy.ai/api/search-image?query=Professional%2520headshot%2520of%2520an%2520Asian%2520male%2520professor%2520in%2520his%252050s%2520wearing%2520a%2520formal%2520dark%2520blue%2520suit%2520and%2520tie.%2520He%2520has%2520a%2520confident%2520smile%252C%2520short%2520black%2520hair%2520with%2520some%2520gray%252C%2520and%2520appears%2520distinguished.%2520The%2520background%2520is%2520neutral%2520and%2520professional.&width=200&height=200&seq=10&orientation=squarish"
+                                            alt="김정훈 제5대 원장" class="w-full h-full object-cover object-top">
+                                    </div>
+                                    <h3 class="font-bold text-gray-900">김정훈 원장</h3>
+                                    <p class="text-gray-600 text-sm">제5대 원장</p>
+                                    <p class="text-gray-600 text-sm">2025.03 - 현재</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 인사말 페이지로 돌아가기 -->
+                    <div class="mt-12 text-center">
+                        <a href="https://readdy.ai/home/8289e8bd-0211-46fd-b43c-4527019ae71a/658d5e48-8cde-4b39-9101-53e466d7fd6d"
+                            data-readdy="true"
+                            class="inline-flex items-center gap-2 bg-primary text-white py-3 px-6 rounded-button hover:bg-primary/90 whitespace-nowrap">
+                            <i class="ri-arrow-left-line"></i>
+                            <span>인사말 페이지로 돌아가기</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // 메뉴 토글 기능
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach(item => {
+                const menuHeader = item.querySelector('div');
+                menuHeader.addEventListener('click', () => {
+                    item.classList.toggle('active');
+                });
+            });
+            // 교육 실적 차트
+            const educationChart = document.getElementById('educationChart');
+            if (educationChart) {
+                const chart = echarts.init(educationChart);
+                const option = {
+                    animation: false,
+                    tooltip: {
+                        trigger: 'axis',
+                        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                        textStyle: {
+                            color: '#1f2937'
+                        }
+                    },
+                    legend: {
+                        data: ['교육 과정 수', '교육생 수(천명)'],
+                        textStyle: {
+                            color: '#1f2937'
+                        }
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        top: '15%',
+                        containLabel: true
+                    },
+                    xAxis: {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: ['2010', '2013', '2016', '2019', '2022', '2025'],
+                        axisLine: {
+                            lineStyle: {
+                                color: '#1f2937'
+                            }
+                        }
+                    },
+                    yAxis: {
+                        type: 'value',
+                        axisLine: {
+                            lineStyle: {
+                                color: '#1f2937'
+                            }
+                        }
+                    },
+                    series: [
+                        {
+                            name: '교육 과정 수',
+                            type: 'line',
+                            smooth: true,
+                            lineStyle: {
+                                width: 3,
+                                color: 'rgba(87, 181, 231, 1)'
+                            },
+                            areaStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                    {
+                                        offset: 0,
+                                        color: 'rgba(87, 181, 231, 0.3)'
+                                    },
+                                    {
+                                        offset: 1,
+                                        color: 'rgba(87, 181, 231, 0.1)'
+                                    }
+                                ])
+                            },
+                            data: [15, 35, 60, 85, 105, 120],
+                            symbol: 'none'
+                        },
+                        {
+                            name: '교육생 수(천명)',
+                            type: 'line',
+                            smooth: true,
+                            lineStyle: {
+                                width: 3,
+                                color: 'rgba(141, 211, 199, 1)'
+                            },
+                            areaStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                    {
+                                        offset: 0,
+                                        color: 'rgba(141, 211, 199, 0.3)'
+                                    },
+                                    {
+                                        offset: 1,
+                                        color: 'rgba(141, 211, 199, 0.1)'
+                                    }
+                                ])
+                            },
+                            data: [0.8, 1.5, 2.8, 3.5, 4.2, 5],
+                            symbol: 'none'
+                        }
+                    ]
+                };
+                chart.setOption(option);
+                // 반응형 차트
+                window.addEventListener('resize', function () {
+                    chart.resize();
+                });
+            }
+        });
+    </script>
 </body>
-</html> 
+
+</html>

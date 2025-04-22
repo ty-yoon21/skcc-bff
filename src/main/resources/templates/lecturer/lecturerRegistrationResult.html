@@ -1,13 +1,1227 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
+
 <head>
-    <meta charset="UTF-8">
-    <title>강사등록 결과 - 체육인재개발원 학습운영시스템</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>체육인재개발원 포털 - 강사등록 확인</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: "#1a237e", secondary: "#0d47a1" },
+                    borderRadius: {
+                        none: "0px",
+                        sm: "4px",
+                        DEFAULT: "8px",
+                        md: "12px",
+                        lg: "16px",
+                        xl: "20px",
+                        "2xl": "24px",
+                        "3xl": "32px",
+                        full: "9999px",
+                        button: "8px",
+                    },
+                },
+            },
+        };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet" />
+    <style>
+        :where([class^="ri-"])::before {
+            content: "\f3c2";
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .sidebar {
+            width: 280px;
+            transition: all 0.3s ease;
+        }
+
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .submenu.active {
+            max-height: 500px;
+        }
+
+        .menu-item.active {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-item.active .submenu {
+            max-height: 500px;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-review {
+            background-color: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .status-approved {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-rejected {
+            background-color: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .modal {
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-content {
+            transition: transform 0.3s ease;
+        }
+
+        .modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .tab-button.active {
+            color: #1a237e;
+            border-bottom: 2px solid #1a237e;
+        }
+
+        .custom-checkbox {
+            display: flex;
+            align-items: center;
+        }
+
+        .custom-checkbox input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .custom-checkbox .checkbox-icon {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #d1d5db;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .custom-checkbox input[type="checkbox"]:checked+.checkbox-icon {
+            background-color: #1a237e;
+            border-color: #1a237e;
+        }
+
+        .custom-checkbox input[type="checkbox"]:checked+.checkbox-icon:after {
+            content: '';
+            width: 6px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+            display: block;
+            margin-top: -2px;
+        }
+    </style>
 </head>
-<body>
-    <!-- 강사등록 > 결과 -->
-    <div th:fragment="content">
-        <h2>강사등록 결과</h2>
+
+<body class="bg-gray-50">
+    <div class="flex min-h-screen">
+        
+
+        <!-- 메인 콘텐츠 -->
+        <div class="ml-[280px] w-[calc(100%-280px)] min-h-screen">
+            <div class="fade-in">
+                <!-- 페이지 헤더 -->
+                <div class="bg-white shadow-sm">
+                    <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+                        <div class="flex items-center text-sm text-gray-500 mb-2">
+                            <a href="#" class="hover:text-primary">홈</a>
+                            <span class="mx-2">&gt;</span>
+                            <a href="#" class="hover:text-primary">강사지원</a>
+                            <span class="mx-2">&gt;</span>
+                            <span class="text-primary font-medium">등록확인</span>
+                        </div>
+                        <h1 class="text-3xl font-bold text-gray-900">강사등록 확인</h1>
+                        <p class="mt-2 text-gray-600">
+                            제출하신 강사등록 신청 현황을 확인하실 수 있습니다.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 신청내역 콘텐츠 -->
+                <div class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+                    <div class="bg-white rounded-lg shadow-sm p-6 md:p-8">
+                        <!-- 필터 영역 -->
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+                            <div class="flex flex-wrap gap-2">
+                                <div class="inline-flex rounded-md shadow-sm">
+                                    <button id="statusAll"
+                                        class="tab-button active px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-50 whitespace-nowrap">
+                                        전체
+                                    </button>
+                                    <button id="statusReview"
+                                        class="tab-button px-4 py-2 text-sm font-medium text-gray-700 bg-white border-t border-b border-r border-gray-300 hover:bg-gray-50 whitespace-nowrap">
+                                        검토중
+                                    </button>
+                                    <button id="statusApproved"
+                                        class="tab-button px-4 py-2 text-sm font-medium text-gray-700 bg-white border-t border-b border-r border-gray-300 hover:bg-gray-50 whitespace-nowrap">
+                                        승인
+                                    </button>
+                                    <button id="statusRejected"
+                                        class="tab-button px-4 py-2 text-sm font-medium text-gray-700 bg-white border-t border-b border-r border-gray-300 rounded-r-lg hover:bg-gray-50 whitespace-nowrap">
+                                        반려
+                                    </button>
+                                </div>
+                                <div class="inline-flex rounded-md shadow-sm">
+                                    <button id="period1Month"
+                                        class="tab-button active px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-50 whitespace-nowrap">
+                                        1개월
+                                    </button>
+                                    <button id="period3Month"
+                                        class="tab-button px-4 py-2 text-sm font-medium text-gray-700 bg-white border-t border-b border-r border-gray-300 hover:bg-gray-50 whitespace-nowrap">
+                                        3개월
+                                    </button>
+                                    <button id="period6Month"
+                                        class="tab-button px-4 py-2 text-sm font-medium text-gray-700 bg-white border-t border-b border-r border-gray-300 hover:bg-gray-50 whitespace-nowrap">
+                                        6개월
+                                    </button>
+                                    <button id="periodAll"
+                                        class="tab-button px-4 py-2 text-sm font-medium text-gray-700 bg-white border-t border-b border-r border-gray-300 rounded-r-lg hover:bg-gray-50 whitespace-nowrap">
+                                        전체
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="relative w-full md:w-64">
+                                <input type="text" placeholder="키워드 검색"
+                                    class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary text-sm" />
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <div class="w-5 h-5 flex items-center justify-center text-gray-400">
+                                        <i class="ri-search-line"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 신청내역 테이블 -->
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th scope="col"
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            신청일자
+                                        </th>
+                                        <th scope="col"
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            이름
+                                        </th>
+                                        <th scope="col"
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            전문분야
+                                        </th>
+                                        <th scope="col"
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            상태
+                                        </th>
+                                        <th scope="col"
+                                            class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            관리
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <tr class="hover:bg-gray-50 cursor-pointer" data-id="1">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            2025-04-20
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            김지훈
+                                        </td>
+                                        <td class="px-6 py-4 text-sm text-gray-900">
+                                            스포츠심리, 선수육성
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="status-badge status-review">검토중</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
+                                            <div class="flex justify-end gap-2">
+                                                <button class="text-primary hover:text-primary/80 font-medium edit-btn"
+                                                    data-id="1">
+                                                    수정
+                                                </button>
+                                                <button class="text-red-600 hover:text-red-800 font-medium cancel-btn"
+                                                    data-id="1">
+                                                    취소
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50 cursor-pointer" data-id="2">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            2025-04-15
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            박서연
+                                        </td>
+                                        <td class="px-6 py-4 text-sm text-gray-900">
+                                            스포츠영양, 운동처방
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="status-badge status-approved">승인</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
+                                            <button class="text-primary hover:text-primary/80 font-medium view-btn"
+                                                data-id="2">
+                                                상세보기
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50 cursor-pointer" data-id="3">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            2025-04-05
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            이도윤
+                                        </td>
+                                        <td class="px-6 py-4 text-sm text-gray-900">
+                                            경기분석, 체력측정
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="status-badge status-rejected">반려</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
+                                            <div class="flex justify-end gap-2">
+                                                <button
+                                                    class="text-primary hover:text-primary/80 font-medium reapply-btn"
+                                                    data-id="3">
+                                                    재신청
+                                                </button>
+                                                <button class="text-primary hover:text-primary/80 font-medium view-btn"
+                                                    data-id="3">
+                                                    상세보기
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50 cursor-pointer" data-id="4">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            2025-03-22
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            최민지
+                                        </td>
+                                        <td class="px-6 py-4 text-sm text-gray-900">
+                                            스포츠재활, 운동처방
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="status-badge status-approved">승인</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
+                                            <button class="text-primary hover:text-primary/80 font-medium view-btn"
+                                                data-id="4">
+                                                상세보기
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50 cursor-pointer" data-id="5">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            2025-03-10
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            정현우
+                                        </td>
+                                        <td class="px-6 py-4 text-sm text-gray-900">
+                                            선수육성, 스포츠심리
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="status-badge status-review">검토중</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
+                                            <div class="flex justify-end gap-2">
+                                                <button class="text-primary hover:text-primary/80 font-medium edit-btn"
+                                                    data-id="5">
+                                                    수정
+                                                </button>
+                                                <button class="text-red-600 hover:text-red-800 font-medium cancel-btn"
+                                                    data-id="5">
+                                                    취소
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50 cursor-pointer" data-id="6">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            2025-02-28
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            강은지
+                                        </td>
+                                        <td class="px-6 py-4 text-sm text-gray-900">
+                                            스포츠영양, 체력측정
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="status-badge status-rejected">반려</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
+                                            <div class="flex justify-end gap-2">
+                                                <button
+                                                    class="text-primary hover:text-primary/80 font-medium reapply-btn"
+                                                    data-id="6">
+                                                    재신청
+                                                </button>
+                                                <button class="text-primary hover:text-primary/80 font-medium view-btn"
+                                                    data-id="6">
+                                                    상세보기
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-50 cursor-pointer" data-id="7">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            2025-02-15
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            한준호
+                                        </td>
+                                        <td class="px-6 py-4 text-sm text-gray-900">
+                                            경기분석, 선수육성
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="status-badge status-approved">승인</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
+                                            <button class="text-primary hover:text-primary/80 font-medium view-btn"
+                                                data-id="7">
+                                                상세보기
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- 페이지네이션 -->
+                        <div class="flex items-center justify-between px-4 py-6 sm:px-6">
+                            <div class="flex-1 flex justify-between sm:hidden">
+                                <a href="#"
+                                    class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                                    이전
+                                </a>
+                                <a href="#"
+                                    class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                                    다음
+                                </a>
+                            </div>
+                            <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-center">
+                                <div>
+                                    <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
+                                        aria-label="Pagination">
+                                        <a href="#"
+                                            class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                            <span class="sr-only">이전</span>
+                                            <div class="w-5 h-5 flex items-center justify-center">
+                                                <i class="ri-arrow-left-s-line"></i>
+                                            </div>
+                                        </a>
+                                        <a href="#" aria-current="page"
+                                            class="z-10 bg-primary border-primary text-white relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                                            1
+                                        </a>
+                                        <a href="#"
+                                            class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                                            2
+                                        </a>
+                                        <a href="#"
+                                            class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                                            3
+                                        </a>
+                                        <a href="#"
+                                            class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                            <span class="sr-only">다음</span>
+                                            <div class="w-5 h-5 flex items-center justify-center">
+                                                <i class="ri-arrow-right-s-line"></i>
+                                            </div>
+                                        </a>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <!-- 상세 정보 모달 -->
+    <div id="detailModal"
+        class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 opacity-0 pointer-events-none">
+        <div
+            class="modal-content bg-white rounded-lg shadow-xl max-w-3xl w-full mx-4 transform translate-y-4 max-h-[90vh] overflow-auto">
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-lg font-bold text-gray-900" id="modalTitle">
+                        강사등록 신청 상세정보
+                    </h3>
+                    <button id="closeDetailModal"
+                        class="text-gray-400 hover:text-gray-500 w-8 h-8 flex items-center justify-center">
+                        <i class="ri-close-line text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="p-6">
+                <div class="mb-6 flex justify-between items-center">
+                    <div>
+                        <div class="flex items-center gap-3">
+                            <h4 class="text-xl font-bold text-gray-900" id="modalName">
+                                박서연
+                            </h4>
+                            <span class="status-badge status-approved" id="modalStatus">승인</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-1" id="modalDate">
+                            신청일: 2025-04-15
+                        </p>
+                    </div>
+                    <div id="modalFeedbackBadge"
+                        class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
+                        승인일: 2025-04-18
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div>
+                        <h5 class="text-sm font-medium text-gray-500 mb-1">기본 정보</h5>
+                        <div class="bg-gray-50 p-4 rounded">
+                            <div class="grid grid-cols-1 gap-3">
+                                <div class="flex">
+                                    <span class="text-gray-600 w-24">생년월일:</span>
+                                    <span class="text-gray-900" id="modalBirth">1990-05-15</span>
+                                </div>
+                                <div class="flex">
+                                    <span class="text-gray-600 w-24">연락처:</span>
+                                    <span class="text-gray-900" id="modalPhone">010-1234-5678</span>
+                                </div>
+                                <div class="flex">
+                                    <span class="text-gray-600 w-24">이메일:</span>
+                                    <span class="text-gray-900" id="modalEmail">seoyeon@example.com</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h5 class="text-sm font-medium text-gray-500 mb-1">전문분야</h5>
+                        <div class="bg-gray-50 p-4 rounded">
+                            <div class="flex flex-wrap gap-2" id="modalFields">
+                                <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">스포츠영양</span>
+                                <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">운동처방</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <div>
+                        <h5 class="text-sm font-medium text-gray-500 mb-1">학력사항</h5>
+                        <div class="bg-gray-50 p-4 rounded">
+                            <div class="space-y-3" id="modalEducation">
+                                <div class="grid grid-cols-3 gap-2">
+                                    <div class="text-gray-900">서울대학교</div>
+                                    <div class="text-gray-900">스포츠영양학</div>
+                                    <div class="text-gray-900">박사</div>
+                                </div>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <div class="text-gray-900">연세대학교</div>
+                                    <div class="text-gray-900">식품영양학</div>
+                                    <div class="text-gray-900">석사</div>
+                                </div>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <div class="text-gray-900">고려대학교</div>
+                                    <div class="text-gray-900">식품영양학</div>
+                                    <div class="text-gray-900">학사</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h5 class="text-sm font-medium text-gray-500 mb-1">경력사항</h5>
+                        <div class="bg-gray-50 p-4 rounded">
+                            <div class="space-y-3" id="modalExperience">
+                                <div class="grid grid-cols-3 gap-2">
+                                    <div class="text-gray-900">국가대표팀</div>
+                                    <div class="text-gray-900">영양 컨설턴트</div>
+                                    <div class="text-gray-900">2020-01 ~ 현재</div>
+                                </div>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <div class="text-gray-900">스포츠과학연구소</div>
+                                    <div class="text-gray-900">선임연구원</div>
+                                    <div class="text-gray-900">2015-03 ~ 2019-12</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h5 class="text-sm font-medium text-gray-500 mb-1">자격증</h5>
+                        <div class="bg-gray-50 p-4 rounded">
+                            <div class="space-y-3" id="modalCertificates">
+                                <div class="grid grid-cols-3 gap-2">
+                                    <div class="text-gray-900">스포츠영양전문가</div>
+                                    <div class="text-gray-900">대한스포츠협회</div>
+                                    <div class="text-gray-900">2018-05-20</div>
+                                </div>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <div class="text-gray-900">운동처방사 1급</div>
+                                    <div class="text-gray-900">한국체육협회</div>
+                                    <div class="text-gray-900">2016-11-15</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h5 class="text-sm font-medium text-gray-500 mb-1">강의계획서</h5>
+                        <div class="bg-gray-50 p-4 rounded">
+                            <p class="text-gray-900 whitespace-pre-line" id="modalPlan">
+                                본 강의는 스포츠 선수들의 영양 관리와 경기력 향상을 위한 식이
+                                전략을 다룹니다. 1. 강의 목표 - 스포츠 종목별 필요 영양소 이해
+                                - 경기 전후 영양 관리 전략 습득 - 체중 조절과 신체 구성 관리
+                                방법 학습 2. 주요 내용 - 스포츠 영양학 기초 이론 - 에너지
+                                대사와 운동 수행능력 - 수분 및 전해질 균형 - 경기력 향상을
+                                위한 영양 전략 - 보충제의 효과와 안전성 3. 교수법 - 이론
+                                강의와 사례 연구 병행 - 실제 선수 영양 관리 계획 수립 실습 -
+                                그룹 토론 및 문제 해결 활동
+                            </p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h5 class="text-sm font-medium text-gray-500 mb-1">첨부파일</h5>
+                        <div class="bg-gray-50 p-4 rounded">
+                            <div class="space-y-2" id="modalFiles">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <div
+                                            class="w-8 h-8 flex items-center justify-center text-blue-600 bg-blue-50 rounded-full mr-2">
+                                            <i class="ri-file-pdf-line"></i>
+                                        </div>
+                                        <span class="text-gray-900">이력서_박서연.pdf</span>
+                                    </div>
+                                    <button class="text-primary hover:text-primary/80 text-sm font-medium">
+                                        다운로드
+                                    </button>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <div
+                                            class="w-8 h-8 flex items-center justify-center text-green-600 bg-green-50 rounded-full mr-2">
+                                            <i class="ri-file-excel-line"></i>
+                                        </div>
+                                        <span class="text-gray-900">강의계획서_상세.xlsx</span>
+                                    </div>
+                                    <button class="text-primary hover:text-primary/80 text-sm font-medium">
+                                        다운로드
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="modalFeedbackSection">
+                        <h5 class="text-sm font-medium text-gray-500 mb-1">검토 의견</h5>
+                        <div class="bg-blue-50 p-4 rounded border-l-4 border-blue-500">
+                            <p class="text-gray-900" id="modalFeedback">
+                                지원자의 전문성과 경력이 우수하며, 강의계획서의 내용이
+                                체계적으로 구성되어 있습니다. 스포츠영양 분야의 전문 강사로
+                                승인합니다.
+                            </p>
+                            <p class="text-sm text-gray-500 mt-2" id="modalFeedbackDate">
+                                검토일: 2025-04-18
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4 border-t border-gray-200 flex justify-end gap-3" id="modalActions">
+                <button id="modalCloseBtn"
+                    class="bg-gray-500 text-white py-2 px-4 rounded-button hover:bg-gray-600 whitespace-nowrap">
+                    닫기
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 신청취소 확인 모달 -->
+    <div id="cancelModal"
+        class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 opacity-0 pointer-events-none">
+        <div class="modal-content bg-white rounded-lg shadow-xl max-w-md w-full mx-4 transform translate-y-4">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-bold text-gray-900">신청취소 확인</h3>
+                    <button id="closeCancelModal"
+                        class="text-gray-400 hover:text-gray-500 w-8 h-8 flex items-center justify-center">
+                        <i class="ri-close-line text-xl"></i>
+                    </button>
+                </div>
+                <div class="py-4">
+                    <div class="flex items-center justify-center mb-4 w-16 h-16 mx-auto bg-red-100 rounded-full">
+                        <i class="ri-error-warning-line text-red-600 text-3xl"></i>
+                    </div>
+                    <p class="text-center text-gray-700 mb-4">
+                        정말 강사등록 신청을 취소하시겠습니까?
+                    </p>
+                    <p class="text-sm text-gray-500 mb-4" id="cancelModalName">
+                        신청자: 김지훈
+                    </p>
+                    <div class="form-group mb-4">
+                        <label for="cancelReason" class="block text-sm font-medium text-gray-700 mb-1">취소 사유
+                            (선택사항)</label>
+                        <select id="cancelReason"
+                            class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none text-gray-800 pr-8">
+                            <option value="">선택해주세요</option>
+                            <option value="정보수정">정보 수정 필요</option>
+                            <option value="일정변경">일정 변경</option>
+                            <option value="개인사정">개인 사정</option>
+                            <option value="기타">기타</option>
+                        </select>
+                    </div>
+                    <div id="otherReasonContainer" class="form-group mb-4 hidden">
+                        <label for="otherReason" class="block text-sm font-medium text-gray-700 mb-1">기타 사유</label>
+                        <textarea id="otherReason" rows="3"
+                            class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none text-gray-800"></textarea>
+                    </div>
+                </div>
+                <div class="flex justify-end gap-3">
+                    <button id="cancelCancelBtn"
+                        class="border border-gray-300 text-gray-700 py-2 px-4 rounded-button hover:bg-gray-50 whitespace-nowrap">
+                        돌아가기
+                    </button>
+                    <button id="confirmCancelBtn"
+                        class="bg-red-600 text-white py-2 px-4 rounded-button hover:bg-red-700 whitespace-nowrap">
+                        신청취소
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 재신청 모달 -->
+    <div id="reapplyModal"
+        class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 opacity-0 pointer-events-none">
+        <div class="modal-content bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 transform translate-y-4">
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-lg font-bold text-gray-900">강사등록 재신청</h3>
+                    <button id="closeReapplyModal"
+                        class="text-gray-400 hover:text-gray-500 w-8 h-8 flex items-center justify-center">
+                        <i class="ri-close-line text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="p-6">
+                <div class="mb-6">
+                    <div class="flex items-center gap-3 mb-2">
+                        <h4 class="text-lg font-bold text-gray-900" id="reapplyName">
+                            이도윤
+                        </h4>
+                        <span class="status-badge status-rejected">반려</span>
+                    </div>
+                    <p class="text-sm text-gray-500" id="reapplyDate">
+                        신청일: 2025-04-05
+                    </p>
+                </div>
+
+                <div class="bg-red-50 p-4 rounded border-l-4 border-red-500 mb-6">
+                    <h5 class="font-medium text-red-800 mb-1">반려 사유</h5>
+                    <p class="text-gray-900" id="rejectReason">
+                        제출하신 강의계획서의 내용이 다소 부족하며, 경기분석 분야에 대한
+                        실무 경력이 충분히 제시되지 않았습니다. 강의계획서를 보완하고 관련
+                        경력 증빙을 추가하여 재신청해 주시기 바랍니다.
+                    </p>
+                    <p class="text-sm text-gray-500 mt-2" id="rejectDate">
+                        검토일: 2025-04-08
+                    </p>
+                </div>
+
+                <div class="space-y-6">
+                    <div>
+                        <h5 class="text-sm font-medium text-gray-700 mb-2">
+                            강의계획서 수정
+                        </h5>
+                        <textarea rows="6"
+                            class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+                            placeholder="강의 목표, 주요 내용, 교수법 등을 자유롭게 기술해주세요.">
+본 강의는 경기분석과 체력측정을 통한 선수 역량 강화 방안을 다룹니다.
+1. 강의 목표
+- 경기분석 방법론 이해 및 실습
+- 체력측정 데이터 수집 및 분석 능력 함양
+- 데이터 기반 훈련 프로그램 설계
+2. 주요 내용
+- 경기분석 기초 이론
+- 영상 분석 기법 및 데이터 해석
+- 체력요소별 측정 방법
+- 선수별 맞춤형 피드백 제공 방법
+3. 교수법
+- 실제 경기 영상 분석 실습
+- 체력측정 시연 및 실습
+- 분석 결과 기반 훈련 프로그램 설계 워크샵</textarea>
+                    </div>
+
+                    <div>
+                        <h5 class="text-sm font-medium text-gray-700 mb-2">
+                            추가 경력사항
+                        </h5>
+                        <div class="space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <input type="text" placeholder="기관명"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+                                    value="국가대표 축구팀" />
+                                <input type="text" placeholder="직위"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+                                    value="경기분석관" />
+                                <input type="text" placeholder="재직기간"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+                                    value="2022-01 ~ 2024-12" />
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <input type="text" placeholder="기관명"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+                                    value="프로스포츠팀" />
+                                <input type="text" placeholder="직위"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+                                    value="체력측정 담당자" />
+                                <input type="text" placeholder="재직기간"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+                                    value="2020-03 ~ 2021-12" />
+                            </div>
+                            <button type="button" class="text-primary hover:text-primary/80">
+                                + 경력 추가
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h5 class="text-sm font-medium text-gray-700 mb-2">첨부파일</h5>
+                        <div
+                            class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded">
+                            <div class="space-y-1 text-center">
+                                <div class="w-12 h-12 mx-auto flex items-center justify-center">
+                                    <i class="ri-upload-2-line text-4xl text-gray-400"></i>
+                                </div>
+                                <div class="flex text-sm text-gray-600">
+                                    <label for="file-upload"
+                                        class="relative cursor-pointer bg-white rounded-md font-medium text-primary hover:text-primary/80">
+                                        <span>파일 업로드</span>
+                                        <input id="file-upload" name="file-upload" type="file" class="sr-only" />
+                                    </label>
+                                    <p class="pl-1">또는 드래그 앤 드롭</p>
+                                </div>
+                                <p class="text-xs text-gray-500">
+                                    PDF, DOC, DOCX, PPT, PPTX (최대 10MB)
+                                </p>
+                            </div>
+                        </div>
+                        <div class="mt-3 space-y-2">
+                            <div class="flex items-center justify-between bg-gray-50 p-2 rounded">
+                                <div class="flex items-center">
+                                    <div
+                                        class="w-8 h-8 flex items-center justify-center text-blue-600 bg-blue-50 rounded-full mr-2">
+                                        <i class="ri-file-pdf-line"></i>
+                                    </div>
+                                    <span class="text-gray-900">경력증명서_국가대표팀.pdf</span>
+                                </div>
+                                <button class="text-red-500 hover:text-red-700">
+                                    <i class="ri-delete-bin-line"></i>
+                                </button>
+                            </div>
+                            <div class="flex items-center justify-between bg-gray-50 p-2 rounded">
+                                <div class="flex items-center">
+                                    <div
+                                        class="w-8 h-8 flex items-center justify-center text-green-600 bg-green-50 rounded-full mr-2">
+                                        <i class="ri-file-word-line"></i>
+                                    </div>
+                                    <span class="text-gray-900">경기분석_포트폴리오.docx</span>
+                                </div>
+                                <button class="text-red-500 hover:text-red-700">
+                                    <i class="ri-delete-bin-line"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4 border-t border-gray-200 flex justify-end gap-3">
+                <button id="cancelReapplyBtn"
+                    class="border border-gray-300 text-gray-700 py-2 px-4 rounded-button hover:bg-gray-50 whitespace-nowrap">
+                    취소
+                </button>
+                <button id="confirmReapplyBtn"
+                    class="bg-primary text-white py-2 px-4 rounded-button hover:bg-primary/90 whitespace-nowrap">
+                    재신청하기
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // 메뉴 토글 기능
+            const menuItems = document.querySelectorAll(".menu-item");
+            menuItems.forEach((item) => {
+                const menuHeader = item.querySelector("div");
+                menuHeader.addEventListener("click", () => {
+                    item.classList.toggle("active");
+                });
+            });
+
+            // 탭 버튼 기능 (상태 필터)
+            const statusTabs = document.querySelectorAll('[id^="status"]');
+            statusTabs.forEach((tab) => {
+                tab.addEventListener("click", function () {
+                    statusTabs.forEach((t) => t.classList.remove("active"));
+                    this.classList.add("active");
+                    // 필터링 로직
+                });
+            });
+
+            // 탭 버튼 기능 (기간 필터)
+            const periodTabs = document.querySelectorAll('[id^="period"]');
+            periodTabs.forEach((tab) => {
+                tab.addEventListener("click", function () {
+                    periodTabs.forEach((t) => t.classList.remove("active"));
+                    this.classList.add("active");
+                    // 필터링 로직
+                });
+            });
+
+            // 상세 모달
+            const detailModal = document.getElementById("detailModal");
+            const closeDetailModal = document.getElementById("closeDetailModal");
+            const modalCloseBtn = document.getElementById("modalCloseBtn");
+            // 테이블 행 클릭 이벤트
+            const tableRows = document.querySelectorAll("tbody tr");
+            tableRows.forEach((row) => {
+                row.addEventListener("click", function (e) {
+                    // 버튼 클릭 시 상세 모달 열지 않음
+                    if (e.target.tagName === "BUTTON" || e.target.closest("button")) {
+                        return;
+                    }
+                    const applicationId = this.getAttribute("data-id");
+                    openDetailModal(applicationId);
+                });
+            });
+
+            // 상세보기 버튼 클릭 이벤트
+            const viewBtns = document.querySelectorAll(".view-btn");
+            viewBtns.forEach((btn) => {
+                btn.addEventListener("click", function (e) {
+                    e.stopPropagation(); // 이벤트 버블링 방지
+                    const applicationId = this.getAttribute("data-id");
+                    openDetailModal(applicationId);
+                });
+            });
+
+            function openDetailModal(applicationId) {
+                // 여기서 applicationId에 따라 모달 내용 변경
+                const modalTitle = document.getElementById("modalTitle");
+                const modalName = document.getElementById("modalName");
+                const modalDate = document.getElementById("modalDate");
+                const modalStatus = document.getElementById("modalStatus");
+                const modalFeedbackSection = document.getElementById(
+                    "modalFeedbackSection",
+                );
+                const modalFeedbackBadge = document.getElementById("modalFeedbackBadge");
+                const modalActions = document.getElementById("modalActions");
+
+                // 예시: ID에 따라 다른 내용 표시
+                if (applicationId === "2") {
+                    // 승인된 신청
+                    modalName.textContent = "박서연";
+                    modalDate.textContent = "신청일: 2025-04-15";
+                    modalStatus.className = "status-badge status-approved";
+                    modalStatus.textContent = "승인";
+                    modalFeedbackBadge.className =
+                        "bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm font-medium";
+                    modalFeedbackBadge.textContent = "승인일: 2025-04-18";
+                    modalFeedbackSection.classList.remove("hidden");
+                    modalActions.innerHTML = `
+              <button id="modalCloseBtn" class="bg-gray-500 text-white py-2 px-4 rounded-button hover:bg-gray-600 whitespace-nowrap">닫기</button>
+            `;
+                } else if (applicationId === "3") {
+                    // 반려된 신청
+                    modalName.textContent = "이도윤";
+                    modalDate.textContent = "신청일: 2025-04-05";
+                    modalStatus.className = "status-badge status-rejected";
+                    modalStatus.textContent = "반려";
+                    modalFeedbackBadge.className =
+                        "bg-red-50 text-red-700 px-3 py-1 rounded-full text-sm font-medium";
+                    modalFeedbackBadge.textContent = "반려일: 2025-04-08";
+                    document
+                        .getElementById("modalFeedbackSection")
+                        .classList.remove("hidden");
+                    document.getElementById("modalFeedback").textContent =
+                        "제출하신 강의계획서의 내용이 다소 부족하며, 경기분석 분야에 대한 실무 경력이 충분히 제시되지 않았습니다. 강의계획서를 보완하고 관련 경력 증빙을 추가하여 재신청해 주시기 바랍니다.";
+                    document.getElementById("modalFeedbackDate").textContent =
+                        "검토일: 2025-04-08";
+                    modalActions.innerHTML = `
+              <button id="modalReapplyBtn" class="bg-primary text-white py-2 px-4 rounded-button hover:bg-primary/90 whitespace-nowrap">재신청</button>
+              <button id="modalCloseBtn" class="bg-gray-500 text-white py-2 px-4 rounded-button hover:bg-gray-600 whitespace-nowrap">닫기</button>
+            `;
+                } else if (applicationId === "1") {
+                    // 검토중인 신청
+                    modalName.textContent = "김지훈";
+                    modalDate.textContent = "신청일: 2025-04-20";
+                    modalStatus.className = "status-badge status-review";
+                    modalStatus.textContent = "검토중";
+                    modalFeedbackBadge.className = "hidden";
+                    modalFeedbackSection.classList.add("hidden");
+                    modalActions.innerHTML = `
+              <button id="modalEditBtn" class="border border-primary text-primary py-2 px-4 rounded-button hover:bg-blue-50 whitespace-nowrap">수정</button>
+              <button id="modalCancelBtn" class="border border-red-600 text-red-600 py-2 px-4 rounded-button hover:bg-red-50 whitespace-nowrap">신청취소</button>
+              <button id="modalCloseBtn" class="bg-gray-500 text-white py-2 px-4 rounded-button hover:bg-gray-600 whitespace-nowrap">닫기</button>
+            `;
+                }
+
+                // 모달 열기
+                detailModal.classList.add("active");
+
+                // 모달 내 버튼 이벤트 다시 바인딩
+                document
+                    .getElementById("modalCloseBtn")
+                    .addEventListener("click", closeDetailModalFunc);
+
+                if (document.getElementById("modalCancelBtn")) {
+                    document
+                        .getElementById("modalCancelBtn")
+                        .addEventListener("click", function () {
+                            closeDetailModalFunc();
+                            openCancelModal(applicationId);
+                        });
+                }
+
+                if (document.getElementById("modalEditBtn")) {
+                    document
+                        .getElementById("modalEditBtn")
+                        .addEventListener("click", function () {
+                            closeDetailModalFunc();
+                            // 수정 페이지로 이동 또는 수정 모달 열기
+                            alert("강사등록 수정 페이지로 이동합니다.");
+                        });
+                }
+
+                if (document.getElementById("modalReapplyBtn")) {
+                    document
+                        .getElementById("modalReapplyBtn")
+                        .addEventListener("click", function () {
+                            closeDetailModalFunc();
+                            openReapplyModal(applicationId);
+                        });
+                }
+            }
+
+            function closeDetailModalFunc() {
+                detailModal.classList.remove("active");
+            }
+
+            closeDetailModal.addEventListener("click", closeDetailModalFunc);
+            modalCloseBtn.addEventListener("click", closeDetailModalFunc);
+            // 수정 버튼 클릭 이벤트
+            const editBtns = document.querySelectorAll(".edit-btn");
+            editBtns.forEach((btn) => {
+                btn.addEventListener("click", function (e) {
+                    e.stopPropagation(); // 이벤트 버블링 방지
+                    // 수정 페이지로 이동 또는 수정 모달 열기
+                    alert("강사등록 수정 페이지로 이동합니다.");
+                });
+            });
+
+            // 취소 버튼 클릭 이벤트
+            const cancelBtns = document.querySelectorAll(".cancel-btn");
+            cancelBtns.forEach((btn) => {
+                btn.addEventListener("click", function (e) {
+                    e.stopPropagation(); // 이벤트 버블링 방지
+                    const applicationId = this.getAttribute("data-id");
+                    openCancelModal(applicationId);
+                });
+            });
+
+            // 신청취소 모달
+            const cancelModal = document.getElementById("cancelModal");
+            const closeCancelModal = document.getElementById("closeCancelModal");
+            const cancelCancelBtn = document.getElementById("cancelCancelBtn");
+            const confirmCancelBtn = document.getElementById("confirmCancelBtn");
+            const cancelReason = document.getElementById("cancelReason");
+            const otherReasonContainer = document.getElementById("otherReasonContainer");
+
+            function openCancelModal(applicationId) {
+                // 취소할 신청 정보 설정
+                const cancelModalName = document.getElementById("cancelModalName");
+                if (applicationId === "1") {
+                    cancelModalName.textContent = "신청자: 김지훈";
+                } else if (applicationId === "5") {
+                    cancelModalName.textContent = "신청자: 정현우";
+                }
+
+                // 모달 열기
+                cancelModal.classList.add("active");
+            }
+
+            function closeCancelModalFunc() {
+                cancelModal.classList.remove("active");
+                // 폼 초기화
+                cancelReason.value = "";
+                otherReasonContainer.classList.add("hidden");
+                document.getElementById("otherReason").value = "";
+            }
+
+            closeCancelModal.addEventListener("click", closeCancelModalFunc);
+            cancelCancelBtn.addEventListener("click", closeCancelModalFunc);
+            // 취소 사유가 '기타'일 때 추가 입력 필드 표시
+            cancelReason.addEventListener("change", function () {
+                if (this.value === "기타") {
+                    otherReasonContainer.classList.remove("hidden");
+                } else {
+                    otherReasonContainer.classList.add("hidden");
+                }
+            });
+            // 취소 확인 버튼
+            confirmCancelBtn.addEventListener("click", function () {
+                alert("강사등록 신청이 취소되었습니다.");
+                closeCancelModalFunc();
+                // 실제 취소 처리 로직 추가
+                location.reload();
+            });
+
+            // 재신청 버튼 클릭 이벤트
+            const reapplyBtns = document.querySelectorAll(".reapply-btn");
+            reapplyBtns.forEach((btn) => {
+                btn.addEventListener("click", function (e) {
+                    e.stopPropagation(); // 이벤트 버블링 방지
+                    const applicationId = this.getAttribute("data-id");
+                    openReapplyModal(applicationId);
+                });
+            });
+
+            // 재신청 모달
+            const reapplyModal = document.getElementById("reapplyModal");
+            const closeReapplyModal = document.getElementById("closeReapplyModal");
+            const cancelReapplyBtn = document.getElementById("cancelReapplyBtn");
+            const confirmReapplyBtn = document.getElementById("confirmReapplyBtn");
+            function openReapplyModal(applicationId) {
+                // 재신청 정보 설정
+                const reapplyName = document.getElementById("reapplyName");
+                const reapplyDate = document.getElementById("reapplyDate");
+                const rejectReason = document.getElementById("rejectReason");
+                const rejectDate = document.getElementById("rejectDate");
+
+                if (applicationId === "3") {
+                    reapplyName.textContent = "이도윤";
+                    reapplyDate.textContent = "신청일: 2025-04-05";
+                    rejectReason.textContent =
+                        "제출하신 강의계획서의 내용이 다소 부족하며, 경기분석 분야에 대한 실무 경력이 충분히 제시되지 않았습니다. 강의계획서를 보완하고 관련 경력 증빙을 추가하여 재신청해 주시기 바랍니다.";
+                    rejectDate.textContent = "검토일: 2025-04-08";
+                } else if (applicationId === "6") {
+                    reapplyName.textContent = "강은지";
+                    reapplyDate.textContent = "신청일: 2025-02-28";
+                    rejectReason.textContent =
+                        "제출하신 자격증 정보가 불충분하며, 체력측정 분야에 대한 전문성을 입증할 수 있는 추가 자료가 필요합니다. 관련 자격증 및 교육 이수 증명서를 추가하여 재신청해 주시기 바랍니다.";
+                    rejectDate.textContent = "검토일: 2025-03-05";
+                }
+
+                // 모달 열기
+                reapplyModal.classList.add("active");
+            }
+
+            function closeReapplyModalFunc() {
+                reapplyModal.classList.remove("active");
+            }
+
+            closeReapplyModal.addEventListener("click", closeReapplyModalFunc);
+            cancelReapplyBtn.addEventListener("click", closeReapplyModalFunc);
+
+            // 재신청 확인 버튼
+            confirmReapplyBtn.addEventListener("click", function () {
+                alert("강사등록이 재신청되었습니다.");
+                closeReapplyModalFunc();
+                // 실제 재신청 처리 로직 추가
+                location.reload();
+            });
+
+            // 모달 외부 영역 클릭 시 닫기
+            window.addEventListener("click", function (e) {
+                if (e.target === detailModal) {
+                    closeDetailModalFunc();
+                }
+                if (e.target === cancelModal) {
+                    closeCancelModalFunc();
+                }
+                if (e.target === reapplyModal) {
+                    closeReapplyModalFunc();
+                }
+            });
+
+            // 커스텀 체크박스 기능
+            const checkboxes = document.querySelectorAll(
+                '.custom-checkbox input[type="checkbox"]',
+            );
+            checkboxes.forEach((checkbox) => {
+                checkbox.addEventListener("change", function () {
+                    const icon = this.nextElementSibling;
+                    if (this.checked) {
+                        icon.classList.add("bg-primary", "border-primary");
+                    } else {
+                        icon.classList.remove("bg-primary", "border-primary");
+                    }
+                });
+            });
+        });
+    </script>
 </body>
-</html> 
+
+</html>

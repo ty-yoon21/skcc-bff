@@ -1,13 +1,966 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
+
 <head>
-    <meta charset="UTF-8">
-    <title>교육비전 - 체육인재개발원 학습운영시스템</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>체육인재개발원 포털 - 교육비전</title>
+  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+  <script>tailwind.config = { theme: { extend: { colors: { primary: '#1a237e', secondary: '#0d47a1' }, borderRadius: { 'none': '0px', 'sm': '4px', DEFAULT: '8px', 'md': '12px', 'lg': '16px', 'xl': '20px', '2xl': '24px', '3xl': '32px', 'full': '9999px', 'button': '8px' } } } }</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
+  <style>
+    :where([class^="ri-"])::before {
+      content: "\f3c2";
+    }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      overflow-x: hidden;
+    }
+
+    .sidebar {
+      width: 280px;
+      transition: all 0.3s ease;
+    }
+
+    .submenu {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .submenu.active {
+      max-height: 500px;
+    }
+
+    .menu-item.active {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .menu-item.active .submenu {
+      max-height: 500px;
+    }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .vision-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    .progress-ring {
+      transform: rotate(-90deg);
+    }
+
+    .fade-in {
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .strategy-item:hover .strategy-icon {
+      transform: scale(1.1);
+    }
+
+    .program-card:hover {
+      transform: translateY(-5px);
+    }
+  </style>
 </head>
-<body>
-    <!-- 개발원 소개 > 교육비전 -->
-    <div th:fragment="content">
-        <h2>교육비전</h2>
+
+<body class="bg-gray-50">
+  <div class="flex min-h-screen">
+    
+    <!-- 메인 콘텐츠 -->
+    <div class="ml-[280px] w-[calc(100%-280px)] min-h-screen">
+      <!-- 교육비전 페이지 -->
+      <div class="fade-in">
+        <!-- 페이지 헤더 -->
+        <div class="bg-white shadow-sm">
+          <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+            <div class="flex items-center text-sm text-gray-500 mb-2">
+              <a href="#" class="hover:text-primary">홈</a>
+              <span class="mx-2">&gt;</span>
+              <a href="#" class="hover:text-primary">개발원소개</a>
+              <span class="mx-2">&gt;</span>
+              <span class="text-primary font-medium">교육비전</span>
+            </div>
+            <h1 class="text-3xl font-bold text-gray-900">교육비전</h1>
+            <p class="mt-2 text-gray-600">체육인재개발원의 교육 철학과 비전, 추진 전략을 소개합니다.</p>
+          </div>
+        </div>
+
+        <!-- 비전 선언문 배너 -->
+        <div class="relative bg-gradient-to-r from-primary to-secondary text-white py-16 overflow-hidden">
+          <div class="absolute inset-0 opacity-20"
+            style="background-image: url('https://readdy.ai/api/search-image?query=Professional%2520athletes%2520training%2520in%2520a%2520modern%2520sports%2520facility%2520with%2520blue%2520lighting%2520and%2520dynamic%2520atmosphere.%2520The%2520scene%2520shows%2520diverse%2520athletes%2520engaged%2520in%2520various%2520training%2520activities%2520with%2520coaches%2520providing%2520guidance.%2520The%2520facility%2520has%2520high-tech%2520equipment%2520and%2520large%2520windows%2520with%2520natural%2520light.%2520The%2520image%2520conveys%2520professionalism%2C%2520dedication%2C%2520and%2520the%2520pursuit%2520of%2520excellence%2520in%2520sports%2520education.&width=1280&height=720&seq=12&orientation=landscape'); background-size: cover; background-position: center;">
+          </div>
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center">
+              <h2 class="text-4xl md:text-5xl font-bold mb-6">Sports Leaders for Tomorrow</h2>
+              <p class="text-xl md:text-2xl mb-8">미래 체육을 선도하는 글로벌 인재 양성</p>
+              <div class="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-10 mt-10">
+                <div class="text-center">
+                  <div
+                    class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/20 flex items-center justify-center mx-auto mb-3">
+                    <i class="ri-award-line text-3xl"></i>
+                  </div>
+                  <p class="font-medium">전문성</p>
+                </div>
+                <div class="text-center">
+                  <div
+                    class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/20 flex items-center justify-center mx-auto mb-3">
+                    <i class="ri-global-line text-3xl"></i>
+                  </div>
+                  <p class="font-medium">글로벌</p>
+                </div>
+                <div class="text-center">
+                  <div
+                    class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/20 flex items-center justify-center mx-auto mb-3">
+                    <i class="ri-creativity-line text-3xl"></i>
+                  </div>
+                  <p class="font-medium">혁신</p>
+                </div>
+                <div class="text-center">
+                  <div
+                    class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/20 flex items-center justify-center mx-auto mb-3">
+                    <i class="ri-team-line text-3xl"></i>
+                  </div>
+                  <p class="font-medium">협력</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 교육 철학과 핵심 가치 -->
+        <div class="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
+          <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">교육 철학과 핵심 가치</h2>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">체육인재개발원은 체육인의 전문성과 역량을 강화하고 글로벌 리더십을 갖춘 인재를 양성하기 위한 교육
+              철학을 바탕으로 합니다.</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div
+              class="bg-white p-8 rounded-lg shadow-sm border border-gray-100 transition-all duration-300 vision-card">
+              <div class="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center mb-6">
+                <i class="ri-user-star-line text-primary text-2xl"></i>
+              </div>
+              <h3 class="text-xl font-bold text-gray-900 mb-3">인재 중심의 교육</h3>
+              <p class="text-gray-600">교육생 개개인의 특성과 역량을 고려한 맞춤형 교육을 통해 체육 분야에서 필요로 하는 핵심 인재를 양성합니다.</p>
+              <ul class="mt-4 space-y-2">
+                <li class="flex items-start">
+                  <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                    <i class="ri-check-line"></i>
+                  </div>
+                  <span class="text-gray-600">개인 맞춤형 교육과정 설계</span>
+                </li>
+                <li class="flex items-start">
+                  <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                    <i class="ri-check-line"></i>
+                  </div>
+                  <span class="text-gray-600">역량 기반 교육 프로그램</span>
+                </li>
+                <li class="flex items-start">
+                  <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                    <i class="ri-check-line"></i>
+                  </div>
+                  <span class="text-gray-600">자기주도적 학습 환경 조성</span>
+                </li>
+              </ul>
+            </div>
+
+            <div
+              class="bg-white p-8 rounded-lg shadow-sm border border-gray-100 transition-all duration-300 vision-card">
+              <div class="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center mb-6">
+                <i class="ri-global-line text-primary text-2xl"></i>
+              </div>
+              <h3 class="text-xl font-bold text-gray-900 mb-3">글로벌 역량 강화</h3>
+              <p class="text-gray-600">국제적 감각과 경쟁력을 갖춘 체육 인재 양성을 위해 글로벌 스탠다드에 부합하는 교육 프로그램을 제공합니다.</p>
+              <ul class="mt-4 space-y-2">
+                <li class="flex items-start">
+                  <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                    <i class="ri-check-line"></i>
+                  </div>
+                  <span class="text-gray-600">국제 교류 협력 프로그램</span>
+                </li>
+                <li class="flex items-start">
+                  <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                    <i class="ri-check-line"></i>
+                  </div>
+                  <span class="text-gray-600">글로벌 스포츠 트렌드 교육</span>
+                </li>
+                <li class="flex items-start">
+                  <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                    <i class="ri-check-line"></i>
+                  </div>
+                  <span class="text-gray-600">외국어 및 문화 역량 강화</span>
+                </li>
+              </ul>
+            </div>
+
+            <div
+              class="bg-white p-8 rounded-lg shadow-sm border border-gray-100 transition-all duration-300 vision-card">
+              <div class="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center mb-6">
+                <i class="ri-lightbulb-line text-primary text-2xl"></i>
+              </div>
+              <h3 class="text-xl font-bold text-gray-900 mb-3">혁신적 교육 방법론</h3>
+              <p class="text-gray-600">최신 교육 방법론과 기술을 활용하여 효과적이고 혁신적인 체육 교육 시스템을 구축합니다.</p>
+              <ul class="mt-4 space-y-2">
+                <li class="flex items-start">
+                  <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                    <i class="ri-check-line"></i>
+                  </div>
+                  <span class="text-gray-600">디지털 기술 활용 교육</span>
+                </li>
+                <li class="flex items-start">
+                  <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                    <i class="ri-check-line"></i>
+                  </div>
+                  <span class="text-gray-600">체험형 학습 프로그램</span>
+                </li>
+                <li class="flex items-start">
+                  <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                    <i class="ri-check-line"></i>
+                  </div>
+                  <span class="text-gray-600">문제 해결 중심 교육</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 교육 목표 -->
+        <div class="bg-gray-50 py-16">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+              <h2 class="text-3xl font-bold text-gray-900 mb-4">교육 목표</h2>
+              <p class="text-lg text-gray-600 max-w-3xl mx-auto">체육인재개발원은 다음의 4가지 핵심 교육 목표를 통해 미래 체육을 선도할 인재를 양성합니다.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center">
+                <div class="relative w-32 h-32 mx-auto mb-4">
+                  <svg class="w-full h-full progress-ring">
+                    <circle cx="64" cy="64" r="56" fill="none" stroke="#e5e7eb" stroke-width="8"></circle>
+                    <circle cx="64" cy="64" r="56" fill="none" stroke="#1a237e" stroke-width="8"
+                      stroke-dasharray="351.86" stroke-dashoffset="70.37"></circle>
+                  </svg>
+                  <div class="absolute inset-0 flex items-center justify-center">
+                    <span class="text-2xl font-bold text-primary">80%</span>
+                  </div>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">전문성 강화</h3>
+                <p class="text-gray-600">체육 분야의 전문 지식과 실무 역량을 갖춘 인재 양성</p>
+              </div>
+              <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center">
+                <div class="relative w-32 h-32 mx-auto mb-4">
+                  <svg class="w-full h-full progress-ring">
+                    <circle cx="64" cy="64" r="56" fill="none" stroke="#e5e7eb" stroke-width="8"></circle>
+                    <circle cx="64" cy="64" r="56" fill="none" stroke="#1a237e" stroke-width="8"
+                      stroke-dasharray="351.86" stroke-dashoffset="123.15"></circle>
+                  </svg>
+                  <div class="absolute inset-0 flex items-center justify-center">
+                    <span class="text-2xl font-bold text-primary">65%</span>
+                  </div>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">글로벌 역량</h3>
+                <p class="text-gray-600">국제적 시각과 경쟁력을 갖춘 글로벌 체육 리더 육성</p>
+              </div>
+              <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center">
+                <div class="relative w-32 h-32 mx-auto mb-4">
+                  <svg class="w-full h-full progress-ring">
+                    <circle cx="64" cy="64" r="56" fill="none" stroke="#e5e7eb" stroke-width="8"></circle>
+                    <circle cx="64" cy="64" r="56" fill="none" stroke="#1a237e" stroke-width="8"
+                      stroke-dasharray="351.86" stroke-dashoffset="105.56"></circle>
+                  </svg>
+                  <div class="absolute inset-0 flex items-center justify-center">
+                    <span class="text-2xl font-bold text-primary">70%</span>
+                  </div>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">혁신 역량</h3>
+                <p class="text-gray-600">창의적 사고와 혁신 역량을 갖춘 체육 인재 육성</p>
+              </div>
+
+              <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center">
+                <div class="relative w-32 h-32 mx-auto mb-4">
+                  <svg class="w-full h-full progress-ring">
+                    <circle cx="64" cy="64" r="56" fill="none" stroke="#e5e7eb" stroke-width="8"></circle>
+                    <circle cx="64" cy="64" r="56" fill="none" stroke="#1a237e" stroke-width="8"
+                      stroke-dasharray="351.86" stroke-dashoffset="87.97"></circle>
+                  </svg>
+                  <div class="absolute inset-0 flex items-center justify-center">
+                    <span class="text-2xl font-bold text-primary">75%</span>
+                  </div>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">리더십 함양</h3>
+                <p class="text-gray-600">체육계를 이끌어갈 리더십과 소통 능력 개발</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 추진 전략 -->
+        <div class="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
+          <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">추진 전략</h2>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">체육인재개발원의 비전과 목표를 달성하기 위한 단계별 추진 전략입니다.</p>
+          </div>
+
+          <div class="relative">
+            <div class="absolute left-1/2 top-0 bottom-0 w-1 bg-gray-200 transform -translate-x-1/2 hidden md:block">
+            </div>
+
+            <div class="space-y-12 md:space-y-0">
+              <!-- 1단계 -->
+              <div class="md:grid md:grid-cols-2 md:gap-8 md:items-center strategy-item">
+                <div class="md:text-right mb-6 md:mb-0 md:pr-12">
+                  <div class="bg-primary text-white inline-block px-3 py-1 rounded-full text-sm font-medium mb-2">1단계
+                    (2025-2026)</div>
+                  <h3 class="text-xl font-bold text-gray-900 mb-2">교육 시스템 혁신</h3>
+                  <p class="text-gray-600">디지털 기술을 활용한 교육 시스템 혁신과 교육 콘텐츠 개발</p>
+                  <ul class="mt-4 space-y-2 md:ml-auto">
+                    <li class="flex items-start md:justify-end">
+                      <span class="text-gray-600">온라인 교육 플랫폼 고도화</span>
+                      <div class="w-5 h-5 flex items-center justify-center text-primary ml-2 mt-0.5">
+                        <i class="ri-check-line"></i>
+                      </div>
+                    </li>
+                    <li class="flex items-start md:justify-end">
+                      <span class="text-gray-600">맞춤형 교육 콘텐츠 개발</span>
+                      <div class="w-5 h-5 flex items-center justify-center text-primary ml-2 mt-0.5">
+                        <i class="ri-check-line"></i>
+                      </div>
+                    </li>
+                    <li class="flex items-start md:justify-end">
+                      <span class="text-gray-600">교육 품질 관리 시스템 구축</span>
+                      <div class="w-5 h-5 flex items-center justify-center text-primary ml-2 mt-0.5">
+                        <i class="ri-check-line"></i>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div class="md:pl-12 relative">
+                  <div
+                    class="absolute left-0 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-primary rounded-full hidden md:flex items-center justify-center text-white z-10 strategy-icon transition-transform duration-300">
+                    <i class="ri-number-1"></i>
+                  </div>
+                  <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                    <img
+                      src="https://readdy.ai/api/search-image?query=Modern%2520digital%2520education%2520system%2520with%2520students%2520using%2520tablets%2520and%2520interactive%2520screens%2520in%2520a%2520bright%2520classroom.%2520The%2520room%2520has%2520blue%2520accents%2520and%2520modern%2520furniture.%2520Teachers%2520are%2520guiding%2520students%2520with%2520digital%2520learning%2520tools.%2520The%2520atmosphere%2520is%2520collaborative%2520and%2520high-tech%2520with%2520clean%2520design%2520elements.&width=600&height=400&seq=13&orientation=landscape"
+                      alt="교육 시스템 혁신" class="w-full h-auto rounded object-cover object-top">
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2단계 -->
+              <div class="md:grid md:grid-cols-2 md:gap-8 md:items-center strategy-item">
+                <div class="md:order-2 md:text-left mb-6 md:mb-0 md:pl-12">
+                  <div class="bg-primary text-white inline-block px-3 py-1 rounded-full text-sm font-medium mb-2">2단계
+                    (2027-2028)</div>
+                  <h3 class="text-xl font-bold text-gray-900 mb-2">글로벌 네트워크 확장</h3>
+                  <p class="text-gray-600">국제 협력 네트워크 확대 및 글로벌 교류 프로그램 강화</p>
+                  <ul class="mt-4 space-y-2">
+                    <li class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                        <i class="ri-check-line"></i>
+                      </div>
+                      <span class="text-gray-600">국제 MOU 체결 확대 (30개국)</span>
+                    </li>
+                    <li class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                        <i class="ri-check-line"></i>
+                      </div>
+                      <span class="text-gray-600">국제 교류 프로그램 운영</span>
+                    </li>
+                    <li class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                        <i class="ri-check-line"></i>
+                      </div>
+                      <span class="text-gray-600">글로벌 인재 양성 특화 과정 개발</span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="md:order-1 md:pr-12 relative">
+                  <div
+                    class="absolute right-0 top-1/2 transform translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-primary rounded-full hidden md:flex items-center justify-center text-white z-10 strategy-icon transition-transform duration-300">
+                    <i class="ri-number-2"></i>
+                  </div>
+                  <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                    <img
+                      src="https://readdy.ai/api/search-image?query=International%2520sports%2520conference%2520with%2520diverse%2520participants%2520from%2520different%2520countries.%2520The%2520modern%2520conference%2520room%2520has%2520national%2520flags%2520displayed%2520and%2520participants%2520are%2520engaged%2520in%2520professional%2520discussions.%2520Some%2520are%2520in%2520business%2520attire%2520while%2520others%2520wear%2520national%2520sports%2520team%2520jackets.%2520The%2520atmosphere%2520is%2520collaborative%2520and%2520formal%2520with%2520presentation%2520screens%2520showing%2520sports%2520data.&width=600&height=400&seq=14&orientation=landscape"
+                      alt="글로벌 네트워크 확장" class="w-full h-auto rounded object-cover object-top">
+                  </div>
+                </div>
+              </div>
+
+              <!-- 3단계 -->
+              <div class="md:grid md:grid-cols-2 md:gap-8 md:items-center strategy-item">
+                <div class="md:text-right mb-6 md:mb-0 md:pr-12">
+                  <div class="bg-primary text-white inline-block px-3 py-1 rounded-full text-sm font-medium mb-2">3단계
+                    (2029-2030)</div>
+                  <h3 class="text-xl font-bold text-gray-900 mb-2">연구 역량 강화</h3>
+                  <p class="text-gray-600">체육 교육 연구 역량 강화 및 연구 성과 확산</p>
+                  <ul class="mt-4 space-y-2 md:ml-auto">
+                    <li class="flex items-start md:justify-end">
+                      <span class="text-gray-600">스포츠 과학 연구 고도화</span>
+                      <div class="w-5 h-5 flex items-center justify-center text-primary ml-2 mt-0.5">
+                        <i class="ri-check-line"></i>
+                      </div>
+                    </li>
+                    <li class="flex items-start md:justify-end">
+                      <span class="text-gray-600">연구 성과 교육 과정 반영</span>
+                      <div class="w-5 h-5 flex items-center justify-center text-primary ml-2 mt-0.5">
+                        <i class="ri-check-line"></i>
+                      </div>
+                    </li>
+                    <li class="flex items-start md:justify-end">
+                      <span class="text-gray-600">국제 학술 교류 활성화</span>
+                      <div class="w-5 h-5 flex items-center justify-center text-primary ml-2 mt-0.5">
+                        <i class="ri-check-line"></i>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div class="md:pl-12 relative">
+                  <div
+                    class="absolute left-0 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-primary rounded-full hidden md:flex items-center justify-center text-white z-10 strategy-icon transition-transform duration-300">
+                    <i class="ri-number-3"></i>
+                  </div>
+                  <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                    <img
+                      src="https://readdy.ai/api/search-image?query=Sports%2520scientists%2520in%2520a%2520high-tech%2520laboratory%2520analyzing%2520athletic%2520performance%2520data.%2520They%2520are%2520using%2520advanced%2520equipment%2520and%2520computers%2520with%2520motion%2520analysis%2520software.%2520The%2520lab%2520has%2520modern%2520testing%2520equipment%2520and%2520screens%2520displaying%2520biomechanical%2520data.%2520Researchers%2520in%2520professional%2520attire%2520are%2520collaborating%2520around%2520large%2520monitors%2520showing%2520research%2520results.&width=600&height=400&seq=15&orientation=landscape"
+                      alt="연구 역량 강화" class="w-full h-auto rounded object-cover object-top">
+                  </div>
+                </div>
+              </div>
+
+              <!-- 4단계 -->
+              <div class="md:grid md:grid-cols-2 md:gap-8 md:items-center strategy-item">
+                <div class="md:order-2 md:text-left mb-6 md:mb-0 md:pl-12">
+                  <div class="bg-primary text-white inline-block px-3 py-1 rounded-full text-sm font-medium mb-2">4단계
+                    (2031-2032)</div>
+                  <h3 class="text-xl font-bold text-gray-900 mb-2">글로벌 리더십 센터 구축</h3>
+                  <p class="text-gray-600">아시아 체육 교육의 허브로서 글로벌 리더십 센터 구축</p>
+                  <ul class="mt-4 space-y-2">
+                    <li class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                        <i class="ri-check-line"></i>
+                      </div>
+                      <span class="text-gray-600">국제 체육 교육 허브 구축</span>
+                    </li>
+                    <li class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                        <i class="ri-check-line"></i>
+                      </div>
+                      <span class="text-gray-600">글로벌 체육 인재 양성 프로그램 확대</span>
+                    </li>
+                    <li class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                        <i class="ri-check-line"></i>
+                      </div>
+                      <span class="text-gray-600">국제 체육 교육 표준 개발 주도</span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="md:order-1 md:pr-12 relative">
+                  <div
+                    class="absolute right-0 top-1/2 transform translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-primary rounded-full hidden md:flex items-center justify-center text-white z-10 strategy-icon transition-transform duration-300">
+                    <i class="ri-number-4"></i>
+                  </div>
+                  <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                    <img
+                      src="https://readdy.ai/api/search-image?query=Modern%2520global%2520leadership%2520center%2520for%2520sports%2520education%2520with%2520an%2520impressive%2520architectural%2520design.%2520The%2520building%2520has%2520a%2520glass%2520facade%2520with%2520blue%2520accents%2520and%2520features%2520multiple%2520national%2520flags%2520at%2520the%2520entrance.%2520Inside%2520view%2520shows%2520a%2520spacious%2520lobby%2520with%2520international%2520visitors%2520and%2520digital%2520displays%2520showing%2520sports%2520education%2520programs.%2520The%2520atmosphere%2520conveys%2520prestige%2520and%2520global%2520cooperation.&width=600&height=400&seq=16&orientation=landscape"
+                      alt="글로벌 리더십 센터" class="w-full h-auto rounded object-cover object-top">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 주요 교육 프로그램 -->
+        <div class="bg-gray-50 py-16">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+              <h2 class="text-3xl font-bold text-gray-900 mb-4">주요 교육 프로그램</h2>
+              <p class="text-lg text-gray-600 max-w-3xl mx-auto">체육인재개발원에서 제공하는 주요 교육 프로그램을 소개합니다.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div class="bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 program-card">
+                <div class="h-48 overflow-hidden">
+                  <img
+                    src="https://readdy.ai/api/search-image?query=Professional%2520sports%2520coach%2520training%2520session%2520with%2520coaches%2520learning%2520in%2520a%2520modern%2520classroom%2520setting.%2520The%2520instructor%2520is%2520presenting%2520training%2520methodologies%2520using%2520digital%2520displays.%2520Participants%2520are%2520taking%2520notes%2520and%2520engaged%2520in%2520discussion.%2520The%2520room%2520has%2520sports%2520equipment%2520samples%2520and%2520training%2520materials%2520visible.&width=600&height=400&seq=17&orientation=landscape"
+                    alt="스포츠 지도자 양성 과정" class="w-full h-full object-cover object-top">
+                </div>
+                <div class="p-6">
+                  <div class="flex items-center mb-3">
+                    <div class="w-10 h-10 flex items-center justify-center bg-blue-100 rounded-full mr-3">
+                      <i class="ri-user-star-line text-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900">스포츠 지도자 양성 과정</h3>
+                  </div>
+                  <p class="text-gray-600 mb-4">각 종목별 전문 지도자를 양성하기 위한 체계적인 교육 프로그램으로, 이론과 실습을 병행하여 현장에서 필요한 실무 역량을
+                    강화합니다.</p>
+                  <div class="flex items-center text-sm text-gray-500">
+                    <div class="flex items-center mr-4">
+                      <i class="ri-time-line mr-1"></i>
+                      <span>12주 과정</span>
+                    </div>
+                    <div class="flex items-center">
+                      <i class="ri-user-line mr-1"></i>
+                      <span>연 200명</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 program-card">
+                <div class="h-48 overflow-hidden">
+                  <img
+                    src="https://readdy.ai/api/search-image?query=International%2520sports%2520management%2520training%2520program%2520with%2520diverse%2520participants%2520in%2520a%2520modern%2520conference%2520room.%2520Professionals%2520from%2520different%2520countries%2520are%2520engaged%2520in%2520a%2520workshop%2520with%2520presentations%2520about%2520global%2520sports%2520business.%2520The%2520setting%2520is%2520professional%2520with%2520digital%2520displays%2520showing%2520charts%2520and%2520international%2520sports%2520data.&width=600&height=400&seq=18&orientation=landscape"
+                    alt="국제 스포츠 매니지먼트 과정" class="w-full h-full object-cover object-top">
+                </div>
+                <div class="p-6">
+                  <div class="flex items-center mb-3">
+                    <div class="w-10 h-10 flex items-center justify-center bg-blue-100 rounded-full mr-3">
+                      <i class="ri-global-line text-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900">국제 스포츠 매니지먼트 과정</h3>
+                  </div>
+                  <p class="text-gray-600 mb-4">글로벌 스포츠 산업의 트렌드와 경영 전략을 배우는 과정으로, 국제 스포츠 이벤트 기획 및 운영 역량을 강화합니다.</p>
+                  <div class="flex items-center text-sm text-gray-500">
+                    <div class="flex items-center mr-4">
+                      <i class="ri-time-line mr-1"></i>
+                      <span>8주 과정</span>
+                    </div>
+                    <div class="flex items-center">
+                      <i class="ri-user-line mr-1"></i>
+                      <span>연 150명</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 program-card">
+                <div class="h-48 overflow-hidden">
+                  <img
+                    src="https://readdy.ai/api/search-image?query=Sports%2520science%2520laboratory%2520session%2520with%2520researchers%2520and%2520athletes%2520using%2520advanced%2520equipment%2520to%2520analyze%2520performance.%2520Scientists%2520are%2520attaching%2520sensors%2520to%2520an%2520athlete%2520while%2520others%2520monitor%2520data%2520on%2520computers.%2520The%2520lab%2520has%2520motion%2520capture%2520technology%2520and%2520physiological%2520testing%2520equipment.%2520The%2520setting%2520is%2520high-tech%2520with%2520blue%2520lighting%2520accents.&width=600&height=400&seq=19&orientation=landscape"
+                    alt="스포츠 과학 전문가 과정" class="w-full h-full object-cover object-top">
+                </div>
+                <div class="p-6">
+                  <div class="flex items-center mb-3">
+                    <div class="w-10 h-10 flex items-center justify-center bg-blue-100 rounded-full mr-3">
+                      <i class="ri-microscope-line text-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900">스포츠 과학 전문가 과정</h3>
+                  </div>
+                  <p class="text-gray-600 mb-4">스포츠 의학, 생리학, 심리학, 영양학 등 스포츠 과학 분야의 전문 지식을 습득하고 현장에 적용하는 방법을 배웁니다.</p>
+                  <div class="flex items-center text-sm text-gray-500">
+                    <div class="flex items-center mr-4">
+                      <i class="ri-time-line mr-1"></i>
+                      <span>16주 과정</span>
+                    </div>
+                    <div class="flex items-center">
+                      <i class="ri-user-line mr-1"></i>
+                      <span>연 100명</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 program-card">
+                <div class="h-48 overflow-hidden">
+                  <img
+                    src="https://readdy.ai/api/search-image?query=Digital%2520sports%2520education%2520training%2520with%2520participants%2520learning%2520to%2520use%2520tablets%2520and%2520digital%2520platforms%2520for%2520coaching.%2520The%2520modern%2520classroom%2520has%2520multiple%2520screens%2520displaying%2520sports%2520analytics%2520software.%2520Instructors%2520are%2520demonstrating%2520digital%2520tools%2520while%2520participants%2520practice%2520on%2520devices.%2520The%2520atmosphere%2520is%2520tech-focused%2520with%2520clean%2520design.&width=600&height=400&seq=20&orientation=landscape"
+                    alt="스포츠 디지털 트랜스포메이션 과정" class="w-full h-full object-cover object-top">
+                </div>
+                <div class="p-6">
+                  <div class="flex items-center mb-3">
+                    <div class="w-10 h-10 flex items-center justify-center bg-blue-100 rounded-full mr-3">
+                      <i class="ri-computer-line text-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900">스포츠 디지털 트랜스포메이션 과정</h3>
+                  </div>
+                  <p class="text-gray-600 mb-4">디지털 기술을 활용한 스포츠 교육, 훈련, 경기 분석 방법을 배우고 스포츠 분야의 디지털 혁신을 주도할 역량을 키웁니다.</p>
+                  <div class="flex items-center text-sm text-gray-500">
+                    <div class="flex items-center mr-4">
+                      <i class="ri-time-line mr-1"></i>
+                      <span>6주 과정</span>
+                    </div>
+                    <div class="flex items-center">
+                      <i class="ri-user-line mr-1"></i>
+                      <span>연 180명</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 program-card">
+                <div class="h-48 overflow-hidden">
+                  <img
+                    src="https://readdy.ai/api/search-image?query=Youth%2520sports%2520leadership%2520program%2520with%2520young%2520coaches%2520learning%2520to%2520train%2520children.%2520The%2520setting%2520shows%2520a%2520mix%2520of%2520classroom%2520instruction%2520and%2520practical%2520training%2520in%2520a%2520gym.%2520Young%2520adult%2520participants%2520are%2520practicing%2520coaching%2520techniques%2520with%2520children%2520under%2520supervision.%2520The%2520atmosphere%2520is%2520energetic%2520and%2520educational.&width=600&height=400&seq=21&orientation=landscape"
+                    alt="청소년 스포츠 지도자 과정" class="w-full h-full object-cover object-top">
+                </div>
+                <div class="p-6">
+                  <div class="flex items-center mb-3">
+                    <div class="w-10 h-10 flex items-center justify-center bg-blue-100 rounded-full mr-3">
+                      <i class="ri-team-line text-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900">청소년 스포츠 지도자 과정</h3>
+                  </div>
+                  <p class="text-gray-600 mb-4">청소년의 발달 특성을 고려한 스포츠 지도 방법론과 심리적 접근법을 배우는 과정으로, 청소년 체육 지도자의 전문성을 강화합니다.
+                  </p>
+                  <div class="flex items-center text-sm text-gray-500">
+                    <div class="flex items-center mr-4">
+                      <i class="ri-time-line mr-1"></i>
+                      <span>10주 과정</span>
+                    </div>
+                    <div class="flex items-center">
+                      <i class="ri-user-line mr-1"></i>
+                      <span>연 250명</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 program-card">
+                <div class="h-48 overflow-hidden">
+                  <img
+                    src="https://readdy.ai/api/search-image?query=Adaptive%2520sports%2520coaching%2520program%2520with%2520instructors%2520learning%2520to%2520work%2520with%2520para-athletes.%2520The%2520training%2520session%2520shows%2520coaches%2520learning%2520specialized%2520techniques%2520for%2520athletes%2520with%2520disabilities.%2520Some%2520participants%2520are%2520practicing%2520with%2520adaptive%2520sports%2520equipment%2520while%2520others%2520observe%2520demonstrations.%2520The%2520setting%2520is%2520professional%2520and%2520inclusive.&width=600&height=400&seq=22&orientation=landscape"
+                    alt="장애인 스포츠 지도자 과정" class="w-full h-full object-cover object-top">
+                </div>
+                <div class="p-6">
+                  <div class="flex items-center mb-3">
+                    <div class="w-10 h-10 flex items-center justify-center bg-blue-100 rounded-full mr-3">
+                      <i class="ri-heart-line text-primary"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900">장애인 스포츠 지도자 과정</h3>
+                  </div>
+                  <p class="text-gray-600 mb-4">장애인 스포츠의 특성과 지도 방법을 배우는 과정으로, 다양한 장애 유형에 따른 맞춤형 지도 역량을 강화합니다.</p>
+                  <div class="flex items-center text-sm text-gray-500">
+                    <div class="flex items-center mr-4">
+                      <i class="ri-time-line mr-1"></i>
+                      <span>12주 과정</span>
+                    </div>
+                    <div class="flex items-center">
+                      <i class="ri-user-line mr-1"></i>
+                      <span>연 120명</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-center mt-10">
+              <button class="bg-primary text-white py-3 px-6 rounded-button hover:bg-primary/90 whitespace-nowrap">
+                전체 교육 과정 보기
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 성과 지표 -->
+        <div class="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
+          <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">교육 성과</h2>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">체육인재개발원의 교육 성과를 수치로 확인하세요.</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+              <h3 class="text-xl font-bold text-gray-900 mb-4">연도별 교육생 수</h3>
+              <div class="h-64" id="studentsChart"></div>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+              <h3 class="text-xl font-bold text-gray-900 mb-4">교육 만족도</h3>
+              <div class="h-64" id="satisfactionChart"></div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-8">
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+              <div class="flex items-center justify-between">
+                <div>
+                  <h4 class="text-lg font-medium text-gray-700">누적 교육생</h4>
+                  <p class="text-3xl font-bold text-primary mt-2">52,480명</p>
+                </div>
+                <div class="w-14 h-14 flex items-center justify-center bg-blue-100 rounded-full text-primary">
+                  <i class="ri-user-line text-2xl"></i>
+                </div>
+              </div>
+              <div class="mt-4">
+                <div class="text-sm text-gray-500 flex justify-between">
+                  <span>전년 대비</span>
+                  <span class="text-green-500 flex items-center">
+                    <i class="ri-arrow-up-line mr-1"></i>
+                    8.5%
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+              <div class="flex items-center justify-between">
+                <div>
+                  <h4 class="text-lg font-medium text-gray-700">교육 과정 수</h4>
+                  <p class="text-3xl font-bold text-primary mt-2">120개</p>
+                </div>
+                <div class="w-14 h-14 flex items-center justify-center bg-blue-100 rounded-full text-primary">
+                  <i class="ri-book-open-line text-2xl"></i>
+                </div>
+              </div>
+              <div class="mt-4">
+                <div class="text-sm text-gray-500 flex justify-between">
+                  <span>전년 대비</span>
+                  <span class="text-green-500 flex items-center">
+                    <i class="ri-arrow-up-line mr-1"></i>
+                    12%
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+              <div class="flex items-center justify-between">
+                <div>
+                  <h4 class="text-lg font-medium text-gray-700">국제 협력 기관</h4>
+                  <p class="text-3xl font-bold text-primary mt-2">35개</p>
+                </div>
+                <div class="w-14 h-14 flex items-center justify-center bg-blue-100 rounded-full text-primary">
+                  <i class="ri-global-line text-2xl"></i>
+                </div>
+              </div>
+              <div class="mt-4">
+                <div class="text-sm text-gray-500 flex justify-between">
+                  <span>전년 대비</span>
+                  <span class="text-green-500 flex items-center">
+                    <i class="ri-arrow-up-line mr-1"></i>
+                    16.7%
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+              <div class="flex items-center justify-between">
+                <div>
+                  <h4 class="text-lg font-medium text-gray-700">취업 연계율</h4>
+                  <p class="text-3xl font-bold text-primary mt-2">87.5%</p>
+                </div>
+                <div class="w-14 h-14 flex items-center justify-center bg-blue-100 rounded-full text-primary">
+                  <i class="ri-briefcase-line text-2xl"></i>
+                </div>
+              </div>
+              <div class="mt-4">
+                <div class="text-sm text-gray-500 flex justify-between">
+                  <span>전년 대비</span>
+                  <span class="text-green-500 flex items-center">
+                    <i class="ri-arrow-up-line mr-1"></i>
+                    5.2%
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 연혁 페이지로 돌아가기 -->
+        <div class="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8 text-center">
+          <a href="https://readdy.ai/home/8289e8bd-0211-46fd-b43c-4527019ae71a/28fef80a-41f7-4118-a9f9-6433bf483275"
+            data-readdy="true"
+            class="inline-flex items-center gap-2 bg-primary text-white py-3 px-6 rounded-button hover:bg-primary/90 whitespace-nowrap">
+            <i class="ri-arrow-left-line"></i>
+            <span>연혁 페이지로 돌아가기</span>
+          </a>
+        </div>
+      </div>
     </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // 메뉴 토글 기능
+      const menuItems = document.querySelectorAll('.menu-item');
+      menuItems.forEach(item => {
+        const menuHeader = item.querySelector('div');
+        menuHeader.addEventListener('click', () => {
+          item.classList.toggle('active');
+        });
+      });
+
+      // 교육생 수 차트
+      const studentsChart = document.getElementById('studentsChart');
+      if (studentsChart) {
+        const chart = echarts.init(studentsChart);
+        const option = {
+          animation: false,
+          tooltip: {
+            trigger: 'axis',
+            backgroundColor: 'rgba(255, 255, 255, 0.8)',
+            textStyle: {
+              color: '#1f2937'
+            }
+          },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            top: '15%',
+            containLabel: true
+          },
+          xAxis: {
+            type: 'category',
+            data: ['2020', '2021', '2022', '2023', '2024', '2025'],
+            axisLine: {
+              lineStyle: {
+                color: '#1f2937'
+              }
+            }
+          },
+          yAxis: {
+            type: 'value',
+            axisLine: {
+              lineStyle: {
+                color: '#1f2937'
+              }
+            }
+          },
+          series: [
+            {
+              name: '연간 교육생 수',
+              type: 'bar',
+              data: [3200, 3600, 4100, 4500, 4800, 5000],
+              itemStyle: {
+                color: 'rgba(87, 181, 231, 1)',
+                borderRadius: [4, 4, 0, 0]
+              }
+            }
+          ]
+        };
+        chart.setOption(option);
+
+        // 반응형 차트
+        window.addEventListener('resize', function () {
+          chart.resize();
+        });
+      }
+
+      // 교육 만족도 차트
+      const satisfactionChart = document.getElementById('satisfactionChart');
+      if (satisfactionChart) {
+        const chart = echarts.init(satisfactionChart);
+        const option = {
+          animation: false,
+          tooltip: {
+            trigger: 'axis',
+            backgroundColor: 'rgba(255, 255, 255, 0.8)',
+            textStyle: {
+              color: '#1f2937'
+            }
+          },
+          legend: {
+            data: ['전문성', '교육환경', '강사역량', '교육내용'],
+            textStyle: {
+              color: '#1f2937'
+            }
+          },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            top: '15%',
+            containLabel: true
+          },
+          xAxis: {
+            type: 'category',
+            data: ['2022', '2023', '2024', '2025'],
+            axisLine: {
+              lineStyle: {
+                color: '#1f2937'
+              }
+            }
+          },
+          yAxis: {
+            type: 'value',
+            min: 3,
+            max: 5,
+            axisLine: {
+              lineStyle: {
+                color: '#1f2937'
+              }
+            }
+          },
+          series: [
+            {
+              name: '전문성',
+              type: 'line',
+              smooth: true,
+              data: [4.2, 4.4, 4.6, 4.8],
+              lineStyle: {
+                width: 3,
+                color: 'rgba(87, 181, 231, 1)'
+              },
+              symbol: 'circle'
+            },
+            {
+              name: '교육환경',
+              type: 'line',
+              smooth: true,
+              data: [4.0, 4.3, 4.5, 4.7],
+              lineStyle: {
+                width: 3,
+                color: 'rgba(141, 211, 199, 1)'
+              },
+              symbol: 'circle'
+            },
+            {
+              name: '강사역량',
+              type: 'line',
+              smooth: true,
+              data: [4.3, 4.5, 4.7, 4.9],
+              lineStyle: {
+                width: 3,
+                color: 'rgba(251, 191, 114, 1)'
+              },
+              symbol: 'circle'
+            },
+            {
+              name: '교육내용',
+              type: 'line',
+              smooth: true,
+              data: [4.1, 4.3, 4.6, 4.8],
+              lineStyle: {
+                width: 3,
+                color: 'rgba(252, 141, 98, 1)'
+              },
+              symbol: 'circle'
+            }
+          ]
+        };
+        chart.setOption(option);
+
+        // 반응형 차트
+        window.addEventListener('resize', function () {
+          chart.resize();
+        });
+      }
+    });
+  </script>
 </body>
-</html> 
+
+</html>

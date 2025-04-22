@@ -1,13 +1,1305 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
+
 <head>
-    <meta charset="UTF-8">
-    <title>찾아오시는 길 - 체육인재개발원 학습운영시스템</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>체육인재개발원 포털 - 찾아오시는 길</title>
+  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+  <script>tailwind.config = { theme: { extend: { colors: { primary: '#1a237e', secondary: '#0d47a1' }, borderRadius: { 'none': '0px', 'sm': '4px', DEFAULT: '8px', 'md': '12px', 'lg': '16px', 'xl': '20px', '2xl': '24px', '3xl': '32px', 'full': '9999px', 'button': '8px' } } } }</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+  <style>
+    :where([class^="ri-"])::before {
+      content: "\f3c2";
+    }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      overflow-x: hidden;
+    }
+
+    .sidebar {
+      width: 280px;
+      transition: all 0.3s ease;
+    }
+
+    .submenu {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .submenu.active {
+      max-height: 500px;
+    }
+
+    .menu-item.active {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .menu-item.active .submenu {
+      max-height: 500px;
+    }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .fade-in {
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .transportation-tab {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .transportation-tab::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: #1a237e;
+      transition: width 0.3s ease;
+    }
+
+    .transportation-tab.active::after {
+      width: 100%;
+    }
+
+    .transportation-tab.active {
+      color: #1a237e;
+      font-weight: 500;
+    }
+
+    .transportation-content {
+      display: none;
+    }
+
+    .transportation-content.active {
+      display: block;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .map-container {
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+    }
+
+    .map-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05));
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .print-button:hover {
+      background-color: #0d47a1;
+    }
+
+    .contact-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px -3px rgba(0, 0, 0, 0.1);
+    }
+  </style>
 </head>
-<body>
-    <!-- 개발원 소개 > 찾아오시는 길 -->
-    <div th:fragment="content">
-        <h2>찾아오시는 길</h2>
+
+<body class="bg-gray-50">
+  <div class="flex min-h-screen">
+    
+
+    <!-- 메인 콘텐츠 -->
+    <div class="ml-[280px] w-[calc(100%-280px)] min-h-screen">
+      <!-- 찾아오시는 길 페이지 -->
+      <div class="fade-in">
+        <!-- 페이지 헤더 -->
+        <div class="bg-white shadow-sm">
+          <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+            <div class="flex items-center text-sm text-gray-500 mb-2">
+              <a href="#" class="hover:text-primary">홈</a>
+              <span class="mx-2">&gt;</span>
+              <a href="#" class="hover:text-primary">개발원소개</a>
+              <span class="mx-2">&gt;</span>
+              <span class="text-primary font-medium">찾아오시는 길</span>
+            </div>
+            <h1 class="text-3xl font-bold text-gray-900">찾아오시는 길</h1>
+            <p class="mt-2 text-gray-600">체육인재개발원의 위치와 오시는 방법에 대한 안내입니다.</p>
+          </div>
+        </div>
+
+        <!-- 지도 및 주소 섹션 -->
+        <div class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+          <div class="bg-white rounded-lg shadow-sm p-8 mb-8">
+            <div class="flex justify-between items-center mb-6">
+              <h2 class="text-2xl font-bold text-gray-900">체육인재개발원 위치</h2>
+              <button
+                class="print-button flex items-center gap-2 bg-primary text-white py-2 px-4 rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap">
+                <i class="ri-printer-line"></i>
+                <span>인쇄하기</span>
+              </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <!-- 지도 -->
+              <div class="map-container h-96 bg-gray-100 overflow-hidden">
+                <img src="https://public.readdy.ai/gen_page/map_placeholder_1280x720.png" alt="체육인재개발원 지도"
+                  class="w-full h-full object-cover">
+                <div class="absolute bottom-4 right-4 z-10">
+                  <a href="https://map.kakao.com" target="_blank"
+                    class="flex items-center gap-2 bg-white py-2 px-4 rounded-button shadow-md text-sm text-gray-700 hover:bg-gray-50 whitespace-nowrap">
+                    <i class="ri-navigation-line text-primary"></i>
+                    <span>길찾기</span>
+                  </a>
+                </div>
+              </div>
+
+              <!-- 주소 및 기본 정보 -->
+              <div class="space-y-6">
+                <div class="bg-gray-50 rounded-lg p-6">
+                  <h3 class="text-xl font-bold text-gray-900 mb-4">기본 정보</h3>
+                  <ul class="space-y-4">
+                    <li class="flex items-start">
+                      <div class="w-6 h-6 flex items-center justify-center text-primary mr-3 mt-0.5">
+                        <i class="ri-map-pin-line"></i>
+                      </div>
+                      <div>
+                        <span class="font-medium text-gray-700">주소</span>
+                        <p class="text-gray-900 mt-1">서울특별시 송파구 올림픽로 424 올림픽공원 내 체육인재개발원</p>
+                        <p class="text-gray-500 text-sm mt-1">(우) 05540</p>
+                      </div>
+                    </li>
+                    <li class="flex items-start">
+                      <div class="w-6 h-6 flex items-center justify-center text-primary mr-3 mt-0.5">
+                        <i class="ri-phone-line"></i>
+                      </div>
+                      <div>
+                        <span class="font-medium text-gray-700">대표전화</span>
+                        <p class="text-gray-900 mt-1">02-2100-6500</p>
+                      </div>
+                    </li>
+                    <li class="flex items-start">
+                      <div class="w-6 h-6 flex items-center justify-center text-primary mr-3 mt-0.5">
+                        <i class="ri-mail-line"></i>
+                      </div>
+                      <div>
+                        <span class="font-medium text-gray-700">이메일</span>
+                        <p class="text-gray-900 mt-1">info@sports.or.kr</p>
+                      </div>
+                    </li>
+                    <li class="flex items-start">
+                      <div class="w-6 h-6 flex items-center justify-center text-primary mr-3 mt-0.5">
+                        <i class="ri-time-line"></i>
+                      </div>
+                      <div>
+                        <span class="font-medium text-gray-700">업무시간</span>
+                        <p class="text-gray-900 mt-1">평일 09:00 ~ 18:00</p>
+                        <p class="text-gray-500 text-sm mt-1">점심시간: 12:00 ~ 13:00 / 주말, 공휴일 휴무</p>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="bg-blue-50 rounded-lg p-6">
+                  <h3 class="text-xl font-bold text-gray-900 mb-4">주변 정보</h3>
+                  <ul class="space-y-3">
+                    <li class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                        <i class="ri-checkbox-circle-line"></i>
+                      </div>
+                      <span class="text-gray-700">올림픽공원 내 위치 (평화의 문 인근)</span>
+                    </li>
+                    <li class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                        <i class="ri-checkbox-circle-line"></i>
+                      </div>
+                      <span class="text-gray-700">올림픽 체조경기장, 핸드볼경기장 인접</span>
+                    </li>
+                    <li class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                        <i class="ri-checkbox-circle-line"></i>
+                      </div>
+                      <span class="text-gray-700">인근 편의시설: 카페, 식당, 편의점</span>
+                    </li>
+                    <li class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                        <i class="ri-checkbox-circle-line"></i>
+                      </div>
+                      <span class="text-gray-700">롯데월드몰, 롯데월드타워 도보 15분 거리</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 교통편 안내 섹션 -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+          <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div class="p-6 border-b border-gray-200">
+              <h2 class="text-2xl font-bold text-gray-900">교통편 안내</h2>
+              <p class="mt-2 text-gray-600">다양한 교통수단을 이용하여 체육인재개발원에 방문하실 수 있습니다.</p>
+            </div>
+
+            <!-- 교통수단 탭 메뉴 -->
+            <div class="border-b border-gray-200">
+              <div class="flex overflow-x-auto">
+                <button
+                  class="transportation-tab active whitespace-nowrap px-6 py-4 text-gray-700 border-b-2 border-transparent flex items-center gap-2">
+                  <div class="w-6 h-6 flex items-center justify-center text-primary">
+                    <i class="ri-subway-line"></i>
+                  </div>
+                  <span>지하철</span>
+                </button>
+                <button
+                  class="transportation-tab whitespace-nowrap px-6 py-4 text-gray-700 border-b-2 border-transparent flex items-center gap-2">
+                  <div class="w-6 h-6 flex items-center justify-center text-primary">
+                    <i class="ri-bus-line"></i>
+                  </div>
+                  <span>버스</span>
+                </button>
+                <button
+                  class="transportation-tab whitespace-nowrap px-6 py-4 text-gray-700 border-b-2 border-transparent flex items-center gap-2">
+                  <div class="w-6 h-6 flex items-center justify-center text-primary">
+                    <i class="ri-car-line"></i>
+                  </div>
+                  <span>자가용</span>
+                </button>
+                <button
+                  class="transportation-tab whitespace-nowrap px-6 py-4 text-gray-700 border-b-2 border-transparent flex items-center gap-2">
+                  <div class="w-6 h-6 flex items-center justify-center text-primary">
+                    <i class="ri-taxi-line"></i>
+                  </div>
+                  <span>택시</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- 교통수단별 내용 -->
+            <div class="p-6">
+              <!-- 지하철 정보 -->
+              <div class="transportation-content active">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div class="md:col-span-2">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
+                      <div class="w-6 h-6 flex items-center justify-center text-primary mr-2">
+                        <i class="ri-subway-line"></i>
+                      </div>
+                      지하철 이용 안내
+                    </h3>
+
+                    <div class="space-y-6">
+                      <div class="bg-blue-50 rounded-lg p-5">
+                        <h4 class="font-bold text-gray-900 mb-3 flex items-center">
+                          <div
+                            class="w-5 h-5 flex items-center justify-center bg-blue-500 text-white rounded-full mr-2 text-xs">
+                            5</div>
+                          <span>5호선 올림픽공원역</span>
+                        </h4>
+                        <ul class="space-y-3 pl-7">
+                          <li class="flex items-start">
+                            <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                              <i class="ri-arrow-right-s-line"></i>
+                            </div>
+                            <span class="text-gray-700"><span class="font-medium">3번 출구</span> 이용</span>
+                          </li>
+                          <li class="flex items-start">
+                            <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                              <i class="ri-arrow-right-s-line"></i>
+                            </div>
+                            <span class="text-gray-700">출구에서 <span class="font-medium">올림픽공원 평화의 문</span> 방향으로 도보 약
+                              10분</span>
+                          </li>
+                          <li class="flex items-start">
+                            <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                              <i class="ri-arrow-right-s-line"></i>
+                            </div>
+                            <span class="text-gray-700">평화의 문 통과 후 <span class="font-medium">우측 체조경기장</span> 방향으로 도보 약
+                              5분</span>
+                          </li>
+                        </ul>
+                      </div>
+
+                      <div class="bg-blue-50 rounded-lg p-5">
+                        <h4 class="font-bold text-gray-900 mb-3 flex items-center">
+                          <div
+                            class="w-5 h-5 flex items-center justify-center bg-green-500 text-white rounded-full mr-2 text-xs">
+                            8</div>
+                          <span>8호선 몽촌토성역</span>
+                        </h4>
+                        <ul class="space-y-3 pl-7">
+                          <li class="flex items-start">
+                            <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                              <i class="ri-arrow-right-s-line"></i>
+                            </div>
+                            <span class="text-gray-700"><span class="font-medium">1번 출구</span> 이용</span>
+                          </li>
+                          <li class="flex items-start">
+                            <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                              <i class="ri-arrow-right-s-line"></i>
+                            </div>
+                            <span class="text-gray-700">출구에서 <span class="font-medium">올림픽공원 남문</span> 방향으로 도보 약
+                              15분</span>
+                          </li>
+                          <li class="flex items-start">
+                            <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                              <i class="ri-arrow-right-s-line"></i>
+                            </div>
+                            <span class="text-gray-700">남문 통과 후 <span class="font-medium">체조경기장</span> 방향으로 도보 약
+                              10분</span>
+                          </li>
+                        </ul>
+                      </div>
+
+                      <div class="bg-gray-50 rounded-lg p-5">
+                        <h4 class="font-bold text-gray-900 mb-3">지하철 환승 정보</h4>
+                        <ul class="space-y-3">
+                          <li class="flex items-start">
+                            <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                              <i class="ri-checkbox-circle-line"></i>
+                            </div>
+                            <span class="text-gray-700">2호선 → 5호선: 잠실역에서 환승</span>
+                          </li>
+                          <li class="flex items-start">
+                            <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                              <i class="ri-checkbox-circle-line"></i>
+                            </div>
+                            <span class="text-gray-700">3호선 → 5호선: 을지로4가역에서 환승</span>
+                          </li>
+                          <li class="flex items-start">
+                            <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                              <i class="ri-checkbox-circle-line"></i>
+                            </div>
+                            <span class="text-gray-700">4호선 → 5호선: 동대문역사문화공원역에서 환승</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div class="bg-gray-50 rounded-lg p-5 h-full">
+                      <h4 class="font-bold text-gray-900 mb-4">지하철 노선도</h4>
+                      <div class="rounded-lg overflow-hidden mb-4">
+                        <img
+                          src="https://readdy.ai/api/search-image?query=Seoul%20subway%20map%20with%20Olympic%20Park%20station%20highlighted%2C%20simple%2C%20clean%20design%2C%20information%20graphic&width=400&height=400&seq=1&orientation=squarish"
+                          alt="지하철 노선도" class="w-full h-auto">
+                      </div>
+                      <div class="text-sm text-gray-600">
+                        <p class="mb-2">※ 5호선 올림픽공원역이 가장 가까운 역입니다.</p>
+                        <p>※ 출퇴근 시간에는 혼잡할 수 있으니 여유있게 이동하시기 바랍니다.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 버스 정보 -->
+              <div class="transportation-content">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div class="md:col-span-2">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
+                      <div class="w-6 h-6 flex items-center justify-center text-primary mr-2">
+                        <i class="ri-bus-line"></i>
+                      </div>
+                      버스 이용 안내
+                    </h3>
+
+                    <div class="space-y-6">
+                      <div class="bg-blue-50 rounded-lg p-5">
+                        <h4 class="font-bold text-gray-900 mb-3">올림픽공원 평화의 문 정류장</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div>
+                            <h5 class="text-sm font-medium text-gray-700 mb-2">간선버스</h5>
+                            <ul class="space-y-2">
+                              <li class="flex items-center">
+                                <div
+                                  class="w-12 h-6 flex items-center justify-center bg-blue-500 text-white rounded-sm text-sm mr-2">
+                                  <span>342</span>
+                                </div>
+                                <span class="text-gray-700 text-sm">강동공영차고지 ↔ 중계동</span>
+                              </li>
+                              <li class="flex items-center">
+                                <div
+                                  class="w-12 h-6 flex items-center justify-center bg-blue-500 text-white rounded-sm text-sm mr-2">
+                                  <span>301</span>
+                                </div>
+                                <span class="text-gray-700 text-sm">장지동 ↔ 도봉산역</span>
+                              </li>
+                            </ul>
+                          </div>
+                          <div>
+                            <h5 class="text-sm font-medium text-gray-700 mb-2">지선버스</h5>
+                            <ul class="space-y-2">
+                              <li class="flex items-center">
+                                <div
+                                  class="w-12 h-6 flex items-center justify-center bg-green-500 text-white rounded-sm text-sm mr-2">
+                                  <span>3315</span>
+                                </div>
+                                <span class="text-gray-700 text-sm">강동공영차고지 ↔ 잠실역</span>
+                              </li>
+                              <li class="flex items-center">
+                                <div
+                                  class="w-12 h-6 flex items-center justify-center bg-green-500 text-white rounded-sm text-sm mr-2">
+                                  <span>3411</span>
+                                </div>
+                                <span class="text-gray-700 text-sm">장지공영차고지 ↔ 강변역</span>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                        <div class="mt-4">
+                          <h5 class="text-sm font-medium text-gray-700 mb-2">이용 방법</h5>
+                          <ul class="space-y-2 pl-2">
+                            <li class="flex items-start">
+                              <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                                <i class="ri-arrow-right-s-line"></i>
+                              </div>
+                              <span class="text-gray-700 text-sm">정류장에서 하차 후 <span class="font-medium">올림픽공원 평화의
+                                  문</span>으로 진입</span>
+                            </li>
+                            <li class="flex items-start">
+                              <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                                <i class="ri-arrow-right-s-line"></i>
+                              </div>
+                              <span class="text-gray-700 text-sm">평화의 문에서 <span class="font-medium">체조경기장</span> 방향으로 도보
+                                약 5분</span>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+
+                      <div class="bg-blue-50 rounded-lg p-5">
+                        <h4 class="font-bold text-gray-900 mb-3">올림픽공원 남문 정류장</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div>
+                            <h5 class="text-sm font-medium text-gray-700 mb-2">간선버스</h5>
+                            <ul class="space-y-2">
+                              <li class="flex items-center">
+                                <div
+                                  class="w-12 h-6 flex items-center justify-center bg-blue-500 text-white rounded-sm text-sm mr-2">
+                                  <span>147</span>
+                                </div>
+                                <span class="text-gray-700 text-sm">월계동 ↔ 장지동</span>
+                              </li>
+                            </ul>
+                          </div>
+                          <div>
+                            <h5 class="text-sm font-medium text-gray-700 mb-2">지선버스</h5>
+                            <ul class="space-y-2">
+                              <li class="flex items-center">
+                                <div
+                                  class="w-12 h-6 flex items-center justify-center bg-green-500 text-white rounded-sm text-sm mr-2">
+                                  <span>2415</span>
+                                </div>
+                                <span class="text-gray-700 text-sm">강동공영차고지 ↔ 잠실역</span>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                        <div class="mt-4">
+                          <h5 class="text-sm font-medium text-gray-700 mb-2">이용 방법</h5>
+                          <ul class="space-y-2 pl-2">
+                            <li class="flex items-start">
+                              <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                                <i class="ri-arrow-right-s-line"></i>
+                              </div>
+                              <span class="text-gray-700 text-sm">정류장에서 하차 후 <span class="font-medium">올림픽공원 남문</span>으로
+                                진입</span>
+                            </li>
+                            <li class="flex items-start">
+                              <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                                <i class="ri-arrow-right-s-line"></i>
+                              </div>
+                              <span class="text-gray-700 text-sm">남문에서 <span class="font-medium">체조경기장</span> 방향으로 도보 약
+                                10분</span>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div class="bg-gray-50 rounded-lg p-5 h-full">
+                      <h4 class="font-bold text-gray-900 mb-4">버스 노선도</h4>
+                      <div class="rounded-lg overflow-hidden mb-4">
+                        <img
+                          src="https://readdy.ai/api/search-image?query=Bus%20route%20map%20with%20Olympic%20Park%20bus%20stops%20highlighted%2C%20simple%2C%20clean%20design%2C%20information%20graphic&width=400&height=400&seq=2&orientation=squarish"
+                          alt="버스 노선도" class="w-full h-auto">
+                      </div>
+                      <div class="text-sm text-gray-600">
+                        <p class="mb-2">※ 버스 도착 정보는 서울버스 앱에서 확인 가능합니다.</p>
+                        <p>※ 배차 간격은 평일 10~15분, 주말 15~20분입니다.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 자가용 정보 -->
+              <div class="transportation-content">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div class="md:col-span-2">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
+                      <div class="w-6 h-6 flex items-center justify-center text-primary mr-2">
+                        <i class="ri-car-line"></i>
+                      </div>
+                      자가용 이용 안내
+                    </h3>
+
+                    <div class="space-y-6">
+                      <div class="bg-blue-50 rounded-lg p-5">
+                        <h4 class="font-bold text-gray-900 mb-3">주요 도로에서 오시는 길</h4>
+                        <div class="space-y-4">
+                          <div>
+                            <h5 class="text-sm font-medium text-gray-700 mb-2">올림픽대로에서 오실 경우</h5>
+                            <ul class="space-y-2 pl-2">
+                              <li class="flex items-start">
+                                <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                                  <i class="ri-arrow-right-s-line"></i>
+                                </div>
+                                <span class="text-gray-700 text-sm">올림픽대로 → <span class="font-medium">잠실방향</span> →
+                                  올림픽공원 IC → 평화의 문 방향</span>
+                              </li>
+                            </ul>
+                          </div>
+                          <div>
+                            <h5 class="text-sm font-medium text-gray-700 mb-2">강변북로에서 오실 경우</h5>
+                            <ul class="space-y-2 pl-2">
+                              <li class="flex items-start">
+                                <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                                  <i class="ri-arrow-right-s-line"></i>
+                                </div>
+                                <span class="text-gray-700 text-sm">강변북로 → <span class="font-medium">잠실대교</span> → 송파대로
+                                  → 올림픽로 → 올림픽공원 평화의 문</span>
+                              </li>
+                            </ul>
+                          </div>
+                          <div>
+                            <h5 class="text-sm font-medium text-gray-700 mb-2">동부간선도로에서 오실 경우</h5>
+                            <ul class="space-y-2 pl-2">
+                              <li class="flex items-start">
+                                <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                                  <i class="ri-arrow-right-s-line"></i>
+                                </div>
+                                <span class="text-gray-700 text-sm">동부간선도로 → <span class="font-medium">강일IC</span> →
+                                  천호대로 → 올림픽로 → 올림픽공원 평화의 문</span>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="bg-blue-50 rounded-lg p-5">
+                        <h4 class="font-bold text-gray-900 mb-3">주차 안내</h4>
+                        <ul class="space-y-3">
+                          <li class="flex items-start">
+                            <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                              <i class="ri-checkbox-circle-line"></i>
+                            </div>
+                            <div>
+                              <span class="text-gray-700">주차장 위치: 올림픽공원 내 제1주차장 (체육인재개발원 전용구역)</span>
+                            </div>
+                          </li>
+                          <li class="flex items-start">
+                            <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                              <i class="ri-checkbox-circle-line"></i>
+                            </div>
+                            <div>
+                              <span class="text-gray-700">주차 요금: 교육생 무료 (방문증 발급 필요)</span>
+                            </div>
+                          </li>
+                          <li class="flex items-start">
+                            <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                              <i class="ri-checkbox-circle-line"></i>
+                            </div>
+                            <div>
+                              <span class="text-gray-700">일반 방문객: 최초 30분 1,000원, 추가 10분당 300원</span>
+                            </div>
+                          </li>
+                          <li class="flex items-start">
+                            <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                              <i class="ri-checkbox-circle-line"></i>
+                            </div>
+                            <div>
+                              <span class="text-gray-700">주차 가능 대수: 약 50대</span>
+                            </div>
+                          </li>
+                          <li class="flex items-start">
+                            <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                              <i class="ri-checkbox-circle-line"></i>
+                            </div>
+                            <div>
+                              <span class="text-gray-700">운영 시간: 06:00 ~ 22:00</span>
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
+
+                      <div class="bg-gray-50 rounded-lg p-5">
+                        <h4 class="font-bold text-gray-900 mb-3">내비게이션 이용 안내</h4>
+                        <ul class="space-y-3">
+                          <li class="flex items-start">
+                            <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                              <i class="ri-navigation-line"></i>
+                            </div>
+                            <div>
+                              <span class="text-gray-700">내비게이션 검색명: "체육인재개발원" 또는 "올림픽공원 체조경기장"</span>
+                            </div>
+                          </li>
+                          <li class="flex items-start">
+                            <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                              <i class="ri-navigation-line"></i>
+                            </div>
+                            <div>
+                              <span class="text-gray-700">주소 검색: "서울특별시 송파구 올림픽로 424"</span>
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div class="bg-gray-50 rounded-lg p-5 h-full">
+                      <h4 class="font-bold text-gray-900 mb-4">주차장 안내도</h4>
+                      <div class="rounded-lg overflow-hidden mb-4">
+                        <img
+                          src="https://readdy.ai/api/search-image?query=Parking%20lot%20map%20for%20Olympic%20Park%2C%20simple%2C%20clean%20design%2C%20information%20graphic&width=400&height=400&seq=3&orientation=squarish"
+                          alt="주차장 안내도" class="w-full h-auto">
+                      </div>
+                      <div class="text-sm text-gray-600">
+                        <p class="mb-2">※ 주말 및 공휴일에는 주차장이 혼잡할 수 있습니다.</p>
+                        <p>※ 행사 기간에는 주차 공간이 제한될 수 있으니 가급적 대중교통을 이용해 주세요.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 택시 정보 -->
+              <div class="transportation-content">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div class="md:col-span-2">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
+                      <div class="w-6 h-6 flex items-center justify-center text-primary mr-2">
+                        <i class="ri-taxi-line"></i>
+                      </div>
+                      택시 이용 안내
+                    </h3>
+
+                    <div class="space-y-6">
+                      <div class="bg-blue-50 rounded-lg p-5">
+                        <h4 class="font-bold text-gray-900 mb-3">택시 이용 방법</h4>
+                        <ul class="space-y-3">
+                          <li class="flex items-start">
+                            <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                              <i class="ri-checkbox-circle-line"></i>
+                            </div>
+                            <div>
+                              <span class="text-gray-700">목적지 안내: "올림픽공원 평화의 문" 또는 "올림픽공원 체조경기장"</span>
+                            </div>
+                          </li>
+                          <li class="flex items-start">
+                            <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                              <i class="ri-checkbox-circle-line"></i>
+                            </div>
+                            <div>
+                              <span class="text-gray-700">하차 지점: 올림픽공원 평화의 문 앞 택시 승하차장</span>
+                            </div>
+                          </li>
+                          <li class="flex items-start">
+                            <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                              <i class="ri-checkbox-circle-line"></i>
+                            </div>
+                            <div>
+                              <span class="text-gray-700">평화의 문에서 체육인재개발원까지 도보 약 5분 소요</span>
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
+
+                      <div class="bg-blue-50 rounded-lg p-5">
+                        <h4 class="font-bold text-gray-900 mb-3">주요 지점에서의 예상 택시 요금</h4>
+                        <div class="overflow-x-auto">
+                          <table class="min-w-full divide-y divide-gray-200">
+                            <thead>
+                              <tr>
+                                <th
+                                  class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                  출발지</th>
+                                <th
+                                  class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                  예상 소요 시간</th>
+                                <th
+                                  class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                  예상 요금</th>
+                              </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                              <tr>
+                                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">서울역</td>
+                                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">약 30분</td>
+                                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">약 15,000원</td>
+                              </tr>
+                              <tr>
+                                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">강남역</td>
+                                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">약 20분</td>
+                                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">약 10,000원</td>
+                              </tr>
+                              <tr>
+                                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">잠실역</td>
+                                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">약 10분</td>
+                                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">약 5,000원</td>
+                              </tr>
+                              <tr>
+                                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">김포공항</td>
+                                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">약 50분</td>
+                                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">약 30,000원</td>
+                              </tr>
+                              <tr>
+                                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">인천국제공항</td>
+                                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">약 80분</td>
+                                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">약 60,000원</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-3">※ 교통 상황에 따라 소요 시간 및 요금이 달라질 수 있습니다.</p>
+                      </div>
+
+                      <div class="bg-gray-50 rounded-lg p-5">
+                        <h4 class="font-bold text-gray-900 mb-3">택시 앱 서비스</h4>
+                        <ul class="space-y-3">
+                          <li class="flex items-start">
+                            <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                              <i class="ri-smartphone-line"></i>
+                            </div>
+                            <div>
+                              <span class="text-gray-700">카카오 T, 티맵 택시 등 택시 호출 앱을 이용하실 수 있습니다.</span>
+                            </div>
+                          </li>
+                          <li class="flex items-start">
+                            <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                              <i class="ri-smartphone-line"></i>
+                            </div>
+                            <div>
+                              <span class="text-gray-700">목적지 설정 시 "올림픽공원 평화의 문"으로 설정하시면 편리합니다.</span>
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div class="bg-gray-50 rounded-lg p-5 h-full">
+                      <h4 class="font-bold text-gray-900 mb-4">택시 승하차 지점</h4>
+                      <div class="rounded-lg overflow-hidden mb-4">
+                        <img
+                          src="https://readdy.ai/api/search-image?query=Taxi%20stand%20at%20Olympic%20Park%20entrance%2C%20simple%2C%20clean%20design%2C%20information%20graphic&width=400&height=400&seq=4&orientation=squarish"
+                          alt="택시 승하차 지점" class="w-full h-auto">
+                      </div>
+                      <div class="text-sm text-gray-600">
+                        <p class="mb-2">※ 택시 승하차장은 올림픽공원 평화의 문 앞에 위치해 있습니다.</p>
+                        <p>※ 체육인재개발원에서 택시 호출 시 안내데스크에 문의해 주세요.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 시설 및 연락처 섹션 -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+          <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div class="p-6 border-b border-gray-200">
+              <h2 class="text-2xl font-bold text-gray-900">시설 및 연락처 안내</h2>
+              <p class="mt-2 text-gray-600">체육인재개발원의 주요 시설과 부서별 연락처 정보입니다.</p>
+            </div>
+
+            <div class="p-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- 시설 안내 -->
+                <div>
+                  <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
+                    <div class="w-6 h-6 flex items-center justify-center text-primary mr-2">
+                      <i class="ri-building-line"></i>
+                    </div>
+                    주요 시설 안내
+                  </h3>
+
+                  <div class="space-y-6">
+                    <div class="bg-gray-50 rounded-lg p-5">
+                      <h4 class="font-bold text-gray-900 mb-3">본관</h4>
+                      <ul class="space-y-3">
+                        <li class="flex items-start">
+                          <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                            <i class="ri-checkbox-circle-line"></i>
+                          </div>
+                          <div>
+                            <span class="text-gray-700"><span class="font-medium">1층:</span> 안내데스크, 행정지원부,
+                              대강당(300석)</span>
+                          </div>
+                        </li>
+                        <li class="flex items-start">
+                          <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                            <i class="ri-checkbox-circle-line"></i>
+                          </div>
+                          <div>
+                            <span class="text-gray-700"><span class="font-medium">2층:</span> 교육운영부, 전산교육실(50석),
+                              세미나실(30석)</span>
+                          </div>
+                        </li>
+                        <li class="flex items-start">
+                          <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                            <i class="ri-checkbox-circle-line"></i>
+                          </div>
+                          <div>
+                            <span class="text-gray-700"><span class="font-medium">3층:</span> 교육기획부, 국제회의실(80석),
+                              교육장(40석)</span>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div class="bg-gray-50 rounded-lg p-5">
+                      <h4 class="font-bold text-gray-900 mb-3">연구동</h4>
+                      <ul class="space-y-3">
+                        <li class="flex items-start">
+                          <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                            <i class="ri-checkbox-circle-line"></i>
+                          </div>
+                          <div>
+                            <span class="text-gray-700"><span class="font-medium">1층:</span> 과학연구실, 자료실, 휴게공간</span>
+                          </div>
+                        </li>
+                        <li class="flex items-start">
+                          <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                            <i class="ri-checkbox-circle-line"></i>
+                          </div>
+                          <div>
+                            <span class="text-gray-700"><span class="font-medium">2층:</span> 연구개발부, 회의실, 연구원 사무실</span>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div class="bg-gray-50 rounded-lg p-5">
+                      <h4 class="font-bold text-gray-900 mb-3">체육시설</h4>
+                      <ul class="space-y-3">
+                        <li class="flex items-start">
+                          <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                            <i class="ri-checkbox-circle-line"></i>
+                          </div>
+                          <div>
+                            <span class="text-gray-700"><span class="font-medium">실내체육관:</span> 다목적 체육시설 (농구, 배구, 배드민턴
+                              등)</span>
+                          </div>
+                        </li>
+                        <li class="flex items-start">
+                          <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                            <i class="ri-checkbox-circle-line"></i>
+                          </div>
+                          <div>
+                            <span class="text-gray-700"><span class="font-medium">통합체육관:</span> 장애인 체육 교육 전용 시설</span>
+                          </div>
+                        </li>
+                        <li class="flex items-start">
+                          <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                            <i class="ri-checkbox-circle-line"></i>
+                          </div>
+                          <div>
+                            <span class="text-gray-700"><span class="font-medium">야외운동장:</span> 축구, 육상 등 실외 훈련 시설</span>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 연락처 안내 -->
+                <div>
+                  <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
+                    <div class="w-6 h-6 flex items-center justify-center text-primary mr-2">
+                      <i class="ri-contacts-line"></i>
+                    </div>
+                    부서별 연락처
+                  </h3>
+
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <!-- 부서 연락처 카드 1 -->
+                    <div class="bg-blue-50 rounded-lg p-5 transition-all duration-300 contact-card">
+                      <div class="flex items-center mb-3">
+                        <div
+                          class="w-10 h-10 flex items-center justify-center bg-blue-100 text-primary rounded-full mr-3">
+                          <i class="ri-calendar-todo-line"></i>
+                        </div>
+                        <h4 class="font-bold text-gray-900">교육기획부</h4>
+                      </div>
+                      <ul class="space-y-2 pl-13">
+                        <li class="flex items-start">
+                          <div class="w-5 h-5 flex items-center justify-center text-primary mr-2">
+                            <i class="ri-phone-line"></i>
+                          </div>
+                          <span class="text-gray-700">02-2100-6501</span>
+                        </li>
+                        <li class="flex items-start">
+                          <div class="w-5 h-5 flex items-center justify-center text-primary mr-2">
+                            <i class="ri-mail-line"></i>
+                          </div>
+                          <span class="text-gray-700">edu-planning@sports.or.kr</span>
+                        </li>
+                        <li class="flex items-start">
+                          <div class="w-5 h-5 flex items-center justify-center text-primary mr-2">
+                            <i class="ri-map-pin-line"></i>
+                          </div>
+                          <span class="text-gray-700">본관 3층 301호</span>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <!-- 부서 연락처 카드 2 -->
+                    <div class="bg-green-50 rounded-lg p-5 transition-all duration-300 contact-card">
+                      <div class="flex items-center mb-3">
+                        <div
+                          class="w-10 h-10 flex items-center justify-center bg-green-100 text-green-800 rounded-full mr-3">
+                          <i class="ri-presentation-line"></i>
+                        </div>
+                        <h4 class="font-bold text-gray-900">교육운영부</h4>
+                      </div>
+                      <ul class="space-y-2 pl-13">
+                        <li class="flex items-start">
+                          <div class="w-5 h-5 flex items-center justify-center text-green-800 mr-2">
+                            <i class="ri-phone-line"></i>
+                          </div>
+                          <span class="text-gray-700">02-2100-6601</span>
+                        </li>
+                        <li class="flex items-start">
+                          <div class="w-5 h-5 flex items-center justify-center text-green-800 mr-2">
+                            <i class="ri-mail-line"></i>
+                          </div>
+                          <span class="text-gray-700">edu-operation@sports.or.kr</span>
+                        </li>
+                        <li class="flex items-start">
+                          <div class="w-5 h-5 flex items-center justify-center text-green-800 mr-2">
+                            <i class="ri-map-pin-line"></i>
+                          </div>
+                          <span class="text-gray-700">본관 2층 201호</span>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <!-- 부서 연락처 카드 3 -->
+                    <div class="bg-purple-50 rounded-lg p-5 transition-all duration-300 contact-card">
+                      <div class="flex items-center mb-3">
+                        <div
+                          class="w-10 h-10 flex items-center justify-center bg-purple-100 text-purple-800 rounded-full mr-3">
+                          <i class="ri-flask-line"></i>
+                        </div>
+                        <h4 class="font-bold text-gray-900">연구개발부</h4>
+                      </div>
+                      <ul class="space-y-2 pl-13">
+                        <li class="flex items-start">
+                          <div class="w-5 h-5 flex items-center justify-center text-purple-800 mr-2">
+                            <i class="ri-phone-line"></i>
+                          </div>
+                          <span class="text-gray-700">02-2100-6701</span>
+                        </li>
+                        <li class="flex items-start">
+                          <div class="w-5 h-5 flex items-center justify-center text-purple-800 mr-2">
+                            <i class="ri-mail-line"></i>
+                          </div>
+                          <span class="text-gray-700">research@sports.or.kr</span>
+                        </li>
+                        <li class="flex items-start">
+                          <div class="w-5 h-5 flex items-center justify-center text-purple-800 mr-2">
+                            <i class="ri-map-pin-line"></i>
+                          </div>
+                          <span class="text-gray-700">연구동 2층 101호</span>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <!-- 부서 연락처 카드 4 -->
+                    <div class="bg-amber-50 rounded-lg p-5 transition-all duration-300 contact-card">
+                      <div class="flex items-center mb-3">
+                        <div
+                          class="w-10 h-10 flex items-center justify-center bg-amber-100 text-amber-800 rounded-full mr-3">
+                          <i class="ri-building-4-line"></i>
+                        </div>
+                        <h4 class="font-bold text-gray-900">행정지원부</h4>
+                      </div>
+                      <ul class="space-y-2 pl-13">
+                        <li class="flex items-start">
+                          <div class="w-5 h-5 flex items-center justify-center text-amber-800 mr-2">
+                            <i class="ri-phone-line"></i>
+                          </div>
+                          <span class="text-gray-700">02-2100-6801</span>
+                        </li>
+                        <li class="flex items-start">
+                          <div class="w-5 h-5 flex items-center justify-center text-amber-800 mr-2">
+                            <i class="ri-mail-line"></i>
+                          </div>
+                          <span class="text-gray-700">admin@sports.or.kr</span>
+                        </li>
+                        <li class="flex items-start">
+                          <div class="w-5 h-5 flex items-center justify-center text-amber-800 mr-2">
+                            <i class="ri-map-pin-line"></i>
+                          </div>
+                          <span class="text-gray-700">본관 1층 101호</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="mt-6">
+                    <div class="bg-gray-50 rounded-lg p-5">
+                      <h4 class="font-bold text-gray-900 mb-3">체육인재개발원 안내</h4>
+                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <h5 class="text-sm font-medium text-gray-700 mb-2">일반 문의</h5>
+                          <ul class="space-y-2">
+                            <li class="flex items-start">
+                              <div class="w-5 h-5 flex items-center justify-center text-primary mr-2">
+                                <i class="ri-customer-service-line"></i>
+                              </div>
+                              <span class="text-gray-700">대표전화: 02-2100-6500</span>
+                            </li>
+                            <li class="flex items-start">
+                              <div class="w-5 h-5 flex items-center justify-center text-primary mr-2">
+                                <i class="ri-mail-line"></i>
+                              </div>
+                              <span class="text-gray-700">이메일: info@sports.or.kr</span>
+                            </li>
+                          </ul>
+                        </div>
+                        <div>
+                          <h5 class="text-sm font-medium text-gray-700 mb-2">교육 신청 문의</h5>
+                          <ul class="space-y-2">
+                            <li class="flex items-start">
+                              <div class="w-5 h-5 flex items-center justify-center text-primary mr-2">
+                                <i class="ri-phone-line"></i>
+                              </div>
+                              <span class="text-gray-700">전화: 02-2100-6600</span>
+                            </li>
+                            <li class="flex items-start">
+                              <div class="w-5 h-5 flex items-center justify-center text-primary mr-2">
+                                <i class="ri-mail-line"></i>
+                              </div>
+                              <span class="text-gray-700">이메일: edu@sports.or.kr</span>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 주변 시설 정보 섹션 -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+          <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div class="p-6 border-b border-gray-200">
+              <h2 class="text-2xl font-bold text-gray-900">주변 시설 정보</h2>
+              <p class="mt-2 text-gray-600">체육인재개발원 주변의 편의시설 및 관광 정보입니다.</p>
+            </div>
+
+            <div class="p-6">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- 숙박 시설 -->
+                <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100">
+                  <div class="p-4 bg-blue-50 border-b border-gray-200">
+                    <div class="flex items-center">
+                      <div
+                        class="w-10 h-10 flex items-center justify-center bg-blue-100 text-primary rounded-full mr-3">
+                        <i class="ri-hotel-line"></i>
+                      </div>
+                      <h3 class="text-lg font-bold text-gray-900">숙박 시설</h3>
+                    </div>
+                  </div>
+                  <div class="p-5">
+                    <ul class="space-y-4">
+                      <li>
+                        <h4 class="font-medium text-gray-900">롯데호텔 월드</h4>
+                        <p class="text-sm text-gray-600 mt-1">개발원에서 도보 15분 거리</p>
+                        <p class="text-sm text-gray-600">02-419-7000</p>
+                      </li>
+                      <li>
+                        <h4 class="font-medium text-gray-900">시그니엘 서울</h4>
+                        <p class="text-sm text-gray-600 mt-1">개발원에서 도보 20분 거리</p>
+                        <p class="text-sm text-gray-600">02-3213-1000</p>
+                      </li>
+                      <li>
+                        <h4 class="font-medium text-gray-900">올림픽 파크텔</h4>
+                        <p class="text-sm text-gray-600 mt-1">개발원에서 도보 5분 거리</p>
+                        <p class="text-sm text-gray-600">02-410-2114</p>
+                      </li>
+                      <li>
+                        <h4 class="font-medium text-gray-900">송파 비즈니스 호텔</h4>
+                        <p class="text-sm text-gray-600 mt-1">개발원에서 차량 10분 거리</p>
+                        <p class="text-sm text-gray-600">02-422-0000</p>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                <!-- 식당 및 카페 -->
+                <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100">
+                  <div class="p-4 bg-green-50 border-b border-gray-200">
+                    <div class="flex items-center">
+                      <div
+                        class="w-10 h-10 flex items-center justify-center bg-green-100 text-green-800 rounded-full mr-3">
+                        <i class="ri-restaurant-line"></i>
+                      </div>
+                      <h3 class="text-lg font-bold text-gray-900">식당 및 카페</h3>
+                    </div>
+                  </div>
+                  <div class="p-5">
+                    <ul class="space-y-4">
+                      <li>
+                        <h4 class="font-medium text-gray-900">올림픽공원 푸드코트</h4>
+                        <p class="text-sm text-gray-600 mt-1">개발원 내 본관 1층</p>
+                        <p class="text-sm text-gray-600">평일 11:00~14:00</p>
+                      </li>
+                      <li>
+                        <h4 class="font-medium text-gray-900">올림픽 카페테리아</h4>
+                        <p class="text-sm text-gray-600 mt-1">평화의 문 인근</p>
+                        <p class="text-sm text-gray-600">매일 09:00~20:00</p>
+                      </li>
+                      <li>
+                        <h4 class="font-medium text-gray-900">몽촌토성 맛집거리</h4>
+                        <p class="text-sm text-gray-600 mt-1">개발원에서 도보 15분 거리</p>
+                        <p class="text-sm text-gray-600">다양한 한식, 양식 레스토랑</p>
+                      </li>
+                      <li>
+                        <h4 class="font-medium text-gray-900">롯데월드몰 식당가</h4>
+                        <p class="text-sm text-gray-600 mt-1">개발원에서 도보 20분 거리</p>
+                        <p class="text-sm text-gray-600">다양한 음식점 및 카페</p>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                <!-- 관광 명소 -->
+                <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100">
+                  <div class="p-4 bg-purple-50 border-b border-gray-200">
+                    <div class="flex items-center">
+                      <div
+                        class="w-10 h-10 flex items-center justify-center bg-purple-100 text-purple-800 rounded-full mr-3">
+                        <i class="ri-map-pin-line"></i>
+                      </div>
+                      <h3 class="text-lg font-bold text-gray-900">관광 명소</h3>
+                    </div>
+                  </div>
+                  <div class="p-5">
+                    <ul class="space-y-4">
+                      <li>
+                        <h4 class="font-medium text-gray-900">올림픽공원</h4>
+                        <p class="text-sm text-gray-600 mt-1">체육인재개발원 위치</p>
+                        <p class="text-sm text-gray-600">산책로, 조각공원, 경기장</p>
+                      </li>
+                      <li>
+                        <h4 class="font-medium text-gray-900">몽촌토성</h4>
+                        <p class="text-sm text-gray-600 mt-1">개발원에서 도보 10분 거리</p>
+                        <p class="text-sm text-gray-600">한성백제시대 유적지</p>
+                      </li>
+                      <li>
+                        <h4 class="font-medium text-gray-900">롯데월드</h4>
+                        <p class="text-sm text-gray-600 mt-1">개발원에서 도보 20분 거리</p>
+                        <p class="text-sm text-gray-600">테마파크, 쇼핑몰</p>
+                      </li>
+                      <li>
+                        <h4 class="font-medium text-gray-900">석촌호수</h4>
+                        <p class="text-sm text-gray-600 mt-1">개발원에서 도보 25분 거리</p>
+                        <p class="text-sm text-gray-600">산책로, 카페거리</p>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 부서안내 페이지로 돌아가기 -->
+        <div class="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8 text-center">
+          <a href="https://readdy.ai/home/8289e8bd-0211-46fd-b43c-4527019ae71a/310afa14-c10b-4bfc-b7c3-6c175b0e450f"
+            data-readdy="true"
+            class="inline-flex items-center gap-2 bg-primary text-white py-3 px-6 rounded-button hover:bg-primary/90 whitespace-nowrap">
+            <i class="ri-arrow-left-line"></i>
+            <span>부서안내 페이지로 돌아가기</span>
+          </a>
+        </div>
+      </div>
     </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // 메뉴 토글 기능
+      const menuItems = document.querySelectorAll('.menu-item');
+      menuItems.forEach(item => {
+        const menuHeader = item.querySelector('div');
+        menuHeader.addEventListener('click', () => {
+          item.classList.toggle('active');
+        });
+      });
+
+      // 교통수단 탭 기능
+      const transportationTabs = document.querySelectorAll('.transportation-tab');
+      const transportationContents = document.querySelectorAll('.transportation-content');
+
+      transportationTabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => {
+          // 모든 탭 비활성화
+          transportationTabs.forEach(t => t.classList.remove('active'));
+          transportationContents.forEach(c => c.classList.remove('active'));
+
+          // 클릭한 탭 활성화
+          tab.classList.add('active');
+          transportationContents[index].classList.add('active');
+        });
+      });
+
+      // 인쇄 기능
+      const printButton = document.querySelector('.print-button');
+      if (printButton) {
+        printButton.addEventListener('click', () => {
+          window.print();
+        });
+      }
+    });
+  </script>
 </body>
-</html> 
+
+</html>

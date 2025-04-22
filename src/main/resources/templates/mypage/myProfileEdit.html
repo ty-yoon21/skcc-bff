@@ -1,13 +1,730 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
+
 <head>
     <meta charset="UTF-8">
-    <title>프로필 수정 - 체육인재개발원 학습운영시스템</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>체육인재개발원 포털 - 개인정보</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>tailwind.config = { theme: { extend: { colors: { primary: '#1a237e', secondary: '#0d47a1' }, borderRadius: { 'none': '0px', 'sm': '4px', DEFAULT: '8px', 'md': '12px', 'lg': '16px', 'xl': '20px', '2xl': '24px', '3xl': '32px', 'full': '9999px', 'button': '8px' } } } }</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        :where([class^="ri-"])::before {
+            content: "\f3c2";
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .sidebar {
+            width: 280px;
+            transition: all 0.3s ease;
+        }
+
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .submenu.active {
+            max-height: 500px;
+        }
+
+        .menu-item.active {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-item.active .submenu {
+            max-height: 500px;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type="password"]::-ms-reveal,
+        input[type="password"]::-ms-clear {
+            display: none;
+        }
+
+        .password-toggle {
+            cursor: pointer;
+        }
+
+        .form-group:focus-within label {
+            color: #1a237e;
+        }
+
+        .form-group:focus-within .input-field {
+            border-color: #1a237e;
+            box-shadow: 0 0 0 1px rgba(26, 35, 126, 0.2);
+        }
+
+        .input-field {
+            transition: all 0.2s ease;
+        }
+
+        .input-field:disabled {
+            background-color: #f9fafb;
+            cursor: not-allowed;
+        }
+
+        .modal {
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-content {
+            transition: transform 0.3s ease;
+        }
+
+        .modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+    </style>
 </head>
-<body>
-    <!-- 마이페이지 > 프로필 수정 -->
-    <div th:fragment="content">
-        <h2>프로필 수정</h2>
+
+<body class="bg-gray-50">
+    <div class="flex min-h-screen">
+        
+
+        <!-- 메인 콘텐츠 -->
+        <div class="ml-[280px] w-[calc(100%-280px)] min-h-screen">
+            <!-- 개인정보 페이지 -->
+            <div class="fade-in">
+                <!-- 페이지 헤더 -->
+                <div class="bg-white shadow-sm">
+                    <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+                        <div class="flex items-center text-sm text-gray-500 mb-2">
+                            <a href="#" class="hover:text-primary">홈</a>
+                            <span class="mx-2">&gt;</span>
+                            <a href="#" class="hover:text-primary">마이페이지</a>
+                            <span class="mx-2">&gt;</span>
+                            <span class="text-primary font-medium">개인정보</span>
+                        </div>
+                        <h1 class="text-3xl font-bold text-gray-900">개인정보</h1>
+                        <p class="mt-2 text-gray-600">회원님의 개인정보를 확인하고 수정할 수 있습니다.</p>
+                    </div>
+                </div>
+
+                <!-- 개인정보 콘텐츠 -->
+                <div class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+                    <div class="bg-white rounded-lg shadow-sm p-6 md:p-8">
+                        <!-- 프로필 영역 -->
+                        <div class="flex flex-col md:flex-row gap-8 mb-8 pb-8 border-b border-gray-200">
+                            <div class="flex flex-col items-center">
+                                <div
+                                    class="relative w-32 h-32 rounded-full bg-gray-100 overflow-hidden border-4 border-white shadow">
+                                    <img id="profileImage"
+                                        src="https://readdy.ai/api/search-image?query=professional%20portrait%20photo%20of%20Korean%20man%20in%20business%20attire%2C%20neutral%20expression%2C%20simple%20background%2C%20high%20quality%2C%20realistic&width=300&height=300&seq=1&orientation=squarish"
+                                        alt="프로필 이미지" class="w-full h-full object-cover">
+                                    <label for="profileUpload"
+                                        class="absolute bottom-0 right-0 bg-primary text-white w-8 h-8 rounded-full flex items-center justify-center cursor-pointer">
+                                        <i class="ri-camera-line"></i>
+                                    </label>
+                                    <input type="file" id="profileUpload" class="hidden" accept="image/*">
+                                </div>
+                                <p class="text-sm text-gray-500 mt-2">프로필 이미지 변경</p>
+                            </div>
+
+                            <div class="flex-1">
+                                <h2 class="text-2xl font-bold text-gray-800 mb-4">김민준 님</h2>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <p class="text-sm text-gray-500">회원번호</p>
+                                        <p class="font-medium">KSP-202504-1234</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-500">회원등급</p>
+                                        <p class="font-medium">정회원</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-500">가입일</p>
+                                        <p class="font-medium">2023년 08월 15일</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-500">최근 로그인</p>
+                                        <p class="font-medium">2025년 04월 22일 09:45</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 탭 메뉴 -->
+                        <div class="border-b border-gray-200 mb-6">
+                            <div class="flex overflow-x-auto">
+                                <button id="basicInfoTab"
+                                    class="text-primary border-b-2 border-primary font-medium px-4 py-3 whitespace-nowrap">기본
+                                    정보</button>
+                                <button id="passwordTab"
+                                    class="text-gray-500 hover:text-gray-700 px-4 py-3 whitespace-nowrap">비밀번호
+                                    변경</button>
+                            </div>
+                        </div>
+
+                        <!-- 기본 정보 폼 -->
+                        <div id="basicInfoForm" class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="form-group">
+                                    <label for="name" class="block text-sm font-medium text-gray-700 mb-1">이름 <span
+                                            class="text-red-500">*</span></label>
+                                    <input type="text" id="name" value="김민준"
+                                        class="input-field w-full px-4 py-2 border border-gray-300 rounded focus:outline-none text-gray-800"
+                                        disabled>
+                                    <p class="text-xs text-gray-500 mt-1">이름은 변경할 수 없습니다.</p>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">이메일 <span
+                                            class="text-red-500">*</span></label>
+                                    <input type="email" id="email" value="minjun.kim@example.com"
+                                        class="input-field w-full px-4 py-2 border border-gray-300 rounded focus:outline-none text-gray-800">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">연락처 <span
+                                            class="text-red-500">*</span></label>
+                                    <input type="tel" id="phone" value="010-1234-5678"
+                                        class="input-field w-full px-4 py-2 border border-gray-300 rounded focus:outline-none text-gray-800">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="organization"
+                                        class="block text-sm font-medium text-gray-700 mb-1">소속기관</label>
+                                    <input type="text" id="organization" value="서울시체육회"
+                                        class="input-field w-full px-4 py-2 border border-gray-300 rounded focus:outline-none text-gray-800">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="position"
+                                        class="block text-sm font-medium text-gray-700 mb-1">직위/직책</label>
+                                    <input type="text" id="position" value="체육지도자"
+                                        class="input-field w-full px-4 py-2 border border-gray-300 rounded focus:outline-none text-gray-800">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="department"
+                                        class="block text-sm font-medium text-gray-700 mb-1">부서</label>
+                                    <input type="text" id="department" value="교육연수팀"
+                                        class="input-field w-full px-4 py-2 border border-gray-300 rounded focus:outline-none text-gray-800">
+                                </div>
+                            </div>
+
+                            <div class="mt-8">
+                                <h3 class="text-lg font-medium text-gray-900 mb-4">알림 설정</h3>
+                                <div class="space-y-3">
+                                    <div class="flex items-center">
+                                        <div class="relative inline-block w-10 mr-2 align-middle select-none">
+                                            <input type="checkbox" id="emailNotification" checked
+                                                class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 border-gray-300 appearance-none cursor-pointer transition-transform duration-200 ease-in-out translate-x-0 checked:translate-x-4 checked:border-primary">
+                                            <label for="emailNotification"
+                                                class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                                        </div>
+                                        <label for="emailNotification" class="text-sm text-gray-700">이메일 알림 수신</label>
+                                    </div>
+
+                                    <div class="flex items-center">
+                                        <div class="relative inline-block w-10 mr-2 align-middle select-none">
+                                            <input type="checkbox" id="smsNotification" checked
+                                                class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 border-gray-300 appearance-none cursor-pointer transition-transform duration-200 ease-in-out translate-x-0 checked:translate-x-4 checked:border-primary">
+                                            <label for="smsNotification"
+                                                class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                                        </div>
+                                        <label for="smsNotification" class="text-sm text-gray-700">SMS 알림 수신</label>
+                                    </div>
+
+                                    <div class="flex items-center">
+                                        <div class="relative inline-block w-10 mr-2 align-middle select-none">
+                                            <input type="checkbox" id="marketingConsent"
+                                                class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 border-gray-300 appearance-none cursor-pointer transition-transform duration-200 ease-in-out translate-x-0 checked:translate-x-4 checked:border-primary">
+                                            <label for="marketingConsent"
+                                                class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                                        </div>
+                                        <label for="marketingConsent" class="text-sm text-gray-700">마케팅 정보 수신 동의</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-end pt-4">
+                                <button id="saveBasicInfo"
+                                    class="bg-primary text-white py-2 px-6 rounded-button hover:bg-primary/90 whitespace-nowrap">저장하기</button>
+                            </div>
+                        </div>
+
+                        <!-- 비밀번호 변경 폼 -->
+                        <div id="passwordForm" class="space-y-6 hidden">
+                            <div class="max-w-md mx-auto">
+                                <div class="form-group mb-4">
+                                    <label for="currentPassword" class="block text-sm font-medium text-gray-700 mb-1">현재
+                                        비밀번호 <span class="text-red-500">*</span></label>
+                                    <div class="relative">
+                                        <input type="password" id="currentPassword"
+                                            class="input-field w-full px-4 py-2 border border-gray-300 rounded focus:outline-none text-gray-800 pr-10">
+                                        <div class="password-toggle absolute inset-y-0 right-0 pr-3 flex items-center">
+                                            <i class="ri-eye-off-line text-gray-400"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group mb-4">
+                                    <label for="newPassword" class="block text-sm font-medium text-gray-700 mb-1">새 비밀번호
+                                        <span class="text-red-500">*</span></label>
+                                    <div class="relative">
+                                        <input type="password" id="newPassword"
+                                            class="input-field w-full px-4 py-2 border border-gray-300 rounded focus:outline-none text-gray-800 pr-10">
+                                        <div class="password-toggle absolute inset-y-0 right-0 pr-3 flex items-center">
+                                            <i class="ri-eye-off-line text-gray-400"></i>
+                                        </div>
+                                    </div>
+                                    <p class="text-xs text-gray-500 mt-1">영문, 숫자, 특수문자를 포함하여 8자 이상</p>
+                                </div>
+
+                                <div class="form-group mb-4">
+                                    <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-1">새
+                                        비밀번호 확인 <span class="text-red-500">*</span></label>
+                                    <div class="relative">
+                                        <input type="password" id="confirmPassword"
+                                            class="input-field w-full px-4 py-2 border border-gray-300 rounded focus:outline-none text-gray-800 pr-10">
+                                        <div class="password-toggle absolute inset-y-0 right-0 pr-3 flex items-center">
+                                            <i class="ri-eye-off-line text-gray-400"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex justify-end pt-4">
+                                    <button id="changePassword"
+                                        class="bg-primary text-white py-2 px-6 rounded-button hover:bg-primary/90 whitespace-nowrap">비밀번호
+                                        변경</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 회원탈퇴 영역 -->
+                        <div class="mt-12 pt-6 border-t border-gray-200">
+                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                <div>
+                                    <h3 class="text-lg font-medium text-gray-900">회원탈퇴</h3>
+                                    <p class="text-sm text-gray-500">탈퇴 시 모든 개인정보가 삭제되며 복구할 수 없습니다.</p>
+                                </div>
+                                <button id="withdrawButton"
+                                    class="text-red-600 border border-red-600 bg-white py-2 px-4 rounded-button hover:bg-red-50 whitespace-nowrap">회원탈퇴</button>
+                            </div>
+                        </div>
+
+                        <!-- 개인정보 처리방침 링크 -->
+                        <div class="mt-8 text-center">
+                            <button id="privacyPolicyButton" class="text-primary hover:underline text-sm">개인정보 처리방침
+                                보기</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 자료실로 돌아가기 -->
+                <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 text-center">
+                    <a href="https://readdy.ai/home/8289e8bd-0211-46fd-b43c-4527019ae71a/99c52b55-7c09-49f8-9129-735d94df3db4"
+                        data-readdy="true"
+                        class="inline-flex items-center gap-2 bg-primary text-white py-3 px-6 rounded-button hover:bg-primary/90 whitespace-nowrap">
+                        <i class="ri-arrow-left-line"></i>
+                        <span>자료실로 돌아가기</span>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <!-- 회원탈퇴 확인 모달 -->
+    <div id="withdrawModal"
+        class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 opacity-0 pointer-events-none">
+        <div class="modal-content bg-white rounded-lg shadow-xl max-w-md w-full mx-4 transform translate-y-4">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-bold text-gray-900">회원탈퇴 확인</h3>
+                    <button id="closeWithdrawModal"
+                        class="text-gray-400 hover:text-gray-500 w-8 h-8 flex items-center justify-center">
+                        <i class="ri-close-line text-xl"></i>
+                    </button>
+                </div>
+                <div class="py-4">
+                    <div class="flex items-center justify-center mb-4 w-16 h-16 mx-auto bg-red-100 rounded-full">
+                        <i class="ri-error-warning-line text-red-600 text-3xl"></i>
+                    </div>
+                    <p class="text-center text-gray-700 mb-4">정말 탈퇴하시겠습니까?</p>
+                    <p class="text-sm text-gray-500 mb-4">회원탈퇴 시 모든 개인정보와 활동 내역이 삭제되며, 이 작업은 되돌릴 수 없습니다.</p>
+
+                    <div class="form-group mb-4">
+                        <label for="withdrawReason" class="block text-sm font-medium text-gray-700 mb-1">탈퇴 사유
+                            (선택사항)</label>
+                        <select id="withdrawReason"
+                            class="input-field w-full px-4 py-2 border border-gray-300 rounded focus:outline-none text-gray-800 pr-8">
+                            <option value="">선택해주세요</option>
+                            <option value="사용빈도 낮음">사용빈도가 낮아서</option>
+                            <option value="서비스 불만족">서비스 불만족</option>
+                            <option value="개인정보 보호">개인정보 보호를 위해</option>
+                            <option value="재가입">재가입을 위해</option>
+                            <option value="기타">기타</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label for="withdrawPassword" class="block text-sm font-medium text-gray-700 mb-1">비밀번호 확인 <span
+                                class="text-red-500">*</span></label>
+                        <input type="password" id="withdrawPassword"
+                            class="input-field w-full px-4 py-2 border border-gray-300 rounded focus:outline-none text-gray-800">
+                    </div>
+
+                    <div class="flex items-center mb-4">
+                        <input type="checkbox" id="withdrawConfirm"
+                            class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary">
+                        <label for="withdrawConfirm" class="ml-2 text-sm text-gray-700">위 내용을 모두 확인하였으며, 탈퇴에
+                            동의합니다.</label>
+                    </div>
+                </div>
+                <div class="flex justify-end gap-3">
+                    <button id="cancelWithdraw"
+                        class="border border-gray-300 text-gray-700 py-2 px-4 rounded-button hover:bg-gray-50 whitespace-nowrap">취소</button>
+                    <button id="confirmWithdraw"
+                        class="bg-red-600 text-white py-2 px-4 rounded-button hover:bg-red-700 whitespace-nowrap"
+                        disabled>탈퇴하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 개인정보 처리방침 모달 -->
+    <div id="privacyModal"
+        class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 opacity-0 pointer-events-none">
+        <div
+            class="modal-content bg-white rounded-lg shadow-xl max-w-3xl w-full mx-4 transform translate-y-4 max-h-[90vh] flex flex-col">
+            <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+                <h3 class="text-lg font-bold text-gray-900">개인정보 처리방침</h3>
+                <button id="closePrivacyModal"
+                    class="text-gray-400 hover:text-gray-500 w-8 h-8 flex items-center justify-center">
+                    <i class="ri-close-line text-xl"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto">
+                <div class="space-y-6 text-gray-700">
+                    <section>
+                        <h4 class="text-base font-medium text-gray-900 mb-2">1. 개인정보의 수집 및 이용 목적</h4>
+                        <p class="text-sm">체육인재개발원은 다음의 목적을 위하여 개인정보를 처리합니다. 처리하고 있는 개인정보는 다음의 목적 이외의 용도로는 이용되지 않으며, 이용
+                            목적이 변경되는 경우에는 개인정보 보호법 제18조에 따라 별도의 동의를 받는 등 필요한 조치를 이행할 예정입니다.</p>
+                        <ul class="list-disc pl-5 mt-2 text-sm">
+                            <li>회원 가입 및 관리</li>
+                            <li>교육 프로그램 신청 및 관리</li>
+                            <li>서비스 제공 및 운영</li>
+                            <li>민원처리, 고지사항 전달</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h4 class="text-base font-medium text-gray-900 mb-2">2. 수집하는 개인정보 항목</h4>
+                        <p class="text-sm">체육인재개발원은 회원가입, 교육 신청, 서비스 이용 등을 위해 아래와 같은 개인정보를 수집하고 있습니다.</p>
+                        <ul class="list-disc pl-5 mt-2 text-sm">
+                            <li>필수항목: 이름, 아이디, 비밀번호, 이메일, 연락처</li>
+                            <li>선택항목: 소속기관, 직위/직책, 부서, 프로필 이미지</li>
+                            <li>자동수집항목: IP주소, 접속 로그, 쿠키</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h4 class="text-base font-medium text-gray-900 mb-2">3. 개인정보의 보유 및 이용기간</h4>
+                        <p class="text-sm">체육인재개발원은 법령에 따른 개인정보 보유·이용기간 또는 정보주체로부터 개인정보를 수집 시에 동의 받은 개인정보 보유·이용기간 내에서
+                            개인정보를 처리·보유합니다.</p>
+                        <ul class="list-disc pl-5 mt-2 text-sm">
+                            <li>회원 정보: 회원 탈퇴 시까지</li>
+                            <li>교육 신청 정보: 교육 종료 후 3년</li>
+                            <li>민원처리 정보: 민원처리 완료 후 3년</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h4 class="text-base font-medium text-gray-900 mb-2">4. 개인정보의 제3자 제공</h4>
+                        <p class="text-sm">체육인재개발원은 정보주체의 동의, 법률의 특별한 규정 등 개인정보 보호법 제17조 및 제18조에 해당하는 경우에만 개인정보를 제3자에게
+                            제공합니다.</p>
+                    </section>
+
+                    <section>
+                        <h4 class="text-base font-medium text-gray-900 mb-2">5. 정보주체의 권리, 의무 및 행사방법</h4>
+                        <p class="text-sm">정보주체는 체육인재개발원에 대해 언제든지 개인정보 열람, 정정, 삭제, 처리정지 요구 등의 권리를 행사할 수 있습니다.</p>
+                    </section>
+
+                    <section>
+                        <h4 class="text-base font-medium text-gray-900 mb-2">6. 개인정보 자동수집 장치의 설치, 운영 및 거부</h4>
+                        <p class="text-sm">체육인재개발원은 이용자에게 개별적인 맞춤서비스를 제공하기 위해 이용정보를 저장하고 수시로 불러오는 '쿠키(cookie)'를 사용합니다.
+                            쿠키는 웹사이트를 운영하는데 이용되는 서버가 이용자의 브라우저에게 보내는 소량의 정보이며 이용자 컴퓨터의 하드디스크에 저장됩니다.</p>
+                    </section>
+
+                    <section>
+                        <h4 class="text-base font-medium text-gray-900 mb-2">7. 개인정보 보호책임자</h4>
+                        <p class="text-sm">체육인재개발원은 개인정보 처리에 관한 업무를 총괄해서 책임지고, 개인정보 처리와 관련한 정보주체의 불만처리 및 피해구제 등을 위하여 아래와
+                            같이 개인정보 보호책임자를 지정하고 있습니다.</p>
+                        <div class="mt-2 text-sm">
+                            <p>▶ 개인정보 보호책임자</p>
+                            <p>성명: 정보호</p>
+                            <p>직책: 개인정보보호팀장</p>
+                            <p>연락처: 02-123-4567, privacy@example.co.kr</p>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h4 class="text-base font-medium text-gray-900 mb-2">8. 개인정보 처리방침 변경</h4>
+                        <p class="text-sm">이 개인정보 처리방침은 2025년 1월 1일부터 적용됩니다. 법령 및 방침에 따른 변경내용의 추가, 삭제 및 정정이 있는 경우에는
+                            변경사항의 시행 7일 전부터 공지사항을 통하여 고지할 것입니다.</p>
+                    </section>
+                </div>
+            </div>
+            <div class="p-4 border-t border-gray-200 flex justify-end">
+                <button id="closePrivacyButton"
+                    class="bg-primary text-white py-2 px-4 rounded-button hover:bg-primary/90 whitespace-nowrap">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // 메뉴 토글 기능
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach(item => {
+                const menuHeader = item.querySelector('div');
+                menuHeader.addEventListener('click', () => {
+                    item.classList.toggle('active');
+                });
+            });
+
+            // 탭 전환 기능
+            const basicInfoTab = document.getElementById('basicInfoTab');
+            const passwordTab = document.getElementById('passwordTab');
+            const basicInfoForm = document.getElementById('basicInfoForm');
+            const passwordForm = document.getElementById('passwordForm');
+
+            basicInfoTab.addEventListener('click', function () {
+                basicInfoTab.classList.add('text-primary', 'border-b-2', 'border-primary');
+                basicInfoTab.classList.remove('text-gray-500');
+                passwordTab.classList.remove('text-primary', 'border-b-2', 'border-primary');
+                passwordTab.classList.add('text-gray-500');
+                basicInfoForm.classList.remove('hidden');
+                passwordForm.classList.add('hidden');
+            });
+
+            passwordTab.addEventListener('click', function () {
+                passwordTab.classList.add('text-primary', 'border-b-2', 'border-primary');
+                passwordTab.classList.remove('text-gray-500');
+                basicInfoTab.classList.remove('text-primary', 'border-b-2', 'border-primary');
+                basicInfoTab.classList.add('text-gray-500');
+                passwordForm.classList.remove('hidden');
+                basicInfoForm.classList.add('hidden');
+            });
+
+            // 비밀번호 표시/숨김 토글
+            const passwordToggles = document.querySelectorAll('.password-toggle');
+            passwordToggles.forEach(toggle => {
+                toggle.addEventListener('click', function () {
+                    const input = this.previousElementSibling;
+                    const icon = this.querySelector('i');
+
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        icon.classList.remove('ri-eye-off-line');
+                        icon.classList.add('ri-eye-line');
+                    } else {
+                        input.type = 'password';
+                        icon.classList.remove('ri-eye-line');
+                        icon.classList.add('ri-eye-off-line');
+                    }
+                });
+            });
+
+            // 프로필 이미지 업로드
+            const profileUpload = document.getElementById('profileUpload');
+            const profileImage = document.getElementById('profileImage');
+
+            profileUpload.addEventListener('change', function (e) {
+                if (e.target.files && e.target.files[0]) {
+                    const reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        profileImage.src = e.target.result;
+                    }
+
+                    reader.readAsDataURL(e.target.files[0]);
+                }
+            });
+
+            // 토글 스위치 스타일링
+            const toggleCheckboxes = document.querySelectorAll('.toggle-checkbox');
+            toggleCheckboxes.forEach(checkbox => {
+                const label = checkbox.nextElementSibling;
+
+                if (checkbox.checked) {
+                    label.classList.add('bg-primary');
+                    label.classList.remove('bg-gray-300');
+                }
+
+                checkbox.addEventListener('change', function () {
+                    if (this.checked) {
+                        label.classList.add('bg-primary');
+                        label.classList.remove('bg-gray-300');
+                    } else {
+                        label.classList.remove('bg-primary');
+                        label.classList.add('bg-gray-300');
+                    }
+                });
+            });
+
+            // 기본 정보 저장 버튼
+            const saveBasicInfoBtn = document.getElementById('saveBasicInfo');
+            saveBasicInfoBtn.addEventListener('click', function () {
+                // 입력값 유효성 검사
+                const email = document.getElementById('email').value;
+                const phone = document.getElementById('phone').value;
+
+                if (!email) {
+                    alert('이메일을 입력해주세요.');
+                    return;
+                }
+
+                if (!phone) {
+                    alert('연락처를 입력해주세요.');
+                    return;
+                }
+
+                // 저장 성공 메시지
+                alert('개인정보가 성공적으로 저장되었습니다.');
+            });
+
+            // 비밀번호 변경 버튼
+            const changePasswordBtn = document.getElementById('changePassword');
+            changePasswordBtn.addEventListener('click', function () {
+                const currentPassword = document.getElementById('currentPassword').value;
+                const newPassword = document.getElementById('newPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+
+                if (!currentPassword) {
+                    alert('현재 비밀번호를 입력해주세요.');
+                    return;
+                }
+
+                if (!newPassword) {
+                    alert('새 비밀번호를 입력해주세요.');
+                    return;
+                }
+
+                if (!confirmPassword) {
+                    alert('새 비밀번호 확인을 입력해주세요.');
+                    return;
+                }
+
+                if (newPassword !== confirmPassword) {
+                    alert('새 비밀번호와 확인 비밀번호가 일치하지 않습니다.');
+                    return;
+                }
+
+                // 비밀번호 변경 성공 메시지
+                alert('비밀번호가 성공적으로 변경되었습니다.');
+
+                // 폼 초기화
+                document.getElementById('currentPassword').value = '';
+                document.getElementById('newPassword').value = '';
+                document.getElementById('confirmPassword').value = '';
+            });
+
+            // 회원탈퇴 모달
+            const withdrawButton = document.getElementById('withdrawButton');
+            const withdrawModal = document.getElementById('withdrawModal');
+            const closeWithdrawModal = document.getElementById('closeWithdrawModal');
+            const cancelWithdraw = document.getElementById('cancelWithdraw');
+            const confirmWithdraw = document.getElementById('confirmWithdraw');
+            const withdrawConfirm = document.getElementById('withdrawConfirm');
+
+            function openWithdrawModal() {
+                withdrawModal.classList.add('active');
+            }
+
+            function closeWithdrawModalFunc() {
+                withdrawModal.classList.remove('active');
+            }
+
+            withdrawButton.addEventListener('click', openWithdrawModal);
+            closeWithdrawModal.addEventListener('click', closeWithdrawModalFunc);
+            cancelWithdraw.addEventListener('click', closeWithdrawModalFunc);
+
+            // 회원탈퇴 동의 체크박스
+            withdrawConfirm.addEventListener('change', function () {
+                confirmWithdraw.disabled = !this.checked;
+            });
+
+            // 회원탈퇴 확인 버튼
+            confirmWithdraw.addEventListener('click', function () {
+                const withdrawPassword = document.getElementById('withdrawPassword').value;
+
+                if (!withdrawPassword) {
+                    alert('비밀번호를 입력해주세요.');
+                    return;
+                }
+
+                alert('회원탈퇴가 완료되었습니다. 그동안 이용해 주셔서 감사합니다.');
+                closeWithdrawModalFunc();
+
+                // 로그아웃 처리 등 추가 로직
+            });
+
+            // 개인정보 처리방침 모달
+            const privacyPolicyButton = document.getElementById('privacyPolicyButton');
+            const privacyModal = document.getElementById('privacyModal');
+            const closePrivacyModal = document.getElementById('closePrivacyModal');
+            const closePrivacyButton = document.getElementById('closePrivacyButton');
+
+            function openPrivacyModal() {
+                privacyModal.classList.add('active');
+            }
+
+            function closePrivacyModalFunc() {
+                privacyModal.classList.remove('active');
+            }
+
+            privacyPolicyButton.addEventListener('click', openPrivacyModal);
+            closePrivacyModal.addEventListener('click', closePrivacyModalFunc);
+            closePrivacyButton.addEventListener('click', closePrivacyModalFunc);
+
+            // 모달 외부 영역 클릭 시 닫기
+            window.addEventListener('click', function (e) {
+                if (e.target === withdrawModal) {
+                    closeWithdrawModalFunc();
+                }
+                if (e.target === privacyModal) {
+                    closePrivacyModalFunc();
+                }
+            });
+        });
+    </script>
 </body>
-</html> 
+
+</html>

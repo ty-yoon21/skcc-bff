@@ -1,13 +1,492 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
+
 <head>
     <meta charset="UTF-8">
-    <title>자료실 - 체육인재개발원 학습운영시스템</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>체육인재개발원 포털 - 자료실</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>tailwind.config = { theme: { extend: { colors: { primary: '#1a237e', secondary: '#0d47a1' }, borderRadius: { 'none': '0px', 'sm': '4px', DEFAULT: '8px', 'md': '12px', 'lg': '16px', 'xl': '20px', '2xl': '24px', '3xl': '32px', 'full': '9999px', 'button': '8px' } } } }</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        :where([class^="ri-"])::before {
+            content: "\f3c2";
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .sidebar {
+            width: 280px;
+            transition: all 0.3s ease;
+        }
+
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .submenu.active {
+            max-height: 500px;
+        }
+
+        .menu-item.active {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-item.active .submenu {
+            max-height: 500px;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .file-row:hover {
+            background-color: rgba(26, 35, 126, 0.05);
+        }
+
+        .important-file {
+            background-color: rgba(26, 35, 126, 0.08);
+        }
+    </style>
 </head>
-<body>
-    <!-- 공지사항 > 자료실 -->
-    <div th:fragment="content">
-        <h2>자료실</h2>
+
+<body class="bg-gray-50">
+    <div class="flex min-h-screen">
+        
+        <!-- 메인 콘텐츠 -->
+        <div class="ml-[280px] w-[calc(100%-280px)] min-h-screen">
+            <!-- 자료실 페이지 -->
+            <div class="fade-in">
+                <!-- 페이지 헤더 -->
+                <div class="bg-white shadow-sm">
+                    <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+                        <div class="flex items-center text-sm text-gray-500 mb-2">
+                            <a href="#" class="hover:text-primary">홈</a>
+                            <span class="mx-2">&gt;</span>
+                            <a href="#" class="hover:text-primary">정보마당</a>
+                            <span class="mx-2">&gt;</span>
+                            <span class="text-primary font-medium">자료실</span>
+                        </div>
+                        <h1 class="text-3xl font-bold text-gray-900">자료실</h1>
+                        <p class="mt-2 text-gray-600">체육인재개발원의 자료를 확인하실 수 있습니다.</p>
+                    </div>
+                </div>
+                <!-- 자료실 콘텐츠 -->
+                <div class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+                    <div class="bg-white rounded-lg shadow-sm p-6 md:p-8">
+                        <!-- 검색 및 필터 영역 -->
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                            <div class="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full md:w-auto">
+                                <div class="relative flex-grow">
+                                    <select id="categoryType"
+                                        class="appearance-none bg-gray-50 border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary w-full sm:w-40">
+                                        <option value="all">전체</option>
+                                        <option value="education">교육자료</option>
+                                        <option value="research">연구보고서</option>
+                                        <option value="presentation">발표자료</option>
+                                    </select>
+                                    <div
+                                        class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                        <i class="ri-arrow-down-s-line"></i>
+                                    </div>
+                                </div>
+                                <div class="relative flex-grow">
+                                    <input type="text" placeholder="검색어를 입력하세요"
+                                        class="w-full bg-gray-50 border border-gray-300 text-gray-700 py-2 px-4 pl-10 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <i class="ri-search-line text-gray-400"></i>
+                                    </div>
+                                </div>
+                                <button
+                                    class="bg-primary text-white py-2 px-4 rounded-button hover:bg-primary/90 whitespace-nowrap">검색</button>
+                            </div>
+
+                        </div>
+                        <!-- 자료실 목록 -->
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th scope="col"
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-16 text-center">
+                                            번호</th>
+                                        <th scope="col"
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            제목</th>
+                                        <th scope="col"
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-32 sm:w-40">
+                                            등록일</th>
+                                        <th scope="col"
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-24 text-center hidden sm:table-cell">
+                                            파일크기</th>
+                                        <th scope="col"
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-24 text-center">
+                                            다운로드</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <!-- 최신 자료 -->
+                                    <tr class="file-row">
+                                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">15
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <div class="flex items-center">
+                                                <div class="w-6 h-6 flex items-center justify-center mr-2">
+                                                    <i class="ri-file-pdf-line text-red-500"></i>
+                                                </div>
+                                                <a href="#" class="text-gray-900 hover:text-primary">
+                                                    <span>[교육자료] 2025년 체육지도자 역량강화 교육 커리큘럼</span>
+                                                </a>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-04-20</td>
+                                        <td
+                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center hidden sm:table-cell">
+                                            2.4MB</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                                            <button
+                                                class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-primary hover:bg-gray-100 rounded-full">
+                                                <i class="ri-download-line"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr class="file-row">
+                                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">14
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <div class="flex items-center">
+                                                <div class="w-6 h-6 flex items-center justify-center mr-2">
+                                                    <i class="ri-file-excel-line text-green-600"></i>
+                                                </div>
+                                                <a href="#" class="text-gray-900 hover:text-primary">
+                                                    <span>[연구보고서] 스포츠 과학 연구 데이터 분석 결과 (2025년 1분기)</span>
+                                                </a>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-04-18</td>
+                                        <td
+                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center hidden sm:table-cell">
+                                            3.7MB</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                                            <button
+                                                class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-primary hover:bg-gray-100 rounded-full">
+                                                <i class="ri-download-line"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr class="file-row">
+                                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">13
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <div class="flex items-center">
+                                                <div class="w-6 h-6 flex items-center justify-center mr-2">
+                                                    <i class="ri-file-ppt-line text-orange-600"></i>
+                                                </div>
+                                                <a href="#" class="text-gray-900 hover:text-primary">
+                                                    <span>[발표자료] 체육인재개발원 디지털 전환 프로젝트 발표 자료</span>
+                                                </a>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-04-15</td>
+                                        <td
+                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center hidden sm:table-cell">
+                                            5.2MB</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                                            <button
+                                                class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-primary hover:bg-gray-100 rounded-full">
+                                                <i class="ri-download-line"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr class="file-row">
+                                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">12
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <div class="flex items-center">
+                                                <div class="w-6 h-6 flex items-center justify-center mr-2">
+                                                    <i class="ri-file-zip-line text-purple-600"></i>
+                                                </div>
+                                                <a href="#" class="text-gray-900 hover:text-primary">
+                                                    <span>[교육자료] 2025년 체육지도자 자격연수 교재 및 보충자료 모음</span>
+                                                </a>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-04-12</td>
+                                        <td
+                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center hidden sm:table-cell">
+                                            18.5MB</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                                            <button
+                                                class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-primary hover:bg-gray-100 rounded-full">
+                                                <i class="ri-download-line"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr class="file-row">
+                                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">11
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <div class="flex items-center">
+                                                <div class="w-6 h-6 flex items-center justify-center mr-2">
+                                                    <i class="ri-file-pdf-line text-red-500"></i>
+                                                </div>
+                                                <a href="#" class="text-gray-900 hover:text-primary">
+                                                    <span>[연구보고서] 국내 체육지도자 역량 실태조사 분석 보고서</span>
+                                                </a>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-04-10</td>
+                                        <td
+                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center hidden sm:table-cell">
+                                            4.8MB</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                                            <button
+                                                class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-primary hover:bg-gray-100 rounded-full">
+                                                <i class="ri-download-line"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr class="file-row">
+                                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">10
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <div class="flex items-center">
+                                                <div class="w-6 h-6 flex items-center justify-center mr-2">
+                                                    <i class="ri-file-word-line text-blue-600"></i>
+                                                </div>
+                                                <a href="#" class="text-gray-900 hover:text-primary">
+                                                    <span>[교육자료] 체육지도자 윤리 가이드라인 및 행동 수칙</span>
+                                                </a>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-04-08</td>
+                                        <td
+                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center hidden sm:table-cell">
+                                            1.2MB</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                                            <button
+                                                class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-primary hover:bg-gray-100 rounded-full">
+                                                <i class="ri-download-line"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr class="file-row">
+                                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">9</td>
+                                        <td class="px-6 py-4">
+                                            <div class="flex items-center">
+                                                <div class="w-6 h-6 flex items-center justify-center mr-2">
+                                                    <i class="ri-file-ppt-line text-orange-600"></i>
+                                                </div>
+                                                <a href="#" class="text-gray-900 hover:text-primary">
+                                                    <span>[발표자료] 2025년 체육인재개발원 해외연수 프로그램 소개</span>
+                                                </a>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-04-05</td>
+                                        <td
+                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center hidden sm:table-cell">
+                                            6.3MB</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                                            <button
+                                                class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-primary hover:bg-gray-100 rounded-full">
+                                                <i class="ri-download-line"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr class="file-row">
+                                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">8</td>
+                                        <td class="px-6 py-4">
+                                            <div class="flex items-center">
+                                                <div class="w-6 h-6 flex items-center justify-center mr-2">
+                                                    <i class="ri-file-pdf-line text-red-500"></i>
+                                                </div>
+                                                <a href="#" class="text-gray-900 hover:text-primary">
+                                                    <span>[연구보고서] 체육인재 양성을 위한 중장기 발전 전략 연구</span>
+                                                </a>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-04-01</td>
+                                        <td
+                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center hidden sm:table-cell">
+                                            7.9MB</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                                            <button
+                                                class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-primary hover:bg-gray-100 rounded-full">
+                                                <i class="ri-download-line"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr class="file-row">
+                                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">7</td>
+                                        <td class="px-6 py-4">
+                                            <div class="flex items-center">
+                                                <div class="w-6 h-6 flex items-center justify-center mr-2">
+                                                    <i class="ri-file-excel-line text-green-600"></i>
+                                                </div>
+                                                <a href="#" class="text-gray-900 hover:text-primary">
+                                                    <span>[교육자료] 체육지도자 자격검정 통계 자료 (2020-2025)</span>
+                                                </a>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-03-28</td>
+                                        <td
+                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center hidden sm:table-cell">
+                                            2.1MB</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                                            <button
+                                                class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-primary hover:bg-gray-100 rounded-full">
+                                                <i class="ri-download-line"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr class="file-row">
+                                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">6</td>
+                                        <td class="px-6 py-4">
+                                            <div class="flex items-center">
+                                                <div class="w-6 h-6 flex items-center justify-center mr-2">
+                                                    <i class="ri-file-pdf-line text-red-500"></i>
+                                                </div>
+                                                <a href="#" class="text-gray-900 hover:text-primary">
+                                                    <span>[발표자료] 국제 체육교육 컨퍼런스 발표 자료집</span>
+                                                </a>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-03-25</td>
+                                        <td
+                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center hidden sm:table-cell">
+                                            12.6MB</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                                            <button
+                                                class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-primary hover:bg-gray-100 rounded-full">
+                                                <i class="ri-download-line"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- 페이지네이션 -->
+                        <div class="flex items-center justify-center mt-8">
+                            <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
+                                aria-label="Pagination">
+                                <a href="#"
+                                    class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                    <span class="sr-only">이전</span>
+                                    <i class="ri-arrow-left-s-line"></i>
+                                </a>
+                                <a href="#" aria-current="page"
+                                    class="z-10 bg-primary text-white relative inline-flex items-center px-4 py-2 border border-primary text-sm font-medium">
+                                    1
+                                </a>
+                                <a href="#"
+                                    class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                                    2
+                                </a>
+                                <a href="#"
+                                    class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                                    3
+                                </a>
+                                <span
+                                    class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
+                                    ...
+                                </span>
+                                <a href="#"
+                                    class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                                    8
+                                </a>
+                                <a href="#"
+                                    class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                                    9
+                                </a>
+                                <a href="#"
+                                    class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                                    10
+                                </a>
+                                <a href="#"
+                                    class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                    <span class="sr-only">다음</span>
+                                    <i class="ri-arrow-right-s-line"></i>
+                                </a>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+                <!-- 공지사항으로 돌아가기 -->
+                <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 text-center">
+                    <a href="https://readdy.ai/home/8289e8bd-0211-46fd-b43c-4527019ae71a/3a9320d4-8c45-47f6-b596-37e42b0acc09"
+                        data-readdy="true"
+                        class="inline-flex items-center gap-2 bg-primary text-white py-3 px-6 rounded-button hover:bg-primary/90 whitespace-nowrap">
+                        <i class="ri-arrow-left-line"></i>
+                        <span>공지사항으로 돌아가기</span>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // 메뉴 토글 기능
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach(item => {
+                const menuHeader = item.querySelector('div');
+                menuHeader.addEventListener('click', () => {
+                    item.classList.toggle('active');
+                });
+            });
+
+            // 자료등록 버튼 클릭 이벤트
+            const uploadButton = document.getElementById('uploadButton');
+            if (uploadButton) {
+                uploadButton.addEventListener('click', function () {
+                    alert('관리자만 자료를 등록할 수 있습니다.');
+                });
+            }
+
+            // 다운로드 버튼 클릭 이벤트
+            const downloadButtons = document.querySelectorAll('button i.ri-download-line');
+            downloadButtons.forEach(button => {
+                button.parentElement.addEventListener('click', function () {
+                    const fileTitle = this.closest('tr').querySelector('a span').textContent;
+                    alert(`'${fileTitle}' 파일 다운로드를 시작합니다.`);
+                });
+            });
+
+            // 카테고리 필터 기능
+            const categorySelect = document.getElementById('categoryType');
+            if (categorySelect) {
+                categorySelect.addEventListener('change', function () {
+                    const selectedCategory = this.value;
+                    alert(`선택한 카테고리: ${selectedCategory === 'all' ? '전체' : selectedCategory === 'education' ? '교육자료' : selectedCategory === 'research' ? '연구보고서' : '발표자료'}`);
+                });
+            }
+        });
+    </script>
 </body>
-</html> 
+
+</html>
