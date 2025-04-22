@@ -145,15 +145,33 @@
         <aside>
             <ul class="menu-list">
                 <li th:each="menu1 : ${menuList}">
-                    <div class="menu-item menu-dir">
-                        <i class="fas fa-folder menu-icon"></i>
-                        <span th:text="${menu1.menuNm}"></span>
+                    <div class="menu-item">
+                        <a th:if="${menu1.screnUrladdr != null}" 
+                           href="#"
+                           th:data-url="${menu1.screnUrladdr}"
+                           class="menu-link">
+                            <i class="fas fa-file-alt menu-icon"></i>
+                            <span th:text="${menu1.menuNm}"></span>
+                        </a>
+                        <div th:if="${menu1.screnUrladdr == null}" class="menu-dir">
+                            <i class="fas fa-folder menu-icon"></i>
+                            <span th:text="${menu1.menuNm}"></span>
+                        </div>
                     </div>
                     <ul th:if="${not #lists.isEmpty(menu1.children)}" class="menu-level">
                         <li th:each="menu2 : ${menu1.children}">
-                            <div class="menu-item menu-dir">
-                                <i class="fas fa-folder menu-icon"></i>
-                                <span th:text="${menu2.menuNm}"></span>
+                            <div class="menu-item">
+                                <a th:if="${menu2.screnUrladdr != null}" 
+                                   href="#"
+                                   th:data-url="${menu2.screnUrladdr}"
+                                   class="menu-link">
+                                    <i class="fas fa-file-alt menu-icon"></i>
+                                    <span th:text="${menu2.menuNm}"></span>
+                                </a>
+                                <div th:if="${menu2.screnUrladdr == null}" class="menu-dir">
+                                    <i class="fas fa-folder menu-icon"></i>
+                                    <span th:text="${menu2.menuNm}"></span>
+                                </div>
                             </div>
                             <ul th:if="${not #lists.isEmpty(menu2.children)}" class="menu-level">
                                 <li th:each="menu3 : ${menu2.children}">
@@ -165,7 +183,7 @@
                                             <i class="fas fa-file-alt menu-icon"></i>
                                             <span th:text="${menu3.menuNm}"></span>
                                         </a>
-                                        <div th:if="${menu3.screnUrladdr == null}" class="menu-item menu-dir">
+                                        <div th:if="${menu3.screnUrladdr == null}" class="menu-dir">
                                             <i class="fas fa-folder menu-icon"></i>
                                             <span th:text="${menu3.menuNm}"></span>
                                         </div>
