@@ -22,29 +22,6 @@
       overflow-x: hidden;
     }
 
-    .sidebar {
-      width: 280px;
-      transition: all 0.3s ease;
-    }
-
-    .submenu {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease;
-    }
-
-    .submenu.active {
-      max-height: 500px;
-    }
-
-    .menu-item.active {
-      background-color: rgba(255, 255, 255, 0.1);
-    }
-
-    .menu-item.active .submenu {
-      max-height: 500px;
-    }
-
     input[type="number"]::-webkit-inner-spin-button,
     input[type="number"]::-webkit-outer-spin-button {
       -webkit-appearance: none;
@@ -85,10 +62,9 @@
 </head>
 
 <body class="bg-gray-50">
-  <div class="flex min-h-screen">
-    
+  <div class="min-h-screen">
     <!-- 메인 콘텐츠 -->
-    <div class="ml-[280px] w-[calc(100%-280px)] min-h-screen">
+    <div class="w-full max-w-7xl mx-auto min-h-screen">
       <!-- 교육비전 페이지 -->
       <div class="fade-in">
         <!-- 페이지 헤더 -->
@@ -777,8 +753,6 @@
             </div>
           </div>
         </div>
-
-        
       </div>
     </div>
   </div>
@@ -786,15 +760,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      // 메뉴 토글 기능
-      const menuItems = document.querySelectorAll('.menu-item');
-      menuItems.forEach(item => {
-        const menuHeader = item.querySelector('div');
-        menuHeader.addEventListener('click', () => {
-          item.classList.toggle('active');
-        });
-      });
-
       // 교육생 수 차트
       const studentsChart = document.getElementById('studentsChart');
       if (studentsChart) {

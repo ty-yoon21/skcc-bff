@@ -23,28 +23,7 @@
       overflow-x: hidden;
     }
 
-    .sidebar {
-      width: 280px;
-      transition: all 0.3s ease;
-    }
-
-    .submenu {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease;
-    }
-
-    .submenu.active {
-      max-height: 500px;
-    }
-
-    .menu-item.active {
-      background-color: rgba(255, 255, 255, 0.1);
-    }
-
-    .menu-item.active .submenu {
-      max-height: 500px;
-    }
+    
 
     input[type="number"]::-webkit-inner-spin-button,
     input[type="number"]::-webkit-outer-spin-button {
@@ -130,11 +109,9 @@
 </head>
 
 <body class="bg-gray-50">
-  <div class="flex min-h-screen">
-    
-
+  <div class="min-h-screen">
     <!-- 메인 콘텐츠 -->
-    <div class="ml-[280px] w-[calc(100%-280px)] min-h-screen">
+    <div class="w-full max-w-7xl mx-auto min-h-screen">
       <!-- 찾아오시는 길 페이지 -->
       <div class="fade-in">
         <!-- 페이지 헤더 -->
@@ -1247,7 +1224,7 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div>Y
           </div>
         </div>
 
