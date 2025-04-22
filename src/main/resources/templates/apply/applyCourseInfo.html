@@ -1,13 +1,2143 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
+
 <head>
-    <meta charset="UTF-8">
-    <title>과정정보 - 체육인재개발원 학습운영시스템</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>체육인재개발원 포털 - 교육과정 소개</title>
+  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { primary: "#1a237e", secondary: "#0d47a1" },
+          borderRadius: {
+            none: "0px",
+            sm: "4px",
+            DEFAULT: "8px",
+            md: "12px",
+            lg: "16px",
+            xl: "20px",
+            "2xl": "24px",
+            "3xl": "32px",
+            full: "9999px",
+            button: "8px",
+          },
+        },
+      },
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
+    rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+  <style>
+    :where([class^="ri-"])::before {
+      content: "\f3c2";
+    }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      overflow-x: hidden;
+    }
+
+    .sidebar {
+      width: 280px;
+      transition: all 0.3s ease;
+    }
+
+    .submenu {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .submenu.active {
+      max-height: 500px;
+    }
+
+    .menu-item.active {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .menu-item.active .submenu {
+      max-height: 500px;
+    }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .fade-in {
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .category-tab {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .category-tab::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: #1a237e;
+      transition: width 0.3s ease;
+    }
+
+    .category-tab.active::after {
+      width: 100%;
+    }
+
+    .category-tab.active {
+      color: #1a237e;
+      font-weight: 500;
+    }
+
+    .category-content {
+      display: none;
+    }
+
+    .category-content.active {
+      display: block;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .course-card {
+      transition: all 0.3s ease;
+    }
+
+    .course-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    .course-status-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      padding: 4px 8px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .custom-checkbox {
+      position: relative;
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      border: 2px solid #d1d5db;
+      background-color: white;
+      transition: all 0.2s ease;
+    }
+
+    .custom-checkbox.checked {
+      background-color: #1a237e;
+      border-color: #1a237e;
+    }
+
+    .custom-checkbox.checked::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 6px;
+      width: 6px;
+      height: 10px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+
+    .custom-radio {
+      position: relative;
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid #d1d5db;
+      background-color: white;
+      transition: all 0.2s ease;
+    }
+
+    .custom-radio.checked {
+      border-color: #1a237e;
+    }
+
+    .custom-radio.checked::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: #1a237e;
+    }
+
+    .custom-switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+
+    .custom-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #e5e7eb;
+      transition: .4s;
+      border-radius: 34px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked+.slider {
+      background-color: #1a237e;
+    }
+
+    input:checked+.slider:before {
+      transform: translateX(20px);
+    }
+
+    .course-detail-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 50;
+      overflow-y: auto;
+    }
+
+    .course-detail-modal.active {
+      display: block;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .schedule-row:nth-child(odd) {
+      background-color: rgba(243, 244, 246, 0.5);
+    }
+
+    .schedule-row:hover {
+      background-color: rgba(243, 244, 246, 0.8);
+    }
+  </style>
 </head>
-<body>
-    <!-- 과정안내 > 과정정보 -->
-    <div th:fragment="content">
-        <h2>과정정보</h2>
+
+<body class="bg-gray-50">
+  <div class="flex min-h-screen">
+    <!-- 사이드바 -->
+    <div class="sidebar fixed h-full bg-primary text-white shadow-lg z-10">
+      <div class="p-6 border-b border-white/10">
+        <h1 class="text-2xl font-['Pacifico'] text-white">logo</h1>
+      </div>
+      <nav class="py-4">
+        <ul>
+          <li class="menu-item">
+            <div class="flex items-center justify-between px-6 py-3 cursor-pointer hover:bg-white/10">
+              <span class="font-medium">개발원소개</span>
+              <div class="w-6 h-6 flex items-center justify-center">
+                <i class="ri-arrow-down-s-line"></i>
+              </div>
+            </div>
+            <ul class="submenu bg-black/10 pl-8">
+              <li>
+                <a href="#" class="block py-2 px-4 hover:text-blue-200">인사말</a>
+              </li>
+              <li>
+                <a href="#" class="block py-2 px-4 hover:text-blue-200">연혁</a>
+              </li>
+              <li>
+                <a href="https://readdy.ai/home/8289e8bd-0211-46fd-b43c-4527019ae71a/cdbaf700-0464-4ede-a4a7-5f386b82fa50"
+                  data-readdy="true" class="block py-2 px-4 hover:text-blue-200">교육비전</a>
+              </li>
+              <li>
+                <a href="https://readdy.ai/home/8289e8bd-0211-46fd-b43c-4527019ae71a/8a52abb8-630b-494a-9b3c-9aa1bc6c4fa8"
+                  data-readdy="true" class="block py-2 px-4 hover:text-blue-200">교육일정</a>
+              </li>
+              <li>
+                <a href="https://readdy.ai/home/8289e8bd-0211-46fd-b43c-4527019ae71a/310afa14-c10b-4bfc-b7c3-6c175b0e450f"
+                  data-readdy="true" class="block py-2 px-4 hover:text-blue-200">부서안내</a>
+              </li>
+              <li>
+                <a href="https://readdy.ai/home/8289e8bd-0211-46fd-b43c-4527019ae71a/1a400b09-1128-4762-9794-7ee8beb397ee"
+                  data-readdy="true" class="block py-2 px-4 hover:text-blue-200">찾아오는길</a>
+              </li>
+            </ul>
+          </li>
+          <li class="menu-item active">
+            <div class="flex items-center justify-between px-6 py-3 cursor-pointer hover:bg-white/10">
+              <span class="font-medium">교육과정</span>
+              <div class="w-6 h-6 flex items-center justify-center">
+                <i class="ri-arrow-down-s-line"></i>
+              </div>
+            </div>
+            <ul class="submenu active bg-black/10 pl-8">
+              <li>
+                <a href="#" class="block py-2 px-4 hover:text-blue-200 text-blue-100">과정소개</a>
+              </li>
+              <li>
+                <a href="#" class="block py-2 px-4 hover:text-blue-200">신청안내</a>
+              </li>
+
+            </ul>
+          </li>
+          <li class="menu-item">
+            <div class="flex items-center justify-between px-6 py-3 cursor-pointer hover:bg-white/10">
+              <span class="font-medium">정보마당</span>
+              <div class="w-6 h-6 flex items-center justify-center">
+                <i class="ri-arrow-down-s-line"></i>
+              </div>
+            </div>
+            <ul class="submenu bg-black/10 pl-8">
+              <li>
+                <a href="#" class="block py-2 px-4 hover:text-blue-200">공지사항</a>
+              </li>
+              <li>
+                <a href="#" class="block py-2 px-4 hover:text-blue-200">자료실</a>
+              </li>
+            </ul>
+          </li>
+          <li class="menu-item active">
+            <div class="flex items-center justify-between px-6 py-3 cursor-pointer hover:bg-white/10">
+              <span class="font-medium">강사지원</span>
+              <div class="w-6 h-6 flex items-center justify-center">
+                <i class="ri-arrow-down-s-line"></i>
+              </div>
+            </div>
+            <ul class="submenu active bg-black/10 pl-8">
+              <li>
+                <a href="#" class="block py-2 px-4 hover:text-blue-200">강사등록</a>
+              </li>
+              <li>
+                <a href="https://readdy.ai/home/8289e8bd-0211-46fd-b43c-4527019ae71a/7876da79-13ff-49e9-b93e-8966e0f1e17d"
+                  data-readdy="true" class="block py-2 px-4 hover:text-blue-200">
+                  등록확인
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="menu-item">
+            <div class="flex items-center justify-between px-6 py-3 cursor-pointer hover:bg-white/10">
+              <span class="font-medium">마이페이지</span>
+              <div class="w-6 h-6 flex items-center justify-center">
+                <i class="ri-arrow-down-s-line"></i>
+              </div>
+            </div>
+            <ul class="submenu bg-black/10 pl-8">
+              <li>
+                <a href="#" class="block py-2 px-4 hover:text-blue-200">신청내역</a>
+              </li>
+              <li>
+                <a href="#" class="block py-2 px-4 hover:text-blue-200">개인정보</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
     </div>
+
+    <!-- 메인 콘텐츠 -->
+    <div class="ml-[280px] w-[calc(100%-280px)] min-h-screen">
+      <!-- 교육과정 소개 페이지 -->
+      <div class="fade-in">
+        <!-- 페이지 헤더 -->
+        <div class="bg-white shadow-sm">
+          <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+            <div class="flex items-center text-sm text-gray-500 mb-2">
+              <a href="#" class="hover:text-primary">홈</a>
+              <span class="mx-2">&gt;</span>
+              <a href="#" class="hover:text-primary">교육과정</a>
+              <span class="mx-2">&gt;</span>
+              <span class="text-primary font-medium">과정소개</span>
+            </div>
+            <h1 class="text-3xl font-bold text-gray-900">교육과정 소개</h1>
+            <p class="mt-2 text-gray-600">
+              체육인재개발원에서 제공하는 다양한 교육과정에 대한 안내입니다.
+            </p>
+          </div>
+        </div>
+
+        <!-- 교육과정 검색 및 필터 섹션 -->
+        <div class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+          <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+              <!-- 검색 영역 -->
+              <div class="lg:col-span-2">
+                <label for="search" class="block text-sm font-medium text-gray-700 mb-1">과정명 검색</label>
+                <div class="relative">
+                  <input type="text" id="search" placeholder="교육과정명 또는 키워드를 입력하세요"
+                    class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none text-sm" />
+                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <div class="w-5 h-5 flex items-center justify-center text-gray-400">
+                      <i class="ri-search-line"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 필터 영역 -->
+              <div>
+                <label for="category-filter" class="block text-sm font-medium text-gray-700 mb-1">교육 분야</label>
+                <div class="relative">
+                  <select id="category-filter"
+                    class="w-full pl-4 pr-10 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none appearance-none text-sm">
+                    <option value="">전체</option>
+                    <option value="체육행정">체육행정</option>
+                    <option value="지도자양성">지도자양성</option>
+                    <option value="전문인력양성">전문인력양성</option>
+                    <option value="국제스포츠">국제스포츠</option>
+                    <option value="특별과정">특별과정</option>
+                  </select>
+                  <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                    <div class="w-5 h-5 flex items-center justify-center text-gray-400">
+                      <i class="ri-arrow-down-s-line"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- 정렬 영역 -->
+              <div>
+                <label for="sort-filter" class="block text-sm font-medium text-gray-700 mb-1">정렬 방식</label>
+                <div class="relative">
+                  <select id="sort-filter"
+                    class="w-full pl-4 pr-10 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none appearance-none text-sm">
+                    <option value="latest">최신순</option>
+                    <option value="popular">인기순</option>
+                    <option value="deadline">마감임박순</option>
+                  </select>
+                  <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                    <div class="w-5 h-5 flex items-center justify-center text-gray-400">
+                      <i class="ri-arrow-down-s-line"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 추가 필터 옵션 -->
+            <div class="mt-6 border-t border-gray-200 pt-6">
+              <h3 class="text-sm font-medium text-gray-700 mb-3">
+                상세 필터
+              </h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- 교육 대상 필터 -->
+                <div>
+                  <p class="text-sm font-medium text-gray-700 mb-2">
+                    교육 대상
+                  </p>
+                  <div class="space-y-2">
+                    <div class="flex items-center">
+                      <div class="custom-checkbox" data-value="체육지도자"></div>
+                      <label class="ml-2 text-sm text-gray-700">체육지도자</label>
+                    </div>
+                    <div class="flex items-center">
+                      <div class="custom-checkbox" data-value="체육행정가"></div>
+                      <label class="ml-2 text-sm text-gray-700">체육행정가</label>
+                    </div>
+                    <div class="flex items-center">
+                      <div class="custom-checkbox" data-value="생활체육인"></div>
+                      <label class="ml-2 text-sm text-gray-700">생활체육인</label>
+                    </div>
+                    <div class="flex items-center">
+                      <div class="custom-checkbox" data-value="일반인"></div>
+                      <label class="ml-2 text-sm text-gray-700">일반인</label>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 교육 기간 필터 -->
+                <div>
+                  <p class="text-sm font-medium text-gray-700 mb-2">
+                    교육 기간
+                  </p>
+                  <div class="space-y-2">
+                    <div class="flex items-center">
+                      <div class="custom-radio" data-value="단기(1일-1주일)"></div>
+                      <label class="ml-2 text-sm text-gray-700">단기(1일-1주일)</label>
+                    </div>
+                    <div class="flex items-center">
+                      <div class="custom-radio" data-value="중기(1주일-1개월)"></div>
+                      <label class="ml-2 text-sm text-gray-700">중기(1주일-1개월)</label>
+                    </div>
+                    <div class="flex items-center">
+                      <div class="custom-radio" data-value="장기(1개월 이상)"></div>
+                      <label class="ml-2 text-sm text-gray-700">장기(1개월 이상)</label>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 교육 방식 필터 -->
+                <div>
+                  <p class="text-sm font-medium text-gray-700 mb-2">
+                    교육 방식
+                  </p>
+                  <div class="space-y-2">
+                    <div class="flex items-center">
+                      <div class="custom-checkbox" data-value="오프라인"></div>
+                      <label class="ml-2 text-sm text-gray-700">오프라인</label>
+                    </div>
+                    <div class="flex items-center">
+                      <div class="custom-checkbox" data-value="온라인"></div>
+                      <label class="ml-2 text-sm text-gray-700">온라인</label>
+                    </div>
+                    <div class="flex items-center">
+                      <div class="custom-checkbox" data-value="혼합형"></div>
+                      <label class="ml-2 text-sm text-gray-700">혼합형(온/오프라인)</label>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 신청 가능 여부 필터 -->
+                <div>
+                  <p class="text-sm font-medium text-gray-700 mb-2">
+                    신청 가능 여부
+                  </p>
+                  <div class="space-y-2">
+                    <div class="flex items-center">
+                      <label class="custom-switch">
+                        <input type="checkbox" id="application-available" />
+                        <span class="slider"></span>
+                      </label>
+                      <label for="application-available" class="ml-2 text-sm text-gray-700">신청 가능한 과정만 보기</label>
+                    </div>
+                    <div class="flex items-center mt-4">
+                      <button id="reset-filters" class="text-sm text-gray-500 hover:text-primary flex items-center">
+                        <div class="w-4 h-4 flex items-center justify-center mr-1">
+                          <i class="ri-refresh-line"></i>
+                        </div>
+                        필터 초기화
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 교육과정 카테고리 탭 -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
+          <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div class="border-b border-gray-200">
+              <div class="flex overflow-x-auto">
+                <button
+                  class="category-tab active whitespace-nowrap px-6 py-4 text-gray-700 border-b-2 border-transparent flex items-center gap-2">
+                  <div class="w-5 h-5 flex items-center justify-center">
+                    <i class="ri-apps-line"></i>
+                  </div>
+                  <span>전체</span>
+                </button>
+                <button
+                  class="category-tab whitespace-nowrap px-6 py-4 text-gray-700 border-b-2 border-transparent flex items-center gap-2">
+                  <div class="w-5 h-5 flex items-center justify-center">
+                    <i class="ri-government-line"></i>
+                  </div>
+                  <span>체육행정</span>
+                </button>
+                <button
+                  class="category-tab whitespace-nowrap px-6 py-4 text-gray-700 border-b-2 border-transparent flex items-center gap-2">
+                  <div class="w-5 h-5 flex items-center justify-center">
+                    <i class="ri-user-star-line"></i>
+                  </div>
+                  <span>지도자양성</span>
+                </button>
+                <button
+                  class="category-tab whitespace-nowrap px-6 py-4 text-gray-700 border-b-2 border-transparent flex items-center gap-2">
+                  <div class="w-5 h-5 flex items-center justify-center">
+                    <i class="ri-team-line"></i>
+                  </div>
+                  <span>전문인력양성</span>
+                </button>
+                <button
+                  class="category-tab whitespace-nowrap px-6 py-4 text-gray-700 border-b-2 border-transparent flex items-center gap-2">
+                  <div class="w-5 h-5 flex items-center justify-center">
+                    <i class="ri-global-line"></i>
+                  </div>
+                  <span>국제스포츠</span>
+                </button>
+                <button
+                  class="category-tab whitespace-nowrap px-6 py-4 text-gray-700 border-b-2 border-transparent flex items-center gap-2">
+                  <div class="w-5 h-5 flex items-center justify-center">
+                    <i class="ri-award-line"></i>
+                  </div>
+                  <span>특별과정</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 교육과정 목록 (전체) -->
+        <div class="category-content active">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+            <div class="flex justify-between items-center mb-6">
+              <div class="text-sm text-gray-500">
+                총 <span class="font-medium text-primary">24</span>개 과정
+              </div>
+              <div class="flex items-center gap-4">
+                <button class="flex items-center gap-1 text-sm text-gray-500 hover:text-primary">
+                  <div class="w-4 h-4 flex items-center justify-center">
+                    <i class="ri-share-line"></i>
+                  </div>
+                  <span>공유하기</span>
+                </button>
+                <button class="flex items-center gap-1 text-sm text-gray-500 hover:text-primary">
+                  <div class="w-4 h-4 flex items-center justify-center">
+                    <i class="ri-printer-line"></i>
+                  </div>
+                  <span>인쇄하기</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- 교육과정 카드 그리드 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <!-- 교육과정 카드 1 -->
+              <div class="course-card bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 relative">
+                <div class="course-status-badge bg-green-500 text-white">
+                  신청중
+                </div>
+                <div class="p-5">
+                  <div class="flex items-center mb-3">
+                    <div class="w-8 h-8 flex items-center justify-center bg-blue-100 text-primary rounded-full mr-2">
+                      <i class="ri-government-line"></i>
+                    </div>
+                    <span class="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">체육행정</span>
+                  </div>
+                  <h3 class="text-lg font-bold text-gray-900 mb-2">
+                    체육행정 전문가 양성과정
+                  </h3>
+                  <div class="space-y-2 mb-4">
+                    <div class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2 mt-0.5">
+                        <i class="ri-calendar-line"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">교육기간</p>
+                        <p class="text-sm text-gray-700">
+                          2025.05.12 ~ 2025.05.16
+                        </p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2 mt-0.5">
+                        <i class="ri-time-line"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">신청기간</p>
+                        <p class="text-sm text-gray-700">
+                          2025.04.15 ~ 2025.05.05
+                        </p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2 mt-0.5">
+                        <i class="ri-user-line"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">교육대상</p>
+                        <p class="text-sm text-gray-700">
+                          체육단체 행정담당자
+                        </p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2 mt-0.5">
+                        <i class="ri-map-pin-line"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">교육장소</p>
+                        <p class="text-sm text-gray-700">
+                          체육인재개발원 본관 2층
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
+                    <div>
+                      <p class="text-xs text-gray-500">수강료</p>
+                      <p class="text-sm font-medium text-gray-900">무료</p>
+                    </div>
+                    <div>
+                      <p class="text-xs text-gray-500">정원</p>
+                      <p class="text-sm font-medium text-gray-900">30명</p>
+                    </div>
+                    <div>
+                      <p class="text-xs text-gray-500">신청현황</p>
+                      <p class="text-sm font-medium text-gray-900">18/30명</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="px-5 pb-5">
+                  <button
+                    class="course-detail-btn w-full py-2.5 bg-primary text-white rounded-button hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 whitespace-nowrap"
+                    data-course-id="1">
+                    <div class="w-4 h-4 flex items-center justify-center">
+                      <i class="ri-information-line"></i>
+                    </div>
+                    <span>상세정보</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- 교육과정 카드 2 -->
+              <div class="course-card bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 relative">
+                <div class="course-status-badge bg-red-500 text-white">
+                  마감임박
+                </div>
+                <div class="p-5">
+                  <div class="flex items-center mb-3">
+                    <div class="w-8 h-8 flex items-center justify-center bg-green-100 text-green-800 rounded-full mr-2">
+                      <i class="ri-user-star-line"></i>
+                    </div>
+                    <span class="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded">지도자양성</span>
+                  </div>
+                  <h3 class="text-lg font-bold text-gray-900 mb-2">
+                    생활체육지도자 역량강화 과정
+                  </h3>
+                  <div class="space-y-2 mb-4">
+                    <div class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2 mt-0.5">
+                        <i class="ri-calendar-line"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">교육기간</p>
+                        <p class="text-sm text-gray-700">
+                          2025.05.20 ~ 2025.05.24
+                        </p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2 mt-0.5">
+                        <i class="ri-time-line"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">신청기간</p>
+                        <p class="text-sm text-gray-700">
+                          2025.04.10 ~ 2025.04.25
+                        </p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2 mt-0.5">
+                        <i class="ri-user-line"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">교육대상</p>
+                        <p class="text-sm text-gray-700">생활체육지도자</p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2 mt-0.5">
+                        <i class="ri-map-pin-line"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">교육장소</p>
+                        <p class="text-sm text-gray-700">
+                          체육인재개발원 실내체육관
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
+                    <div>
+                      <p class="text-xs text-gray-500">수강료</p>
+                      <p class="text-sm font-medium text-gray-900">
+                        50,000원
+                      </p>
+                    </div>
+                    <div>
+                      <p class="text-xs text-gray-500">정원</p>
+                      <p class="text-sm font-medium text-gray-900">25명</p>
+                    </div>
+                    <div>
+                      <p class="text-xs text-gray-500">신청현황</p>
+                      <p class="text-sm font-medium text-gray-900">22/25명</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="px-5 pb-5">
+                  <button
+                    class="course-detail-btn w-full py-2.5 bg-primary text-white rounded-button hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 whitespace-nowrap"
+                    data-course-id="2">
+                    <div class="w-4 h-4 flex items-center justify-center">
+                      <i class="ri-information-line"></i>
+                    </div>
+                    <span>상세정보</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- 교육과정 카드 3 -->
+              <div class="course-card bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 relative">
+                <div class="course-status-badge bg-green-500 text-white">
+                  신청중
+                </div>
+                <div class="p-5">
+                  <div class="flex items-center mb-3">
+                    <div
+                      class="w-8 h-8 flex items-center justify-center bg-purple-100 text-purple-800 rounded-full mr-2">
+                      <i class="ri-team-line"></i>
+                    </div>
+                    <span class="text-xs font-medium text-purple-600 bg-purple-50 px-2 py-1 rounded">전문인력양성</span>
+                  </div>
+                  <h3 class="text-lg font-bold text-gray-900 mb-2">
+                    스포츠 심판 전문가 과정
+                  </h3>
+                  <div class="space-y-2 mb-4">
+                    <div class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2 mt-0.5">
+                        <i class="ri-calendar-line"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">교육기간</p>
+                        <p class="text-sm text-gray-700">
+                          2025.06.03 ~ 2025.06.21
+                        </p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2 mt-0.5">
+                        <i class="ri-time-line"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">신청기간</p>
+                        <p class="text-sm text-gray-700">
+                          2025.04.20 ~ 2025.05.20
+                        </p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2 mt-0.5">
+                        <i class="ri-user-line"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">교육대상</p>
+                        <p class="text-sm text-gray-700">
+                          스포츠 심판 희망자
+                        </p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2 mt-0.5">
+                        <i class="ri-map-pin-line"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">교육장소</p>
+                        <p class="text-sm text-gray-700">
+                          체육인재개발원 본관 3층
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
+                    <div>
+                      <p class="text-xs text-gray-500">수강료</p>
+                      <p class="text-sm font-medium text-gray-900">
+                        150,000원
+                      </p>
+                    </div>
+                    <div>
+                      <p class="text-xs text-gray-500">정원</p>
+                      <p class="text-sm font-medium text-gray-900">20명</p>
+                    </div>
+                    <div>
+                      <p class="text-xs text-gray-500">신청현황</p>
+                      <p class="text-sm font-medium text-gray-900">12/20명</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="px-5 pb-5">
+                  <button
+                    class="course-detail-btn w-full py-2.5 bg-primary text-white rounded-button hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 whitespace-nowrap"
+                    data-course-id="3">
+                    <div class="w-4 h-4 flex items-center justify-center">
+                      <i class="ri-information-line"></i>
+                    </div>
+                    <span>상세정보</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- 교육과정 카드 4 -->
+              <div class="course-card bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 relative">
+                <div class="course-status-badge bg-gray-500 text-white">
+                  준비중
+                </div>
+                <div class="p-5">
+                  <div class="flex items-center mb-3">
+                    <div
+                      class="w-8 h-8 flex items-center justify-center bg-indigo-100 text-indigo-800 rounded-full mr-2">
+                      <i class="ri-global-line"></i>
+                    </div>
+                    <span class="text-xs font-medium text-indigo-600 bg-indigo-50 px-2 py-1 rounded">국제스포츠</span>
+                  </div>
+                  <h3 class="text-lg font-bold text-gray-900 mb-2">
+                    국제 스포츠 행정 전문가 과정
+                  </h3>
+                  <div class="space-y-2 mb-4">
+                    <div class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2 mt-0.5">
+                        <i class="ri-calendar-line"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">교육기간</p>
+                        <p class="text-sm text-gray-700">
+                          2025.07.01 ~ 2025.07.15
+                        </p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2 mt-0.5">
+                        <i class="ri-time-line"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">신청기간</p>
+                        <p class="text-sm text-gray-700">
+                          2025.05.15 ~ 2025.06.15
+                        </p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2 mt-0.5">
+                        <i class="ri-user-line"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">교육대상</p>
+                        <p class="text-sm text-gray-700">
+                          국제스포츠 행정 담당자
+                        </p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2 mt-0.5">
+                        <i class="ri-map-pin-line"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">교육장소</p>
+                        <p class="text-sm text-gray-700">
+                          체육인재개발원 국제회의실
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
+                    <div>
+                      <p class="text-xs text-gray-500">수강료</p>
+                      <p class="text-sm font-medium text-gray-900">
+                        200,000원
+                      </p>
+                    </div>
+                    <div>
+                      <p class="text-xs text-gray-500">정원</p>
+                      <p class="text-sm font-medium text-gray-900">15명</p>
+                    </div>
+                    <div>
+                      <p class="text-xs text-gray-500">신청현황</p>
+                      <p class="text-sm font-medium text-gray-900">-</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="px-5 pb-5">
+                  <button
+                    class="course-detail-btn w-full py-2.5 bg-primary text-white rounded-button hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 whitespace-nowrap"
+                    data-course-id="4">
+                    <div class="w-4 h-4 flex items-center justify-center">
+                      <i class="ri-information-line"></i>
+                    </div>
+                    <span>상세정보</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- 교육과정 카드 5 -->
+              <div class="course-card bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 relative">
+                <div class="course-status-badge bg-amber-500 text-white">
+                  접수예정
+                </div>
+                <div class="p-5">
+                  <div class="flex items-center mb-3">
+                    <div class="w-8 h-8 flex items-center justify-center bg-amber-100 text-amber-800 rounded-full mr-2">
+                      <i class="ri-award-line"></i>
+                    </div>
+                    <span class="text-xs font-medium text-amber-600 bg-amber-50 px-2 py-1 rounded">특별과정</span>
+                  </div>
+                  <h3 class="text-lg font-bold text-gray-900 mb-2">
+                    스포츠 윤리 및 인권 교육
+                  </h3>
+                  <div class="space-y-2 mb-4">
+                    <div class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2 mt-0.5">
+                        <i class="ri-calendar-line"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">교육기간</p>
+                        <p class="text-sm text-gray-700">
+                          2025.06.10 (1일 과정)
+                        </p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2 mt-0.5">
+                        <i class="ri-time-line"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">신청기간</p>
+                        <p class="text-sm text-gray-700">
+                          2025.05.01 ~ 2025.06.01
+                        </p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2 mt-0.5">
+                        <i class="ri-user-line"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">교육대상</p>
+                        <p class="text-sm text-gray-700">
+                          체육지도자 및 행정담당자
+                        </p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2 mt-0.5">
+                        <i class="ri-map-pin-line"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">교육장소</p>
+                        <p class="text-sm text-gray-700">
+                          체육인재개발원 대강당
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
+                    <div>
+                      <p class="text-xs text-gray-500">수강료</p>
+                      <p class="text-sm font-medium text-gray-900">무료</p>
+                    </div>
+                    <div>
+                      <p class="text-xs text-gray-500">정원</p>
+                      <p class="text-sm font-medium text-gray-900">100명</p>
+                    </div>
+                    <div>
+                      <p class="text-xs text-gray-500">신청현황</p>
+                      <p class="text-sm font-medium text-gray-900">-</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="px-5 pb-5">
+                  <button
+                    class="course-detail-btn w-full py-2.5 bg-primary text-white rounded-button hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 whitespace-nowrap"
+                    data-course-id="5">
+                    <div class="w-4 h-4 flex items-center justify-center">
+                      <i class="ri-information-line"></i>
+                    </div>
+                    <span>상세정보</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- 교육과정 카드 6 -->
+              <div class="course-card bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 relative">
+                <div class="course-status-badge bg-green-500 text-white">
+                  신청중
+                </div>
+                <div class="p-5">
+                  <div class="flex items-center mb-3">
+                    <div class="w-8 h-8 flex items-center justify-center bg-blue-100 text-primary rounded-full mr-2">
+                      <i class="ri-government-line"></i>
+                    </div>
+                    <span class="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">체육행정</span>
+                  </div>
+                  <h3 class="text-lg font-bold text-gray-900 mb-2">
+                    스포츠 조직 경영 역량 강화
+                  </h3>
+                  <div class="space-y-2 mb-4">
+                    <div class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2 mt-0.5">
+                        <i class="ri-calendar-line"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">교육기간</p>
+                        <p class="text-sm text-gray-700">
+                          2025.05.26 ~ 2025.05.30
+                        </p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2 mt-0.5">
+                        <i class="ri-time-line"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">신청기간</p>
+                        <p class="text-sm text-gray-700">
+                          2025.04.15 ~ 2025.05.15
+                        </p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2 mt-0.5">
+                        <i class="ri-user-line"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">교육대상</p>
+                        <p class="text-sm text-gray-700">체육단체 관리자</p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2 mt-0.5">
+                        <i class="ri-map-pin-line"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">교육장소</p>
+                        <p class="text-sm text-gray-700">
+                          체육인재개발원 본관 2층
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
+                    <div>
+                      <p class="text-xs text-gray-500">수강료</p>
+                      <p class="text-sm font-medium text-gray-900">
+                        80,000원
+                      </p>
+                    </div>
+                    <div>
+                      <p class="text-xs text-gray-500">정원</p>
+                      <p class="text-sm font-medium text-gray-900">25명</p>
+                    </div>
+                    <div>
+                      <p class="text-xs text-gray-500">신청현황</p>
+                      <p class="text-sm font-medium text-gray-900">15/25명</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="px-5 pb-5">
+                  <button
+                    class="course-detail-btn w-full py-2.5 bg-primary text-white rounded-button hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 whitespace-nowrap"
+                    data-course-id="6">
+                    <div class="w-4 h-4 flex items-center justify-center">
+                      <i class="ri-information-line"></i>
+                    </div>
+                    <span>상세정보</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 페이지네이션 -->
+            <div class="mt-10 flex justify-center">
+              <nav class="inline-flex rounded-md shadow">
+                <a href="#"
+                  class="px-3 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                  이전
+                </a>
+                <a href="#"
+                  class="px-3 py-2 border-t border-b border-gray-300 bg-white text-sm font-medium text-primary hover:bg-gray-50">
+                  1
+                </a>
+                <a href="#"
+                  class="px-3 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                  2
+                </a>
+                <a href="#"
+                  class="px-3 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                  3
+                </a>
+                <a href="#"
+                  class="px-3 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                  4
+                </a>
+                <a href="#"
+                  class="px-3 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                  다음
+                </a>
+              </nav>
+            </div>
+          </div>
+        </div>
+
+        <!-- 교육과정 목록 (체육행정) -->
+        <div class="category-content">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+            <div class="flex justify-between items-center mb-6">
+              <div class="text-sm text-gray-500">
+                총 <span class="font-medium text-primary">5</span>개 과정
+              </div>
+              <div class="flex items-center gap-4">
+                <button class="flex items-center gap-1 text-sm text-gray-500 hover:text-primary">
+                  <div class="w-4 h-4 flex items-center justify-center">
+                    <i class="ri-share-line"></i>
+                  </div>
+                  <span>공유하기</span>
+                </button>
+                <button class="flex items-center gap-1 text-sm text-gray-500 hover:text-primary">
+                  <div class="w-4 h-4 flex items-center justify-center">
+                    <i class="ri-printer-line"></i>
+                  </div>
+                  <span>인쇄하기</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- 체육행정 카드 그리드 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <!-- 교육과정 카드 1 -->
+              <div class="course-card bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 relative">
+                <div class="course-status-badge bg-green-500 text-white">
+                  신청중
+                </div>
+                <div class="p-5">
+                  <div class="flex items-center mb-3">
+                    <div class="w-8 h-8 flex items-center justify-center bg-blue-100 text-primary rounded-full mr-2">
+                      <i class="ri-government-line"></i>
+                    </div>
+                    <span class="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">체육행정</span>
+                  </div>
+                  <h3 class="text-lg font-bold text-gray-900 mb-2">
+                    체육행정 전문가 양성과정
+                  </h3>
+                  <div class="space-y-2 mb-4">
+                    <div class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2 mt-0.5">
+                        <i class="ri-calendar-line"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">교육기간</p>
+                        <p class="text-sm text-gray-700">
+                          2025.05.12 ~ 2025.05.16
+                        </p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2 mt-0.5">
+                        <i class="ri-time-line"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">신청기간</p>
+                        <p class="text-sm text-gray-700">
+                          2025.04.15 ~ 2025.05.05
+                        </p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2 mt-0.5">
+                        <i class="ri-user-line"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">교육대상</p>
+                        <p class="text-sm text-gray-700">
+                          체육단체 행정담당자
+                        </p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2 mt-0.5">
+                        <i class="ri-map-pin-line"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">교육장소</p>
+                        <p class="text-sm text-gray-700">
+                          체육인재개발원 본관 2층
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
+                    <div>
+                      <p class="text-xs text-gray-500">수강료</p>
+                      <p class="text-sm font-medium text-gray-900">무료</p>
+                    </div>
+                    <div>
+                      <p class="text-xs text-gray-500">정원</p>
+                      <p class="text-sm font-medium text-gray-900">30명</p>
+                    </div>
+                    <div>
+                      <p class="text-xs text-gray-500">신청현황</p>
+                      <p class="text-sm font-medium text-gray-900">18/30명</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="px-5 pb-5">
+                  <button
+                    class="course-detail-btn w-full py-2.5 bg-primary text-white rounded-button hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 whitespace-nowrap"
+                    data-course-id="1">
+                    <div class="w-4 h-4 flex items-center justify-center">
+                      <i class="ri-information-line"></i>
+                    </div>
+                    <span>상세정보</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- 교육과정 카드 6 -->
+              <div class="course-card bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 relative">
+                <div class="course-status-badge bg-green-500 text-white">
+                  신청중
+                </div>
+                <div class="p-5">
+                  <div class="flex items-center mb-3">
+                    <div class="w-8 h-8 flex items-center justify-center bg-blue-100 text-primary rounded-full mr-2">
+                      <i class="ri-government-line"></i>
+                    </div>
+                    <span class="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">체육행정</span>
+                  </div>
+                  <h3 class="text-lg font-bold text-gray-900 mb-2">
+                    스포츠 조직 경영 역량 강화
+                  </h3>
+                  <div class="space-y-2 mb-4">
+                    <div class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2 mt-0.5">
+                        <i class="ri-calendar-line"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">교육기간</p>
+                        <p class="text-sm text-gray-700">
+                          2025.05.26 ~ 2025.05.30
+                        </p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2 mt-0.5">
+                        <i class="ri-time-line"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">신청기간</p>
+                        <p class="text-sm text-gray-700">
+                          2025.04.15 ~ 2025.05.15
+                        </p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2 mt-0.5">
+                        <i class="ri-user-line"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">교육대상</p>
+                        <p class="text-sm text-gray-700">체육단체 관리자</p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2 mt-0.5">
+                        <i class="ri-map-pin-line"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">교육장소</p>
+                        <p class="text-sm text-gray-700">
+                          체육인재개발원 본관 2층
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
+                    <div>
+                      <p class="text-xs text-gray-500">수강료</p>
+                      <p class="text-sm font-medium text-gray-900">
+                        80,000원
+                      </p>
+                    </div>
+                    <div>
+                      <p class="text-xs text-gray-500">정원</p>
+                      <p class="text-sm font-medium text-gray-900">25명</p>
+                    </div>
+                    <div>
+                      <p class="text-xs text-gray-500">신청현황</p>
+                      <p class="text-sm font-medium text-gray-900">15/25명</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="px-5 pb-5">
+                  <button
+                    class="course-detail-btn w-full py-2.5 bg-primary text-white rounded-button hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 whitespace-nowrap"
+                    data-course-id="6">
+                    <div class="w-4 h-4 flex items-center justify-center">
+                      <i class="ri-information-line"></i>
+                    </div>
+                    <span>상세정보</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 교육과정 목록 (지도자양성) -->
+        <div class="category-content">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+            <div class="flex justify-between items-center mb-6">
+              <div class="text-sm text-gray-500">
+                총 <span class="font-medium text-primary">4</span>개 과정
+              </div>
+              <div class="flex items-center gap-4">
+                <button class="flex items-center gap-1 text-sm text-gray-500 hover:text-primary">
+                  <div class="w-4 h-4 flex items-center justify-center">
+                    <i class="ri-share-line"></i>
+                  </div>
+                  <span>공유하기</span>
+                </button>
+                <button class="flex items-center gap-1 text-sm text-gray-500 hover:text-primary">
+                  <div class="w-4 h-4 flex items-center justify-center">
+                    <i class="ri-printer-line"></i>
+                  </div>
+                  <span>인쇄하기</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- 지도자양성 카드 그리드 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <!-- 교육과정 카드 2 -->
+              <div class="course-card bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100 relative">
+                <div class="course-status-badge bg-red-500 text-white">
+                  마감임박
+                </div>
+                <div class="p-5">
+                  <div class="flex items-center mb-3">
+                    <div class="w-8 h-8 flex items-center justify-center bg-green-100 text-green-800 rounded-full mr-2">
+                      <i class="ri-user-star-line"></i>
+                    </div>
+                    <span class="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded">지도자양성</span>
+                  </div>
+                  <h3 class="text-lg font-bold text-gray-900 mb-2">
+                    생활체육지도자 역량강화 과정
+                  </h3>
+                  <div class="space-y-2 mb-4">
+                    <div class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2 mt-0.5">
+                        <i class="ri-calendar-line"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">교육기간</p>
+                        <p class="text-sm text-gray-700">
+                          2025.05.20 ~ 2025.05.24
+                        </p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2 mt-0.5">
+                        <i class="ri-time-line"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">신청기간</p>
+                        <p class="text-sm text-gray-700">
+                          2025.04.10 ~ 2025.04.25
+                        </p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2 mt-0.5">
+                        <i class="ri-user-line"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">교육대상</p>
+                        <p class="text-sm text-gray-700">생활체육지도자</p>
+                      </div>
+                    </div>
+                    <div class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-gray-400 mr-2 mt-0.5">
+                        <i class="ri-map-pin-line"></i>
+                      </div>
+                      <div>
+                        <p class="text-sm text-gray-500">교육장소</p>
+                        <p class="text-sm text-gray-700">
+                          체육인재개발원 실내체육관
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
+                    <div>
+                      <p class="text-xs text-gray-500">수강료</p>
+                      <p class="text-sm font-medium text-gray-900">
+                        50,000원
+                      </p>
+                    </div>
+                    <div>
+                      <p class="text-xs text-gray-500">정원</p>
+                      <p class="text-sm font-medium text-gray-900">25명</p>
+                    </div>
+                    <div>
+                      <p class="text-xs text-gray-500">신청현황</p>
+                      <p class="text-sm font-medium text-gray-900">22/25명</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="px-5 pb-5">
+                  <button
+                    class="course-detail-btn w-full py-2.5 bg-primary text-white rounded-button hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 whitespace-nowrap"
+                    data-course-id="2">
+                    <div class="w-4 h-4 flex items-center justify-center">
+                      <i class="ri-information-line"></i>
+                    </div>
+                    <span>상세정보</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 교육과정 목록 (전문인력양성) -->
+        <div class="category-content">
+          <!-- 전문인력양성 카테고리 내용 -->
+        </div>
+
+        <!-- 교육과정 목록 (국제스포츠) -->
+        <div class="category-content">
+          <!-- 국제스포츠 카테고리 내용 -->
+        </div>
+
+        <!-- 교육과정 목록 (특별과정) -->
+        <div class="category-content">
+          <!-- 특별과정 카테고리 내용 -->
+        </div>
+
+        <!-- 찾아오시는 길 페이지로 돌아가기 -->
+        <div class="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8 text-center">
+          <a href="https://readdy.ai/home/8289e8bd-0211-46fd-b43c-4527019ae71a/1a400b09-1128-4762-9794-7ee8beb397ee"
+            data-readdy="true"
+            class="inline-flex items-center gap-2 bg-primary text-white py-3 px-6 rounded-button hover:bg-primary/90 whitespace-nowrap">
+            <i class="ri-arrow-left-line"></i>
+            <span>찾아오시는 길 페이지로 돌아가기</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 교육과정 상세 모달 -->
+  <div id="courseDetailModal" class="course-detail-modal">
+    <div class="flex items-start justify-center min-h-screen p-4 sm:p-6 lg:p-8">
+      <div class="bg-white rounded-lg shadow-xl overflow-hidden w-full max-w-5xl">
+        <!-- 모달 헤더 -->
+        <div class="bg-primary text-white p-6">
+          <div class="flex justify-between items-center">
+            <h2 class="text-2xl font-bold" id="modalTitle">
+              체육행정 전문가 양성과정
+            </h2>
+            <button id="closeModalBtn"
+              class="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors">
+              <i class="ri-close-line text-white"></i>
+            </button>
+          </div>
+          <div class="flex items-center mt-2">
+            <div class="w-5 h-5 flex items-center justify-center mr-1">
+              <i class="ri-government-line"></i>
+            </div>
+            <span class="text-sm">체육행정</span>
+          </div>
+        </div>
+
+        <!-- 모달 내용 -->
+        <div class="p-6">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- 왼쪽 정보 영역 -->
+            <div class="lg:col-span-2">
+              <!-- 과정 개요 -->
+              <div class="mb-8">
+                <h3 class="text-lg font-bold text-gray-900 mb-4 pb-2 border-b border-gray-200">
+                  과정 개요
+                </h3>
+                <p class="text-gray-700 mb-4">
+                  본 과정은 체육단체에서 행정 업무를 담당하는 실무자들을
+                  대상으로 체육행정의 전문성을 향상시키기 위한 교육
+                  프로그램입니다. 체육정책, 예산관리, 법규해석, 사업기획 등
+                  체육행정 전반에 관한 이론과 실무 능력을 배양하여 체육단체의
+                  효율적인 운영과 발전에 기여할 수 있는 전문 인력을 양성하는
+                  것을 목표로 합니다.
+                </p>
+                <div class="bg-gray-50 rounded-lg p-4">
+                  <h4 class="font-medium text-gray-900 mb-2">교육 목적</h4>
+                  <ul class="space-y-1 text-gray-700">
+                    <li class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                        <i class="ri-checkbox-circle-line"></i>
+                      </div>
+                      <span>체육행정 실무자의 전문성 및 역량 강화</span>
+                    </li>
+                    <li class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                        <i class="ri-checkbox-circle-line"></i>
+                      </div>
+                      <span>체육단체 운영의 효율성 및 투명성 제고</span>
+                    </li>
+                    <li class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                        <i class="ri-checkbox-circle-line"></i>
+                      </div>
+                      <span>체육행정 분야의 최신 동향 및 정책 이해</span>
+                    </li>
+                    <li class="flex items-start">
+                      <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                        <i class="ri-checkbox-circle-line"></i>
+                      </div>
+                      <span>체육단체 간 네트워크 형성 및 정보 교류 활성화</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- 교육 내용 -->
+              <div class="mb-8">
+                <h3 class="text-lg font-bold text-gray-900 mb-4 pb-2 border-b border-gray-200">
+                  교육 내용
+                </h3>
+                <div class="overflow-x-auto">
+                  <table class="min-w-full divide-y divide-gray-200">
+                    <thead>
+                      <tr class="bg-gray-50">
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          일자
+                        </th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          시간
+                        </th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          교육내용
+                        </th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          강사
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                      <tr class="schedule-row">
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700" rowspan="3">
+                          1일차<br />(5/12)
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
+                          09:30-10:30
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-700">
+                          오리엔테이션 및 과정 소개
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
+                          김민수 교수
+                        </td>
+                      </tr>
+                      <tr class="schedule-row">
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
+                          10:40-12:00
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-700">
+                          체육정책의 이해와 동향
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
+                          박지훈 박사
+                        </td>
+                      </tr>
+                      <tr class="schedule-row">
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
+                          13:00-17:00
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-700">
+                          체육단체 운영 및 관리 실무
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
+                          이승철 팀장
+                        </td>
+                      </tr>
+                      <tr class="schedule-row">
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700" rowspan="2">
+                          2일차<br />(5/13)
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
+                          09:30-12:00
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-700">
+                          체육 관련 법규 및 규정 해석
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
+                          정현우 변호사
+                        </td>
+                      </tr>
+                      <tr class="schedule-row">
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
+                          13:00-17:00
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-700">
+                          체육단체 예산 편성 및 집행 실무
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
+                          최영진 회계사
+                        </td>
+                      </tr>
+                      <tr class="schedule-row">
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700" rowspan="2">
+                          3일차<br />(5/14)
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
+                          09:30-12:00
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-700">
+                          체육 프로그램 기획 및 평가
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
+                          김서연 교수
+                        </td>
+                      </tr>
+                      <tr class="schedule-row">
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
+                          13:00-17:00
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-700">
+                          체육시설 관리 및 안전
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
+                          장민호 센터장
+                        </td>
+                      </tr>
+                      <tr class="schedule-row">
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700" rowspan="2">
+                          4일차<br />(5/15)
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
+                          09:30-12:00
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-700">
+                          체육단체 홍보 및 마케팅 전략
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
+                          윤소희 이사
+                        </td>
+                      </tr>
+                      <tr class="schedule-row">
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
+                          13:00-17:00
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-700">
+                          체육 분야 갈등관리 및 협상 기술
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
+                          강동현 교수
+                        </td>
+                      </tr>
+                      <tr class="schedule-row">
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700" rowspan="2">
+                          5일차<br />(5/16)
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
+                          09:30-12:00
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-700">
+                          체육행정 사례 연구 및 토론
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
+                          이지원 교수
+                        </td>
+                      </tr>
+                      <tr class="schedule-row">
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
+                          13:00-16:00
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-700">
+                          종합 토론 및 수료식
+                        </td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
+                          교육운영팀
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p class="text-sm text-gray-500 mt-3">
+                  ※ 상기 일정은 사정에 따라 변경될 수 있습니다.
+                </p>
+              </div>
+
+              <!-- 신청 방법 -->
+              <div class="mb-8">
+                <h3 class="text-lg font-bold text-gray-900 mb-4 pb-2 border-b border-gray-200">
+                  신청 방법
+                </h3>
+                <div class="space-y-4">
+                  <div class="bg-gray-50 rounded-lg p-4">
+                    <h4 class="font-medium text-gray-900 mb-2">신청 절차</h4>
+                    <ol class="space-y-2">
+                      <li class="flex items-start">
+                        <div
+                          class="w-5 h-5 flex items-center justify-center bg-primary text-white rounded-full mr-2 mt-0.5 text-xs">
+                          1
+                        </div>
+                        <span class="text-gray-700">체육인재개발원 홈페이지 회원가입 및 로그인</span>
+                      </li>
+                      <li class="flex items-start">
+                        <div
+                          class="w-5 h-5 flex items-center justify-center bg-primary text-white rounded-full mr-2 mt-0.5 text-xs">
+                          2
+                        </div>
+                        <span class="text-gray-700">교육과정 소개 페이지에서 해당 과정 신청</span>
+                      </li>
+                      <li class="flex items-start">
+                        <div
+                          class="w-5 h-5 flex items-center justify-center bg-primary text-white rounded-full mr-2 mt-0.5 text-xs">
+                          3
+                        </div>
+                        <span class="text-gray-700">신청서 작성 및 제출</span>
+                      </li>
+                      <li class="flex items-start">
+                        <div
+                          class="w-5 h-5 flex items-center justify-center bg-primary text-white rounded-full mr-2 mt-0.5 text-xs">
+                          4
+                        </div>
+                        <span class="text-gray-700">교육비 납부 (해당되는 경우)</span>
+                      </li>
+                      <li class="flex items-start">
+                        <div
+                          class="w-5 h-5 flex items-center justify-center bg-primary text-white rounded-full mr-2 mt-0.5 text-xs">
+                          5
+                        </div>
+                        <span class="text-gray-700">신청 완료 및 확인 이메일 수신</span>
+                      </li>
+                    </ol>
+                  </div>
+
+                  <div class="bg-gray-50 rounded-lg p-4">
+                    <h4 class="font-medium text-gray-900 mb-2">제출 서류</h4>
+                    <ul class="space-y-1 text-gray-700">
+                      <li class="flex items-start">
+                        <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                          <i class="ri-checkbox-circle-line"></i>
+                        </div>
+                        <span>교육 신청서 (온라인 작성)</span>
+                      </li>
+                      <li class="flex items-start">
+                        <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                          <i class="ri-checkbox-circle-line"></i>
+                        </div>
+                        <span>재직증명서 (해당되는 경우)</span>
+                      </li>
+                      <li class="flex items-start">
+                        <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                          <i class="ri-checkbox-circle-line"></i>
+                        </div>
+                        <span>개인정보 수집·이용 동의서</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div class="bg-gray-50 rounded-lg p-4">
+                    <h4 class="font-medium text-gray-900 mb-2">수료 기준</h4>
+                    <ul class="space-y-1 text-gray-700">
+                      <li class="flex items-start">
+                        <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                          <i class="ri-checkbox-circle-line"></i>
+                        </div>
+                        <span>전체 교육시간의 80% 이상 출석</span>
+                      </li>
+                      <li class="flex items-start">
+                        <div class="w-5 h-5 flex items-center justify-center text-primary mr-2 mt-0.5">
+                          <i class="ri-checkbox-circle-line"></i>
+                        </div>
+                        <span>과제 및 평가 60점 이상 취득 (해당되는 경우)</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 오른쪽 정보 영역 -->
+            <div>
+              <div class="bg-gray-50 rounded-lg p-5 mb-6">
+                <h3 class="text-lg font-bold text-gray-900 mb-4">
+                  교육 정보
+                </h3>
+                <ul class="space-y-4">
+                  <li class="flex items-start">
+                    <div class="w-5 h-5 flex items-center justify-center text-primary mr-3 mt-0.5">
+                      <i class="ri-calendar-line"></i>
+                    </div>
+                    <div>
+                      <p class="text-sm font-medium text-gray-700">
+                        교육기간
+                      </p>
+                      <p class="text-gray-900">2025.05.12 ~ 2025.05.16</p>
+                      <p class="text-sm text-gray-500">(5일, 35시간)</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start">
+                    <div class="w-5 h-5 flex items-center justify-center text-primary mr-3 mt-0.5">
+                      <i class="ri-time-line"></i>
+                    </div>
+                    <div>
+                      <p class="text-sm font-medium text-gray-700">
+                        교육시간
+                      </p>
+                      <p class="text-gray-900">09:30 ~ 17:00</p>
+                      <p class="text-sm text-gray-500">
+                        (점심시간: 12:00~13:00)
+                      </p>
+                    </div>
+                  </li>
+                  <li class="flex items-start">
+                    <div class="w-5 h-5 flex items-center justify-center text-primary mr-3 mt-0.5">
+                      <i class="ri-map-pin-line"></i>
+                    </div>
+                    <div>
+                      <p class="text-sm font-medium text-gray-700">
+                        교육장소
+                      </p>
+                      <p class="text-gray-900">체육인재개발원 본관 2층</p>
+                      <p class="text-sm text-gray-500">세미나실 1호</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start">
+                    <div class="w-5 h-5 flex items-center justify-center text-primary mr-3 mt-0.5">
+                      <i class="ri-user-line"></i>
+                    </div>
+                    <div>
+                      <p class="text-sm font-medium text-gray-700">
+                        교육대상
+                      </p>
+                      <p class="text-gray-900">체육단체 행정담당자</p>
+                      <p class="text-sm text-gray-500">
+                        (체육회, 경기단체, 공공기관 등)
+                      </p>
+                    </div>
+                  </li>
+                  <li class="flex items-start">
+                    <div class="w-5 h-5 flex items-center justify-center text-primary mr-3 mt-0.5">
+                      <i class="ri-money-dollar-circle-line"></i>
+                    </div>
+                    <div>
+                      <p class="text-sm font-medium text-gray-700">수강료</p>
+                      <p class="text-gray-900">무료</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start">
+                    <div class="w-5 h-5 flex items-center justify-center text-primary mr-3 mt-0.5">
+                      <i class="ri-group-line"></i>
+                    </div>
+                    <div>
+                      <p class="text-sm font-medium text-gray-700">정원</p>
+                      <p class="text-gray-900">30명</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start">
+                    <div class="w-5 h-5 flex items-center justify-center text-primary mr-3 mt-0.5">
+                      <i class="ri-time-line"></i>
+                    </div>
+                    <div>
+                      <p class="text-sm font-medium text-gray-700">
+                        신청기간
+                      </p>
+                      <p class="text-gray-900">2025.04.15 ~ 2025.05.05</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="bg-gray-50 rounded-lg p-5 mb-6">
+                <h3 class="text-lg font-bold text-gray-900 mb-4">
+                  담당자 정보
+                </h3>
+                <ul class="space-y-4">
+                  <li class="flex items-start">
+                    <div class="w-5 h-5 flex items-center justify-center text-primary mr-3 mt-0.5">
+                      <i class="ri-user-line"></i>
+                    </div>
+                    <div>
+                      <p class="text-sm font-medium text-gray-700">담당자</p>
+                      <p class="text-gray-900">김정훈 주임</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start">
+                    <div class="w-5 h-5 flex items-center justify-center text-primary mr-3 mt-0.5">
+                      <i class="ri-phone-line"></i>
+                    </div>
+                    <div>
+                      <p class="text-sm font-medium text-gray-700">연락처</p>
+                      <p class="text-gray-900">02-2100-6511</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start">
+                    <div class="w-5 h-5 flex items-center justify-center text-primary mr-3 mt-0.5">
+                      <i class="ri-mail-line"></i>
+                    </div>
+                    <div>
+                      <p class="text-sm font-medium text-gray-700">이메일</p>
+                      <p class="text-gray-900">admin-edu@sports.or.kr</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="space-y-3">
+                <button
+                  class="w-full py-3 bg-primary text-white rounded-button hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 whitespace-nowrap">
+                  <div class="w-5 h-5 flex items-center justify-center">
+                    <i class="ri-user-add-line"></i>
+                  </div>
+                  <span>신청하기</span>
+                </button>
+                <button
+                  class="w-full py-3 bg-white text-primary border border-primary rounded-button hover:bg-gray-50 transition-colors flex items-center justify-center gap-2 whitespace-nowrap">
+                  <div class="w-5 h-5 flex items-center justify-center">
+                    <i class="ri-heart-line"></i>
+                  </div>
+                  <span>관심과정 등록</span>
+                </button>
+                <button
+                  class="w-full py-3 bg-white text-gray-700 border border-gray-300 rounded-button hover:bg-gray-50 transition-colors flex items-center justify-center gap-2 whitespace-nowrap">
+                  <div class="w-5 h-5 flex items-center justify-center">
+                    <i class="ri-share-line"></i>
+                  </div>
+                  <span>공유하기</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // 메뉴 토글 기능
+      const menuItems = document.querySelectorAll(".menu-item");
+      menuItems.forEach((item) => {
+        const menuHeader = item.querySelector("div");
+        menuHeader.addEventListener("click", () => {
+          item.classList.toggle("active");
+        });
+      });
+
+      // 카테고리 탭 기능
+      const categoryTabs = document.querySelectorAll(".category-tab");
+      const categoryContents = document.querySelectorAll(".category-content");
+      categoryTabs.forEach((tab, index) => {
+        tab.addEventListener("click", () => {
+          // 모든 탭 비활성화
+          categoryTabs.forEach((t) => t.classList.remove("active"));
+          categoryContents.forEach((c) => c.classList.remove("active"));
+          // 클릭한 탭 활성화
+          tab.classList.add("active");
+          categoryContents[index].classList.add("active");
+        });
+      });
+
+      // 체크박스 기능
+      const checkboxes = document.querySelectorAll(".custom-checkbox");
+      checkboxes.forEach((checkbox) => {
+        checkbox.addEventListener("click", () => {
+          checkbox.classList.toggle("checked");
+        });
+      });
+
+      // 라디오 버튼 기능
+      const radioButtons = document.querySelectorAll(".custom-radio");
+      radioButtons.forEach((radio) => {
+        radio.addEventListener("click", () => {
+          // 같은 그룹의 다른 라디오 버튼 해제
+          const parentGroup = radio.closest("div").parentElement;
+          parentGroup.querySelectorAll(".custom-radio").forEach((r) => {
+            r.classList.remove("checked");
+          });
+          // 클릭한 라디오 버튼 활성화
+          radio.classList.add("checked");
+        });
+      });
+
+      // 필터 초기화 버튼
+      const resetButton = document.getElementById("reset-filters");
+      if (resetButton) {
+        resetButton.addEventListener("click", () => {
+          // 체크박스 초기화
+          document.querySelectorAll(".custom-checkbox").forEach((checkbox) => {
+            checkbox.classList.remove("checked");
+          });
+
+          // 라디오 버튼 초기화
+          document.querySelectorAll(".custom-radio").forEach((radio) => {
+            radio.classList.remove("checked");
+          });
+
+          // 스위치 초기화
+          document.getElementById("application-available").checked = false;
+
+          // 셀렉트 박스 초기화
+          document.getElementById("category-filter").selectedIndex = 0;
+          document.getElementById("sort-filter").selectedIndex = 0;
+
+          // 검색어 초기화
+          document.getElementById("search").value = "";
+        });
+      }
+
+      // 교육과정 상세 모달 기능
+      const courseDetailBtns = document.querySelectorAll(".course-detail-btn");
+      const courseDetailModal = document.getElementById("courseDetailModal");
+      const closeModalBtn = document.getElementById("closeModalBtn");
+
+      courseDetailBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          courseDetailModal.classList.add("active");
+          document.body.style.overflow = "hidden"; // 스크롤 방지
+        });
+      });
+
+      if (closeModalBtn) {
+        closeModalBtn.addEventListener("click", () => {
+          courseDetailModal.classList.remove("active");
+          document.body.style.overflow = ""; // 스크롤 복원
+        });
+      }
+
+      // 모달 외부 클릭 시 닫기
+      if (courseDetailModal) {
+        courseDetailModal.addEventListener("click", (e) => {
+          if (e.target === courseDetailModal) {
+            courseDetailModal.classList.remove("active");
+            document.body.style.overflow = ""; // 스크롤 복원
+          }
+        });
+      }
+    });
+  </script>
 </body>
-</html> 
+
+</html>
